@@ -23,5 +23,5 @@ def vista_prueba(request):
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('prueba/', vista_prueba),
+    path('', vista_prueba),
 ]
