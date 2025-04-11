@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <title>{% block title %} Iniciar Sesion {% endblock %}</title>
+</head>
+
+<body style="background: #1E1F36;">
+    <section class="login-wrapper">
+        <div class="container-login mt-5">
+            <div class="card">
+                <div class="card-body ">
+                    <h2>Iniciar Sesion</h2>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="username">Correo:</label>
+                            <input type="text" name="username" class="form-control login-input"
+                                placeholder="correo@gmail.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" name="password" class="form-control login-input"
+                                placeholder="Contraseña">>
+                        </div>
+                        <hr style="color: #17F0D2;">
+                        <button type="submit" class="btn w-100 py-2"
+                            style="margin-bottom: 20px; background-color: #17F0D2; color: #1E1F36; font-weight: bold;">
+                            Iniciar Sesion
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+            
+    </section>
+
+
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+    crossorigin="anonymous"></script>
+
+</html>

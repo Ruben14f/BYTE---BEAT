@@ -3,7 +3,7 @@
 
 {% block banner %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
-<section class="text-white text-center px-4 py-3 banner-container" style="background:  #4638EE;">
+<section class="text-center px-4 py-3 banner-container" style="background:  #2C2F47;">
     <div class="banner">
         <h2>Los mejores productos <br>
             <b>a un click</b>
@@ -17,54 +17,54 @@
 
 {% block content %}
 
-<section class="container our-categories-container">
-    
-    <div class="text-center" style="color: black;">
+<section id="categories" class="container our-categories-container">
+
+    <div class="text-center" style="color: #17F0D2;">
         <h3>Nuestras Categorias</h3>
     </div>
 
     <div class="container-our-categories">
         <div class="row">
             <div class="col-12 col-md-4">
-                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
-                    <div class="bg-light d-flex align-items-center justify-content-center rounded-top" style="height: 130px;">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; ">
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
                         <span class="text-muted fs-4">400 × 320</span>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Categoria</h5>
-                        <p class="card-text text-muted">
+                        <h5 class="card-title fw-bold">Categoria</h5>
+                        <p class="card-text">
                             Descripcion de los productos en esta categoria
                         </p>
-                        <a href="#" class="btn btn-primary rounded-pill px-4">Explore</a>
+                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Ver</a>
                     </div>
                 </div>
                 
             </div>
             <div class="col-12 col-md-4">
-                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
-                    <div class="bg-light d-flex align-items-center justify-content-center rounded-top" style="height: 130px;">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto"  style="max-width: 300px;">
+                    <div class="bg-light d-flex align-items-center justify-content-center " style="height: 130px; border-radius: 10px;">
                         <span class="text-muted fs-4">400 × 320</span>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Categoria</h5>
-                        <p class="card-text text-muted">
+                        <h5 class="card-title fw-bold">Categoria</h5>
+                        <p class="card-text">
                             Descripcion de los productos en esta categoria
                         </p>
-                        <a href="#" class="btn btn-primary rounded-pill px-4">Explore</a>
+                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Ver</a>
                     </div>
                 </div>
             </div>
             <div class="col-12 col-md-4">
-                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
-                    <div class="bg-light d-flex align-items-center justify-content-center rounded-top" style="height: 130px;">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto " style="max-width: 300px;">
+                    <div class="bg-light d-flex align-items-center justify-content-center " style="height: 130px; border-radius: 10px;">
                         <span class="text-muted fs-4">400 × 320</span>
                     </div>
                     <div class="card-body">
-                        <h5 class="card-title fw-bold text-primary">Categoria</h5>
-                        <p class="card-text text-muted">
+                        <h5 class="card-title fw-bold">Categoria</h5>
+                        <p class="card-text">
                             Descripcion de los productos en esta categoria
                         </p>
-                        <a href="#" class="btn btn-primary rounded-pill px-4">Explore</a>
+                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Ver</a>
                     </div>
                 </div>
             </div>
@@ -75,6 +75,100 @@
 
 </section>
 
+<section class="containter featured-products bg-secondary" >
+    <div class="text-center" style="color: #17F0D2;">
+        <h3 class="title-featured">Productos Destacados</h3>
+    </div>
+
+    <div class="container-featured-products bg-secondary">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; position: relative;">
+                    <!-- Contenedor de imagen con overlay -->
+                    <div class="position-relative" style="height: 130px; border-radius: 10px;">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
+                            <span class="text-muted fs-4">400 × 320</span>
+                        </div>
+                        <!-- Aquí se muestra la categoría encima de la imagen -->
+                        <div class="overlay">
+                            <h6 class="fw-bold m-0" style="color: #2C2F47;">Categoria</h6>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuerpo de la tarjeta -->
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Nombre producto</h5>
+                        <p class="card-text mb-2" style="color: white;">Precio</p>
+                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; position: relative;">
+                    <!-- Contenedor de imagen con overlay -->
+                    <div class="position-relative" style="height: 130px; border-radius: 10px;">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
+                            <span class="text-muted fs-4">400 × 320</span>
+                        </div>
+                        <!-- Aquí se muestra la categoría encima de la imagen -->
+                        <div class="overlay">
+                            <h6 class="fw-bold m-0" style="color: #2C2F47;">Categoria</h6>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuerpo de la tarjeta -->
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Nombre producto</h5>
+                        <p class="card-text mb-2" style="color: white;">Precio</p>
+                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; position: relative;">
+                    <!-- Contenedor de imagen con overlay -->
+                    <div class="position-relative" style="height: 130px; border-radius: 10px;">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
+                            <span class="text-muted fs-4">400 × 320</span>
+                        </div>
+                        <!-- Aquí se muestra la categoría encima de la imagen -->
+                        <div class="overlay">
+                            <h6 class="fw-bold m-0" style="color: #2C2F47;">Categoria</h6>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuerpo de la tarjeta -->
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Nombre producto</h5>
+                        <p class="card-text mb-2" style="color: white;">Precio</p>
+                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
+                    </div>
+                </div>                
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; position: relative;">
+                    <!-- Contenedor de imagen con overlay -->
+                    <div class="position-relative" style="height: 130px; border-radius: 10px;">
+                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
+                            <span class="text-muted fs-4">400 × 320</span>
+                        </div>
+                        <!-- Aquí se muestra la categoría encima de la imagen -->
+                        <div class="overlay">
+                            <h6 class="fw-bold m-0" style="color: #2C2F47;">Categoria</h6>
+                        </div>
+                    </div>
+                    
+                    <!-- Cuerpo de la tarjeta -->
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">Nombre producto</h5>
+                        <p class="card-text mb-2" style="color: white;">Precio</p>
+                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
+                    </div>
+                </div>                
+            </div>
+        </div>
+    </div>
+</section>
 
 
 {% endblock %}
