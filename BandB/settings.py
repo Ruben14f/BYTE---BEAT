@@ -26,7 +26,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY', default='RQbybpHnBxqQYgmMVzZK')
 SECRET_KEY = 'django-insecure-1ts+!(*m^oa09%j%h9%(7vnj#wlv@b5y(_!c&)2632^y(6r8#g'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = True
 DEBUG = 'RENDER' not in os.environ
 ALLOWED_HOSTS = ['*']
 
@@ -44,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'BandB.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [   BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,8 +82,12 @@ WSGI_APPLICATION = 'BandB.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'bdproject_kcdq'),
+        'USER': os.environ.get('DB_USER', 'adminuser'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 've2Nqqb8arVkFKrXSJd1lL5D6xBTDwZi'),
+        'HOST': os.environ.get('DB_HOST', 'dpg-cvs2ai0gjchc73anmcs0-a.oregon-postgres.render.com'),
+        'PORT': '5432',
     }
 }
 
@@ -122,7 +126,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

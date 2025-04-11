@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block banner %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+<section class="text-white text-center px-4 py-3 banner-container" style="background:  #4638EE;">
+    <div class="banner">
+        <h2>Los mejores productos <br>
+            <b>a un click</b>
+        </h2>
+        <h5>Descubra lo mejor en tecnologia e instrumentos
+            <br>musicales en Byte & Beat
+        </h5>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+
+<section class="container our-categories-container">
+    
+    <div class="text-center" style="color: black;">
+        <h3>Nuestras Categorias</h3>
+    </div>
+
+    <div class="container-our-categories">
+        <div class="row">
+            <div class="col-12 col-md-4">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded-top" style="height: 130px;">
+                        <span class="text-muted fs-4">400 × 320</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-primary">Categoria</h5>
+                        <p class="card-text text-muted">
+                            Descripcion de los productos en esta categoria
+                        </p>
+                        <a href="#" class="btn btn-primary rounded-pill px-4">Explore</a>
+                    </div>
+                </div>
+                
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded-top" style="height: 130px;">
+                        <span class="text-muted fs-4">400 × 320</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-primary">Categoria</h5>
+                        <p class="card-text text-muted">
+                            Descripcion de los productos en esta categoria
+                        </p>
+                        <a href="#" class="btn btn-primary rounded-pill px-4">Explore</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-4">
+                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded-top" style="height: 130px;">
+                        <span class="text-muted fs-4">400 × 320</span>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-primary">Categoria</h5>
+                        <p class="card-text text-muted">
+                            Descripcion de los productos en esta categoria
+                        </p>
+                        <a href="#" class="btn btn-primary rounded-pill px-4">Explore</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+
+</section>
+
+
+
+{% endblock %}
