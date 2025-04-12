@@ -20,11 +20,13 @@ def login(request):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
+       
         usuarios = authenticate(request, username=username, password=password)
-
+        
+        first_name = usuarios.first_name.capitalize()
         if usuarios:
             lg(request, usuarios)
-            messages.success(request, f'Bienvenido {username}')
+            messages.success(request, f'Bienvenido {first_name}')
             return redirect('index')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
