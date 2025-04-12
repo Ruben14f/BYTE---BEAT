@@ -1,0 +1,121 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
+
+<!--MODAL DE ERROR INICIO SESION-->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="display: flex; justify-content: center; align-items: center">
+        <div class="modal-content text-white" style="background-color: #1e1f36; width: 350px; border: none">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                {% if messages %} {% for message in messages %}
+                <div class="alert m-0 alert-danger d-flex align-items-center" role="alert"
+                    style="background-color: #dc3545; border: none; color: white">
+                    <i class="bi bi-x-circle-fill text-white me-2"></i>
+                    {{ message }}
+                </div>
+                {% endfor %} {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL DE EXITO INICIO DE SESION-->
+<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+    ">
+        <div class="modal-content text-white" style="background-color: #1e1f36; width: 350px">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="successModalLabel">Sesion Iniciada</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                {% if messages %} {% for message in messages %}
+                <div class="alert m-0 alert-success d-flex align-items-center" role="alert"
+                    style="background-color: #198754; border: none; color: white">
+                    <i class="bi bi-check-circle-fill text-white me-2"></i>
+                    {{ message }}
+                </div>
+                {% endfor %} {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL DE SALIR DE SESION-->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: none;
+    ">
+        <div class="modal-content text-white" style="background-color: #1e1f36; width: 350px">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="logoutModalLabel">Cierre de sesión</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                {% if messages %} {% for message in messages %}
+                <div class="alert m-0 alert-success d-flex align-items-center" role="alert"
+                    style="background-color: #198754; border: none; color: white">
+                    <i class="bi bi-check-circle-fill text-white me-2"></i>
+                    <div>{{ message }} <i class="bi bi-emoji-smile"></i></div>
+                </div>
+                {% endfor %} {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--MODAL DE REGISTRO EXITOSO-->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="display: flex; justify-content: center; align-items: center;">
+        <div class="modal-content text-white" style="background-color: #1E1F36; width: 350px; border: none;">
+            <div class="modal-header border-0">
+                <h5 class="modal-title" id="registerModalLabel">Cuenta creada</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-center">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert m-0 alert-success d-flex align-items-center" role="alert" style="background-color: #198754; border: none; color: white;">
+                            <i class="bi bi-check-circle-fill text-white me-2"></i>
+                            <div>{{ message }} <i class="bi bi-emoji-smile"></i></div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% if messages %}
+            {% for message in messages %}
+                {% if message.tags == 'success' %}
+                    <!-- Mostrar modal de registro exitoso -->
+                    const registerModal = new bootstrap.Modal(document.getElementById('registerModal'));
+                    registerModal.show();
+                {% elif message.tags == 'error' %}
+                    <!-- Mostrar modal de error -->
+                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+                    errorModal.show();
+                {% elif message.tags == 'info' %}
+                    <!-- Mostrar modal de cierre de sesión -->
+                    const logoutModal = new bootstrap.Modal(document.getElementById('logoutModal'));
+                    logoutModal.show();  
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    });
+</script>

@@ -1,5 +1,5 @@
 {% load static %}
-
+{% include 'modals/alert_modal.html' %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,23 +14,33 @@
 </head>
 
 <body style="background: #1E1F36;">
-    <section class="login-wrapper">
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 2%;">
+        <a style="text-decoration: none;" href="{% url 'index' %}"><h2 style="color: #17F0D2; font-size: 40px;">Byte & Beat</h2></a>
+    </div>
+    
+
+    <section class="login-wrapper" style="margin-bottom: 100px;">
         <div class="container-login mt-5">
             <div class="card">
                 <div class="card-body ">
-                    <h2>Iniciar Sesion</h2>
+                    <h3>Iniciar Sesion</h3>
                     <form method="POST">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="username">Correo:</label>
                             <input type="text" name="username" class="form-control login-input"
-                                placeholder="correo@gmail.com">
+                                placeholder="correo@gmail.com" required>
                         </div>
                         <div class="form-group">
                             <label for="password">Contraseña:</label>
                             <input type="password" name="password" class="form-control login-input"
-                                placeholder="Contraseña">>
+                                placeholder="Contraseña" required>
                         </div>
+                        <div class="mt-4 mb-4" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <a style="color: #17F0D2; text-decoration: none;" href="{% url 'register' %}">Registrarse</a>
+                            <a style="color: #17F0D2; text-decoration: none;" href="#">Recuperar contraseña</a>
+                        </div>
+                        
                         <hr style="color: #17F0D2;">
                         <button type="submit" class="btn w-100 py-2"
                             style="margin-bottom: 20px; background-color: #17F0D2; color: #1E1F36; font-weight: bold;">
