@@ -91,6 +91,119 @@
     border: 2px solid #17F0D2;
 }
 
+.form-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    background-color: #2C2F47;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 
+                0 0 0 1px rgba(23, 240, 210, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 400px;
+    padding: 20px;
+}
+
+
+.form-card {
+    display: flex;
+    background-color: #2C2F47;
+    border: none !important;
+    border-radius: 20px;
+}
+
+.form-card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2C2F47;
+    padding: 20px;
+}
+
+.form-card h3 {
+    color: #17F0D2;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+.input-group label {
+    margin-bottom: 3%;
+    color: #17F0D2;
+    font-size: 16px;
+}
+
+
+.reset-input {
+    width: 100%;
+    padding: 12px;
+    background-color: #1E1F36;
+    border: 2px solid #17F0D2;
+    color: white;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.reset-input::placeholder {
+    color: #aaaaaa;
+}
+
+.reset-input:focus {
+    background: white;
+    color: black;
+    border: 2px solid #17F0D2;
+    outline: none;
+}
+
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #17F0D2;
+    color: #1E1F36;
+    font-weight: bold;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+    background-color: #15d1b6;
+}
+
+
+@media (max-width: 640px) {
+    .form-container {
+        width: 90%;
+        margin-top: 10%;
+    }
+}
+
+
+@media (min-width: 641px) and (max-width: 768px) {}
+
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .reset-wrapper {
+        padding-top: 100px;
+        padding-bottom: 100px;
+        display: flex;
+        align-items: flex-start;
+    }
+}
+
+
+@media (min-width: 1025px) {
+    .form-container {
+        width: 400px;
+    }
+}
 
 @media screen and (max-width: 768px) {}
 
