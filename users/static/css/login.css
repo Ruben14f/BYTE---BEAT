@@ -1,5 +1,4 @@
-
-.container-login{
+.container-login {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -8,25 +7,25 @@
     background-color: #2C2F47;
     border: none;
     border-radius: 20px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 
-                0 0 0 1px rgba(23, 240, 210, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(23, 240, 210, 0.1);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     width: 400px;
 }
 
-.card{
+.card {
     display: flex;
     background-color: #2C2F47;
     border: none !important;
 }
 
-.card h3{
+.card h3 {
     color: #17F0D2;
     margin-top: 10%;
     text-align: center;
 }
 
-.card-body{
+.card-body {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -34,7 +33,7 @@
     background-color: #2C2F47;
 }
 
-.form-group{
+.form-group {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -42,9 +41,10 @@
     width: 100%;
     margin-top: 10%;
 }
-.form-group label{
+
+.form-group label {
     margin-bottom: 3%;
-    color:#17F0D2;
+    color: #17F0D2;
 }
 
 
@@ -59,32 +59,55 @@
     color: #aaaaaa;
 }
 
-.btn{
+.btn {
     --background: #17F0D2 !important;
 }
 
 
-@media screen and (max-width: 768px) {
+.input-reset {
+    background-color: #1E1F36;
+    border: 2px solid #17F0D2;
+    color: white;
+    padding: 10px;
+}
 
+.input-reset {
+    background-color: #1E1F36;
+    border: 2px solid #17F0D2;
+    color: white;
+    padding: 10px;
+    width: 100%;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
 
+.input-reset::placeholder {
+    color: #aaaaaa;
+}
+
+.input-reset:focus  {
+    background: white;
+    color: black;
+    border: 2px solid #17F0D2;
 }
 
 
- /* móviles pequeños */ 
+@media screen and (max-width: 768px) {}
+
+
+/* móviles pequeños */
 @media (max-width: 640px) {
-    .container-login{
+    .container-login {
         width: 90%;
         margin-top: 20%;
     }
 }
 
-/* móviles grandes y tablets verticales */ 
-@media (min-width: 641px) and (max-width: 768px) { 
+/* móviles grandes y tablets verticales */
+@media (min-width: 641px) and (max-width: 768px) {}
 
-}
-
-/* tablets horizontales y laptops pequeñas */ 
-@media (min-width: 769px) and (max-width: 1024px) { 
+/* tablets horizontales y laptops pequeñas */
+@media (min-width: 769px) and (max-width: 1024px) {
     .login-wrapper {
         padding-top: 100px;
         padding-bottom: 100px;
@@ -94,6 +117,4 @@
 }
 
 /* escritorio y pantallas grandes */
-@media (min-width: 1025px) {
-   
-}
+@media (min-width: 1025px) {}

@@ -78,6 +78,7 @@
 }
 
 
+
 @media screen and (max-width: 768px) {
     .banner-container{
         flex-direction: column;
