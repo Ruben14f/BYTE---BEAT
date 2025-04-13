@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+{% for product in products %}
+<div style="background-color: white;">
+    {{product.name}}
+    {{ product.brand }}
+    {% if product.main_image %}
+    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+    {% endif %}
+    {{ product.price}}
+</div>
+{% endfor %}
+
+{% endblock %}
