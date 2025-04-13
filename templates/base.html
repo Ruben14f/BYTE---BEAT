@@ -30,7 +30,7 @@
               <div class="collapse navbar-collapse justify-content-center order-3 order-lg-2 fs-5" id="navbarNav">
                 <div class="navbar-nav text-lg-start ">
                   <a class="nav-link active text-light" href="#">Inicio</a>
-                  <a class="nav-link text-light" href="#">Productos</a>
+                  <a class="nav-link text-light" href="{% url 'view_products' %}">Productos</a>
                   <a class="nav-link text-light" href="#categories">Categorias</a>
                   {% if user.is_authenticated %}
                     <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar sesion</a>
