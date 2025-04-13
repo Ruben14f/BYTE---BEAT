@@ -51,14 +51,14 @@ def optimize_image(sender, instance, **kwargs):
     if instance.main_image:
 
         uploaded_image = upload(instance.main_image, transformation=[
-            {'quality': 'auto', 'fetch_format': 'auto'}
+            {'quality': '70', 'fetch_format': 'auto'}
         ],folder='products')
         instance.main_image = uploaded_image['url']
 
     if instance.secondary_image:
 
         uploaded_image = upload(instance.secondary_image, transformation=[
-            {'quality': 'auto', 'fetch_format': 'auto'}
+            {'quality': '70', 'fetch_format': 'auto'}
         ], folder='products')
         instance.secondary_image = uploaded_image['url']
 

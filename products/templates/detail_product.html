@@ -7,7 +7,7 @@
     {{product.name}}
     {{ product.brand }}
     {% if product.main_image %}
-    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;" loading="lazy">
     {% endif %}
     {{ product.price}}
 </div>
