@@ -1,18 +1,47 @@
 {% extends 'base.html' %}
-
+{% load precios_tag %}
 
 {% block content %}
-{% for product in products %}
-<div style="background-color: white;">
-    <p>{{ product.name }}</p>
-    <p>{{ product.brand }}</p>
-    {% if product.main_image %}
-    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
-    {% else %}
-    <p>No image available</p>
-    {% endif %}
-    <p>{{ product.price }}</p>
+
+
+{% include 'search.html' %}
+{% if query %}
+    <hr style="color: aliceblue;">
+    <p style="color: aliceblue;">Resultado de búsqueda para: {{ query | title }}</p>
+    {% for product in product_list %}
+    <div class="card" style="width: 250px;">
+        <div class="card-body">
+            <div style="background-color: white;">
+                {% if product.main_image %}
+                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                {% else %}
+                <p>No image available</p>
+                {% endif %}
+                <p><b>{{ product.brand }}</b></p>
+                <p>{{ product.name }}</p>
+                <p>{{ product.price | format_price }}</p>
+                <a style="color: black;" href="{% url 'product' product.slug %}">Ir al producto</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+{% for product in product_list %}
+<div class="card" style="width: 250px;">
+    <div class="card-body">
+        <div style="background-color: white;">
+            {% if product.main_image %}
+            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+            {% else %}
+            <p>No image available</p>
+            {% endif %}
+            <p><b>{{ product.brand }}</b></p>
+            <p>{{ product.name  }}</p>
+            <p>{{ product.price | format_price }}</p>
+            <a style="color: black;" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
+        </div>
+    </div>
 </div>
 {% endfor %}
-
+{% endif %}
 {% endblock %}

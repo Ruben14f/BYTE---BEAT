@@ -1,7 +1,8 @@
 {% include 'modals/alert_modal.html'%}
+{% load precios_tag %}
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
@@ -24,12 +25,12 @@
                   aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
                 </button>
-                <a class="navbar-brand mb-0 h1 fs-3" style="color: #17F0D2;" href="#">Byte & Beat</a>
+                <a class="navbar-brand mb-0 h1 fs-3" style="color: #17F0D2;" href="{% url 'index' %}">Byte & Beat</a>
               </div>
           
               <div class="collapse navbar-collapse justify-content-center order-3 order-lg-2 fs-5" id="navbarNav">
                 <div class="navbar-nav text-lg-start ">
-                  <a class="nav-link active text-light" href="#">Inicio</a>
+                  <a class="nav-link active text-light" href="{% url 'index' %}">Inicio</a>
                   <a class="nav-link text-light" href="{% url 'view_products' %}">Productos</a>
                   <a class="nav-link text-light" href="#categories">Categorias</a>
                   {% if user.is_authenticated %}

@@ -1,0 +1,10 @@
+<form action="{% url 'search_product' %}" method="GET">
+    <div class="input-group" style="display: flex; justify-content: center; margin-top: 20px; width: 500px;">
+        <input type="text" name="searchQ" class="form-control" placeholder="Buscar productos..." aria-label="Buscar productos..." value="{{ query }}"> 
+        <div class="input-group-append">
+            <button type="submit" class="btn" style="background-color: #17F0D2; border-radius: 0 5px 5px 0;">
+                <i class="bi bi-search" style="font-size: 25px;"></i>
+            </button>
+        </div>
+    </div>
+</form>

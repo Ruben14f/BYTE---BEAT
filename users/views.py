@@ -2,13 +2,13 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as lg, logout as lgout
 from django.contrib import messages
-from django.views import View
 from django.contrib.auth.forms import SetPasswordForm
 from .forms import Registro, RecuperarContraseñaForm
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
+from django.contrib.auth.models import Group
 
 
 
@@ -44,9 +44,11 @@ def register(request):
 
     if request.method == 'POST' and form.is_valid():
         usuario = form.save()
-        
-        usuario.set_password(form.cleaned_data['password'])
 
+        client_group = Group.objects.get(name='Clientes')
+        usuario.groups.add(client_group)
+
+        usuario.set_password(form.cleaned_data['password'])
         usuario.save()
 
         lg(request, usuario)
@@ -123,3 +125,5 @@ def password_reset_confirm(request, uidb64, token):
         return render(request, 'reset_password/password_reset_confirm.html', {'form': form, 'validlink': validlink})
     else:
         raise Http404("El enlace es inválido o ha expirado.")
+
+
