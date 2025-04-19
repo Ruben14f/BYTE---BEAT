@@ -20,7 +20,7 @@
                 <p><b>{{ product.brand }}</b></p>
                 <p>{{ product.name }}</p>
                 <p>{{ product.price | format_price }}</p>
-                <a style="color: black;" href="{% url 'product' product.slug %}">Ir al producto</a>
+                <a style="color: black;" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
             </div>
         </div>
     </div>

@@ -20,6 +20,11 @@
                 {{ product.brand }}
                 
                 {{ product.price | format_price}}
+                {{ product.description }}
+            </div>
+
+            <div>
+                {% include 'add.html' %}
             </div>
         </div>
     </div>
