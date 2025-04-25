@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="background: white; margin: auto; color: black; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h1>Mi perfil</h1>
+    <div>
+        <strong>Nombres</strong>
+        <br>
+        {{profile.user.first_name}}
+        <br>
+        <strong>Apellidos</strong>
+        <br>
+        {{profile.user.last_name}}
+        <br>
+        <strong>Correo electronico</strong>
+        <br>
+        {{profile.user.email}}
+        <br>
+        <strong>Telefono</strong>
+        <br>
+        {% if profile.phone_number %}
+            {{profile.phone_number}}
+        {% else %}
+            <p>Sin telefono</p>
+        {% endif %}
+        <br>
+        <strong>Direccion</strong>
+        <br>
+        {% if addresses %}
+            {% for address in addresses %}
+            {{ address.calle }} {{ address.num_direccion }}, {{ address.comuna.name }}-{{ address.ciudad }}
+            {% endfor %}
+        {% else %}
+        <p>Sin direcciones</p>
+        {% endif %}
+        <br>
+        <strong>Contraseña</strong>
+        <br>
+        <a href="{% url 'change_password' %}">Cambiar contraseña</a>
+        <br>
+        <a href="{% url 'edit_profile' %}">Editar perfil</a>
+        
+    </div>
+
+    
+</div>
+{% endblock %}

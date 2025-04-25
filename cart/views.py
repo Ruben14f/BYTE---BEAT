@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from .funciones import *
 from products.models import Product
+from .models import CartProduct
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
+from orden.utils import breadcrumb
 
 # Create your views here.
 
@@ -12,18 +14,22 @@ def cart(request):
     
     print(cart.productos.all())
 
-    return render(request, 'cart_detail.html', 
-        {'cart': cart
+    breadcrumb_items = breadcrumb(Cart=True, products=False, confirmation=False)  
+
+    return render(request, 'cart_detail.html', {
+        'cart': cart,
+        'breadcrumb' : breadcrumb_items
     })
 
 
 def addCart(request):
     cart = funcionCarrito(request)
     product = get_object_or_404(Product, pk=request.POST.get('product_id'))
+    quantity = int(request.POST.get('quantity', 1))
+    
+    product_cart = CartProduct.objects.crearActualizar(cart=cart, productos=product, quantity=quantity)
 
-    cart.productos.add(product)
-    messages.success(request, 'Producto agregado al carrito')
-
+    messages.info(request, 'Producto agregado al carrito correctamente')
     return render(request, 'add_to_cart.html',{
         'product': product,
     })
@@ -33,5 +39,6 @@ def remove(request):
     product = get_object_or_404(Product, pk=request.POST.get('product_id'))
 
     cart.productos.remove(product)
+    
     messages.info(request, 'Producto eliminado de carrito')
     return redirect('cart')

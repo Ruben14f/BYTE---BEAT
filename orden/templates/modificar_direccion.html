@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background-color: aliceblue;">
+    <h3>Modificar dirección para el pedido {{ orden.ordenID }}</h3>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ address_form.as_p }}
+        <button type="submit">Guardar dirección</button>
+    </form>
+
+    {% if direccion_existente %}
+        <p>Dirección actual: {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }} - {{ direccion_existente.comuna.name }}, {{ direccion_existente.ciudad }}</p>
+    {% endif %}
+</div>
+{% endblock %}

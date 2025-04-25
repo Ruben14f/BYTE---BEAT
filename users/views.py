@@ -9,7 +9,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
-
+from django.http import HttpResponseRedirect
 
 
 
@@ -23,10 +23,15 @@ def login(request):
        
         usuarios = authenticate(request, username=username, password=password)
         
-        first_name = usuarios.first_name.capitalize()
-        if usuarios:
+        
+        if usuarios is not None:
             lg(request, usuarios)
+            first_name = usuarios.first_name.capitalize()
             messages.success(request, f'Bienvenido {first_name}')
+
+            if request.GET.get('next'):
+                return HttpResponseRedirect(request.GET['next'])
+            
             return redirect('index')
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')

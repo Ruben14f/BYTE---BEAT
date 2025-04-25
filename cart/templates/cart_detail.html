@@ -11,7 +11,8 @@
             <div class="card">
                 <div class="card-body" style="display: flex; flex-direction: column;">
                     {% if cart.productos.exists %}
-                        {% for product in cart.productos.all %}
+                        {% for cart_product in cart.product_related %}
+                        {% with product=cart_product.productos %}
                         <div style="background: #444444; margin-bottom: 20px; padding: 15px; border-radius: 8px;">
                             <div style="display: flex; align-items: center; justify-content: space-between;">
                                 <div style="display: flex; flex-direction: row; align-items: center;">
@@ -25,14 +26,16 @@
                                     </div>
                                 </div>
                                 <div style="display: flex; flex-direction: row; align-items: center; color: #FFFFFF;">
-                                    <p style="margin-right: 10px;">Cantidad: {{ forloop.counter }}</p>
+                                    <p style="margin-right: 10px;">Cantidad: {{ cart_product.quantity }}</p>
                                     <div>{% include 'remove.html' %}</div>
                                 </div>
                             </div>
                         </div>
+                        {% endwith %}
                         {% endfor %}
+
                     {% else %}
-                    <h3 style="color: white;">El carrito está vacío</h3>
+                    <h3 style="color: rgb(0, 0, 0);">El carrito está vacío</h3>
                     {% endif %}
                 </div>
             </div>
@@ -43,10 +46,9 @@
         <div style="background-color: #1A1A1A; color: white; width: 300px; padding: 20px; border-radius: 8px;">
             <h4 style="font-size: 24px; margin-bottom: 10px;">Resumen del Pedido</h4>
             <p style="font-size: 18px; margin-bottom: 10px;">Subtotal: {{ cart.subtotal | format_price }}</p>
-            <p style="font-size: 18px; margin-bottom: 10px;">Envío: {{ cart.shipping | format_price }}</p>
             <hr style="border-top: 1px solid #333;">
             <p style="font-size: 18px; font-weight: bold;">Total: {{ cart.total | format_price }}</p>
-            <button class="btn btn-primary" style="margin-top: 15px;">Proceder al pago</button>
+            <a href="{% url 'orden' %}" class="btn btn-primary">Proceder al pago</a>
             <button class="btn btn-secondary" style="margin-top: 10px; background-color: #444; border: none;">Continuar comprando</button>
         </div>
         {% else %}

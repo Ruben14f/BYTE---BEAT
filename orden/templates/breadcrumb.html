@@ -1,0 +1,34 @@
+<style>
+    .breadcrumb-item + .breadcrumb-item::before {
+      content: '>';
+      color: white;
+      margin: 0 5px;
+    }
+  
+    .breadcrumb-item a {
+      color: white;
+      text-decoration: none;
+    }
+  
+    .breadcrumb-item.active {
+      color: rgb(255, 0, 0); /* Rojo para el item activo */
+    }
+  
+    .breadcrumb-item.active a {
+      color: rgb(255, 0, 0); /* Asegurarse de que el color rojo se aplica al enlace */
+    }
+  </style>
+  
+  <div style="margin-top: 90px; margin-bottom: -50px; color: white; display: flex; justify-content: center;">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        {% for item in breadcrumb %}
+          {% if item.active %}
+            <li class="breadcrumb-item active" aria-current="page">{{item.title}}</li> <!-- No enlace para el item activo -->
+          {% else %}
+            <li class="breadcrumb-item"><a href="{{item.url}}">{{item.title}}</a></li> <!-- Enlace para los demás items -->
+          {% endif %}
+        {% endfor %}
+      </ol>
+    </nav>
+  </div>
