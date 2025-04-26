@@ -1,34 +1,41 @@
 {% extends 'base.html' %}
 {% load precios_tag %}
-
-
-<div style="margin-top: 40px; background: red;">
-    <h2 style="color: aliceblue;">HOLA</h2>
-</div>
-
+{% load static %}
 {% block content %}
-
-<div>
-    <div class="card" style="width: 250px;">
-        <div class="card-body">
-            <div style="background-color: white;">
-                {% if product.main_image %}
+<link rel="stylesheet" href="{% static 'css/detail_product.css' %}">
+<div class="product-detail-container">
+    <div class="product-images">
+        <div class="main-image">
+            {% if product.main_image %}
                 <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;"
                     loading="lazy">
+            {% endif %}
+        </div>
+        <div class="thumbnail-images">
+            <div class="thumbnail active">
+                {% if product.secondary_image %}
+                <img src="{{ product.secondary_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;"
+                    loading="lazy">
                 {% endif %}
-                {{product.name}}
-                {{ product.brand }}
-                
-                {{ product.price | format_price}}
-                {{ product.description }}
-            </div>
-
-            <div>
-                {% include 'add.html' %}
             </div>
         </div>
     </div>
-
+    
+    <div class="product-info">
+        <div class="product-brand">{{ product.brand }}</div>
+        <h1 class="product-name">{{product.name}}</h1>
+        <div class="product-price">{{ product.price | format_price}}</div>
+        
+        <p class="product-description">
+            {{ product.description }}
+        </p>
+        
+        <div class="quantity-selector">
+            {% include 'add.html' %}
+        </div>
+        
+    </div>
 </div>
+
 
 {% endblock %}

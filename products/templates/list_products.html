@@ -1,32 +1,89 @@
 {% extends 'base.html' %}
 {% load precios_tag %}
-
+{% load static %}
 {% block content %}
+<link rel="stylesheet" href="{% static 'css/list_products.css' %}">
 
+<div class="search-container">
+    <div class="search-bar">
+        {% include 'search.html' %} <p>okla</p>
+    </div>
+</div>
 
-{% include 'search.html' %}
 {% if query %}
-    <hr style="color: aliceblue;">
-    <p style="color: aliceblue;">Resultado de búsqueda para: {{ query | title }}</p>
+<p style="color: white;">Resultado de búsqueda para: {{ query | title }}</p>
+<h2 class="section-title">Listado de Productos</h2>
+
+<div class="product-container">
     {% for product in product_list %}
-    <div class="card" style="width: 250px;">
-        <div class="card-body">
-            <div style="background-color: white;">
+    <div class="products-grid">
+        <div class="product-card">
+            <div class="product-image">
                 {% if product.main_image %}
                 <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
                 {% else %}
                 <p>No image available</p>
                 {% endif %}
-                <p><b>{{ product.brand }}</b></p>
-                <p>{{ product.name }}</p>
-                <p>{{ product.price | format_price }}</p>
-                <a style="color: black;" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
+            </div>
+            <div class="product-info">
+                <div class="product-brand">{{ product.brand }}</div>
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-price">{{ product.price | format_price }}</div>
+                <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                <a href="{% url 'detail_product' product.slug %}">Ir al producto</a>
             </div>
         </div>
     </div>
     {% endfor %}
+</div>
 {% else %}
 {% for product in product_list %}
+<div class="product-container">
+<div class="products-grid">
+    <div class="product-card">
+        <div class="product-image">
+            {% if product.main_image %}
+            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+            {% else %}
+            <p>No image available</p>
+            {% endif %}
+        </div>
+        <div class="product-info">
+            <div class="product-brand">{{ product.brand }}</div>
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-price">{{ product.price | format_price }}</div>
+            <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+            <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al producto</a></button>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+</div>
+
+{% endblock %}
+
+<!-- {% include 'search.html' %}
+
+    <hr style="color: aliceblue;">
+    <p style="color: aliceblue;"></p>
+    
+    <div class="card" style="width: 250px;">
+        <div class="card-body">
+            <div style="background-color: white;">
+                
+                <p><b></b></p>
+                <p></p>
+                <p></p>
+                
+            </div>
+        </div>
+    </div>
+   
+
+
+
 <div class="card" style="width: 250px;">
     <div class="card-body">
         <div style="background-color: white;">
@@ -41,7 +98,4 @@
             <a style="color: black;" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
         </div>
     </div>
-</div>
-{% endfor %}
-{% endif %}
-{% endblock %}
+</div> -->

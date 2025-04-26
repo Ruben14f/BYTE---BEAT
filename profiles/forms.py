@@ -28,6 +28,12 @@ class OrderAddressForm(forms.ModelForm):
             raise forms.ValidationError("El número de calle debe ser solo numérico.")
         return num_direccion
     
+    def clean_calle(self):
+        calle = self.cleaned_data.get('calle')
+        if calle.isdigit(): 
+            raise forms.ValidationError("Debe ingresar solamente la calle")
+        return calle
+    
 class AddressForm(forms.ModelForm):
     class Meta:
         model = Address
@@ -81,9 +87,18 @@ class UserForm(forms.ModelForm):
 
     
 class ChangePasswordForm(forms.Form):
-    current_password = forms.CharField(label='Contraseña actual', widget=forms.PasswordInput(), required=True)
-    new_password = forms.CharField(label='Nueva Contraseña', widget=forms.PasswordInput(), required=False)
-    confirm_password = forms.CharField(label='Confirmar Nueva Contraseña', widget=forms.PasswordInput(), required=False)
+    current_password = forms.CharField(label='Contraseña actual', widget=forms.PasswordInput(attrs={
+        'class': 'form-group',
+        'placeholder': 'Ingresa contraseña actual'}
+        ), required=True)
+    new_password = forms.CharField(label='Nueva Contraseña', widget=forms.PasswordInput(attrs={
+        'class': 'form-group',
+        'placeholder': 'Ingresa nueva contraseña'}
+        ), required=False)
+    confirm_password = forms.CharField(label='Confirmar Nueva Contraseña', widget=forms.PasswordInput(attrs={
+        'class': 'form-group',
+        'placeholder': 'Confirmar tu nueva contraseña'
+    }), required=False, )
 
     def clean(self):
         cleaned_data = super().clean()

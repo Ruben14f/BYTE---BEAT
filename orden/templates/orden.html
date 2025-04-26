@@ -29,10 +29,12 @@
                         <p>Dirección registrada en tu perfil:
                             {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }},
                             {{ direccion_existente.comuna.name }} - {{ direccion_existente.ciudad }}</p>
+                            
                     {% else %}
                         <p>No tienes una dirección registrada en tu perfil. Por favor, agrégala.</p>
                     {% endif %}
                 {% endif %}
+                <a href="{% url 'modificar_direccion' orden.id %}">Modificar direccion</a>
             </div>
             
             <div>

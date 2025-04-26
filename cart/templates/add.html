@@ -1,12 +1,14 @@
 <form action="{% url 'add' %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="product_id" value="{{ product.id }}">
-    <div>
+    <div class="quantity-selector">
         <button type="button" class="btn btn-danger d-inline" id="remove">-</button>
         <input type="number" value="1" class="form-control-1 d-inline"  id="quantity" name="quantity"readonly>
         <button type="button" class="btn btn-danger d-inline" id="add">+</button>
     </div>
-    <button type="submit">Agregar al carrito</button>
+    <div class="action-buttons">
+        <button class="add-to-cart" type="submit">Agregar al carrito</button>
+    </div>
 </form>
 
 <script>

@@ -1,0 +1,206 @@
+:root {
+    --primary-color: #0dffd4;
+    --background-color: #272840;
+    --dark-background: #1e1f36;
+    --text-color: #ffffff;
+    --secondary-text: #b4b4cc;
+    --card-background: #3a3b58;
+}
+
+
+.logo {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin-left: 1.5rem;
+}
+
+nav a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.user-icons {
+    display: flex;
+    align-items: center;
+}
+
+.user-icons a {
+    margin-left: 1rem;
+    color: var(--text-color);
+    font-size: 1.2rem;
+}
+
+section {
+    max-width: 800px;
+    margin: -5px auto;
+    padding: 0 1rem;
+    
+}
+
+.profile-container {
+    background-color: var(--dark-background);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(23, 240, 210, 0.1);
+}
+
+h1 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.profile-section {
+    margin-bottom: 2rem;
+}
+
+.profile-field {
+    margin-bottom: 1.2rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 1px solid #444;
+}
+
+.profile-field:last-child {
+    border-bottom: none;
+}
+
+.field-label {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+
+.field-value {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    color: var(--text-color);
+}
+
+.password-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #444;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.buttons a{
+    text-decoration: none;
+    color: black;
+}
+
+button {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #0cbda0;
+}
+
+.user-info {
+    background-color: var(--card-background);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.user-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.user-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--dark-background);
+    margin-right: 1.5rem;
+}
+
+.user-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: white;
+}
+
+.user-email {
+    color: var(--secondary-text);
+    font-size: 1rem;
+}
+
+
+@media screen and (max-width: 768px) {
+    .user-avatar{
+        background-color: red;
+    }
+    section{
+        margin-top: -30px;
+    }
+    .user-card-header{
+        display: flex;
+        flex-direction: column;
+    }
+    .buttons{
+        display: flex;
+        flex-direction: column;
+    }
+
+}
+
+
+@media (max-width: 640px) {
+    
+}
+
+@media (min-width: 641px) and (max-width: 768px) { 
+
+}
+
+
+@media (min-width: 769px) and (max-width: 1024px) { 
+   
+
+  
+}
+
+/* escritorio y pantallas grandes */
+@media (min-width: 1025px) {
+    
+}
+

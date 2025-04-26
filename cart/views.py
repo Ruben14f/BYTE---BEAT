@@ -30,8 +30,9 @@ def addCart(request):
     product_cart = CartProduct.objects.crearActualizar(cart=cart, productos=product, quantity=quantity)
 
     messages.info(request, 'Producto agregado al carrito correctamente')
-    return render(request, 'add_to_cart.html',{
+    return render(request, 'cart_detail.html',{
         'product': product,
+        'cart': cart
     })
 
 def remove(request):
