@@ -166,9 +166,6 @@ button:hover {
 
 
 @media screen and (max-width: 768px) {
-    .user-avatar{
-        background-color: red;
-    }
     section{
         margin-top: -30px;
     }
