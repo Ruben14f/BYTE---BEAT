@@ -41,15 +41,17 @@ class Orden(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.delivery_method:
-            self.delivery_method = DeliveryMethod.SHIPPING 
-        
-        if self.delivery_method == DeliveryMethod.SHIPPING:
-            self.envio_total = 3990  
-        else:
-            self.envio_total = 0  
+            self.delivery_method = DeliveryMethod.SHIPPING  # Default a Envío
 
+        # Ajustar el costo de envío según el método de entrega
+        if self.delivery_method == DeliveryMethod.SHIPPING:
+            self.envio_total = 3990
+        elif self.delivery_method == DeliveryMethod.PICKUP:
+            self.envio_total = 0
+
+        # Recalcular el total
         self.total = self.cart.subtotal + self.envio_total
-        super().save(*args, **kwargs) 
+        super().save(*args, **kwargs)
 
 
 class OrderAddress(models.Model):

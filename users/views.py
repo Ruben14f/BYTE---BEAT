@@ -15,14 +15,11 @@ from django.http import HttpResponseRedirect
 
 # Create your views here.
 def login(request):
-
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-       
         usuarios = authenticate(request, username=username, password=password)
-        
         
         if usuarios is not None:
             lg(request, usuarios)

@@ -3,79 +3,121 @@
 {% block content %}
 <div style="color: aliceblue; background: rgb(0, 153, 255); width: 50%; margin: auto;">
     <div style="display: flex; justify-content: space-evenly; padding: 0px 15px; color: black;">
-        <div style="text-align: center;">
-            Detalle del pedido
-            <!-- <div>
-                <form method="POST">
-                    {% csrf_token %}
-                    <label for="delivery_method">Método de entrega:</label>
-                    <select name="delivery_method" id="delivery_method">
-                        <option value="SHIPPING" {% if orden.delivery_method  == 'SHIPPING' %}selected{% endif %}>Despacho</option>
-                        <option value="PICKUP" {% if orden.delivery_method  == 'PICKUP' %}selected{% endif %}>Retiro en tienda</option>
-                    </select>
-                    <button type="submit">Seleccionar</button>
-                </form>
-            </div> -->
-            <!-- {% if orden.delivery_method == 'SHIPPING' %}
-                
-            {% endif %} -->
-            <div style="display:flex; flex-direction: row; background-color: aqua;">
-                {% if orden.orderaddress_set.first %}
-                    <p>Dirección para este pedido {{ orden.id }}:
-                        {{ orden.orderaddress_set.first.calle }} {{ orden.orderaddress_set.first.num_direccion }},
-                        {{ orden.orderaddress_set.first.comuna.name }} - {{ orden.orderaddress_set.first.ciudad }}</p>
-                {% else %}
-                    {% if direccion_existente %}
-                        <p>Dirección registrada en tu perfil:
-                            {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }},
-                            {{ direccion_existente.comuna.name }} - {{ direccion_existente.ciudad }}</p>
-                            
-                    {% else %}
-                        <p>No tienes una dirección registrada en tu perfil. Por favor, agrégala.</p>
-                    {% endif %}
-                {% endif %}
-                <a href="{% url 'modificar_direccion' orden.id %}">Modificar direccion</a>
-            </div>
+        <div style="text-align: center; display: flex; flex-direction: row;">
             
             <div>
-                <p>Metodo de pago:
-                    WebPay
-                </p>
+                Detalle del pedido
+                <!-- Formulario para elegir el método de entrega -->
+                <form method="POST" >
+                    {% csrf_token %}
+                    <!-- Botón para Envio -->
+                     
+                    <button id="envio-btn" type="submit" name="delivery_method" value="SHIPPING" class="btn btn-primary" {% if orden.delivery_method == 'SHIPPING' %}disabled{% endif %}>
+                        Envío
+                    </button>
+        
+                    <!-- Botón para Retiro -->
+                    <button id="retiro-btn" type="submit" name="delivery_method" value="PICKUP" class="btn btn-secondary" {% if orden.delivery_method == 'PICKUP' %}disabled{% endif %}>
+                        Retiro en tienda
+                    </button>
+                </form>
+        
+                <div style="display:flex; flex-direction: row; background-color: aqua;">
+                    {% if orden.delivery_method == 'SHIPPING' %}
+                        <!-- Si es "Envio", se valida si tiene dirección registrada en el perfil -->
+                        {% if orden.orderaddress_set.first %}
+                            <p>Dirección para este pedido {{ orden.id }}:
+                                {{ orden.orderaddress_set.first.calle }} {{ orden.orderaddress_set.first.num_direccion }},
+                                {{ orden.orderaddress_set.first.comuna.name }} - {{ orden.orderaddress_set.first.ciudad }}
+                            </p>
+                        {% else %}
+                            <!-- Si no hay dirección para el pedido, mostramos la dirección del perfil -->
+                            {% if direccion_existente %}
+                                <p>Dirección de envío registrada en tu perfil:
+                                    {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }},
+                                    {{ direccion_existente.comuna.name }} - {{ direccion_existente.ciudad }}</p>
+                                <a href="{% url 'modificar_direccion' orden.id %}">Modificar dirección</a>
+                                <p>Valor de envío: {{ orden.envio_total }}</p>
+                            {% else %}
+                                <p>No tienes una dirección registrada en tu perfil. Puedes agregar una dirección para este pedido o en tu perfil.</p>
+                                <a href="{% url 'add_address' %}">Agregar dirección a mi perfil</a><br>
+                                <a href="{% url 'modificar_direccion' orden.id %}">Agregar dirección solo para este pedido</a>
+                            {% endif %}
+                        {% endif %}
+                    {% elif orden.delivery_method == 'PICKUP' %}
+                        <!-- Si es "Retiro", mostramos la dirección registrada en el perfil -->
+                        {% if direccion_existente %}
+                            <p>Dirección de retiro: {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }},
+                                {{ direccion_existente.comuna.name }} - {{ direccion_existente.ciudad }}</p>
+                        {% else %}
+                            <p>No tienes una dirección registrada en tu perfil. Por favor, agrégala.</p>
+                            <a href="{% url 'add_address' %}">Agregar dirección a mi perfil</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div>
+                    <p>Metodo de pago:
+                        WebPay
+                    </p>
+                </div>
             </div>
 
+            <div>
+                <div>
+                    Resumen del pedido
+                    Editar
+                </div>
+                {% for cart_product in cart.product_related %}
+                <div>
+                    {% if cart_product.productos.main_image %}
+                    <img src="{{cart_product.productos.main_image.url}}" alt="" width="70px" height="70px">
+                    {% endif %}
+                </div>
 
-        </div>
-        <div>
-            <div>
-                Resumen del pedido
-                Editar
+                <div>
+                    <strong>{{cart_product.productos.name}}</strong>
+                </div>
+                <div>
+                    {{cart_product.productos.price}}
+                </div>
+                <div>
+                    {{cart_product.quantity }}
+                </div>
+                {% endfor %}
+                <div>
+                    <p>Subtotal: </p>
+                    <p>Envio: {{ orden.envio_total }} </p>
+                    <strong>Total: {{orden.total}} </strong>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="pagar" class="btn btn-primary">Pagar</button>
+                </form>
             </div>
-            {% for cart_product in cart.product_related %}
-            <div>
-                {% if cart_product.productos.main_image %}
-                <img src="{{cart_product.productos.main_image.url}}" alt="" width="70px" height="70px">
-                {% endif %}
-            </div>
-
-            <div>
-                <strong>{{cart_product.productos.name}}</strong>
-            </div>
-            <div>
-                {{cart_product.productos.price}}
-            </div>
-            <div>
-                {{cart_product.quantity }}
-            </div>
-            {% endfor %}
-            <div>
-                <p>Subtotal: </p>
-                <p>Envio: {{ orden.envio_total }} </p>
-                <strong>Total: {{orden.total}} </strong>
-            </div>
-            <a href="" class="btn btn-primary">Pagar</a>
         </div>
     </div>
 
-
-</div>
+    
+    <script>
+        let envioClicked = false;
+        let retiroClicked = false;
+    
+        document.getElementById('envio-btn')?.addEventListener('click', function(e) {
+            if (envioClicked) {
+                e.preventDefault();
+                return false;
+            }
+            envioClicked = true;
+        });
+    
+        document.getElementById('retiro-btn')?.addEventListener('click', function(e) {
+            if (retiroClicked) {
+                e.preventDefault();
+                return false;
+            }
+            retiroClicked = true;
+        });
+    </script>
+    
+    
 {% endblock %}

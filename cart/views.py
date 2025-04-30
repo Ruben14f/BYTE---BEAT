@@ -43,3 +43,20 @@ def remove(request):
     
     messages.info(request, 'Producto eliminado de carrito')
     return redirect('cart')
+
+def update_cart_product(request):
+    if request.method == 'POST':
+        cart_product_id = request.POST.get('cart_product_id')
+        new_quantity = int(request.POST.get('new_quantity'))
+
+        try:
+            cart_product = CartProduct.objects.get(id=cart_product_id)
+            cart_product.update_quantity(new_quantity)
+            cart_product.cart.update_totals()
+            return redirect('cart')
+
+        except CartProduct.DoesNotExist:
+            messages.error(request, "El producto no se encuentra en el carrito")
+            return redirect('cart')
+
+    return redirect('cart') 

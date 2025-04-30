@@ -1,0 +1,49 @@
+
+<div style="display: flex; flex-direction: row; align-items: center; color: #FFFFFF; position: relative; min-height: 100px; width: 100%; box-sizing: border-box;">
+    <div id="loading-spinner-{{ cart_product.id }}" class="loading-spinner" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 100; display: flex; justify-content: center; align-items: center;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif" alt="Cargando..." style="width: 50px; height: 50px;">
+    </div>
+
+    <p style="margin-right: 10px;">Cantidad:</p>
+    <form id="quantity-form-{{ cart_product.id }}" class="quantity-form" method="post" action="{% url 'update_cart_product' %}" style="display: flex; align-items: center;">
+        {% csrf_token %}
+        <input type="hidden" name="cart_product_id" value="{{ cart_product.id }}">
+        <input type="hidden" name="new_quantity" id="new_quantity-{{ cart_product.id }}" value="{{ cart_product.quantity }}">
+        <button type="button" class="btn btn-danger" id="remove-{{ cart_product.id }}" onclick="updateQuantity({{ cart_product.id }}, -1)" style="width: 40px; height: 40px; font-size: 24px;" id="btn-remove-{{ cart_product.id }}">-</button>
+        <span id="quantity-{{ cart_product.id }}" style="font-size: 18px; margin: 0 10px;">{{ cart_product.quantity }}</span>
+
+        <button type="button" class="btn btn-danger" id="add-{{ cart_product.id }}" onclick="updateQuantity({{ cart_product.id }}, 1)" style="width: 40px; height: 40px; font-size: 24px;" id="btn-add-{{ cart_product.id }}">+</button>
+
+        <button type="submit" style="display: none;" id="submit-{{ cart_product.id }}">Actualizar</button>
+    </form>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let allSpinners = document.querySelectorAll('.loading-spinner');
+        allSpinners.forEach(function(spinner) {
+            spinner.style.display = 'none';  
+        });
+    });
+
+    function updateQuantity(cartProductId, change) {
+    let quantityElement = document.getElementById('quantity-' + cartProductId);
+    let currentQuantity = parseInt(quantityElement.innerText);
+    let newQuantity = currentQuantity + change;
+
+    if (newQuantity > 0) {
+
+        document.getElementById('loading-spinner-' + cartProductId).style.display = 'flex';
+        document.getElementById('remove-' + cartProductId).disabled = true;
+        document.getElementById('add-' + cartProductId).disabled = true;
+
+        quantityElement.innerText = newQuantity;
+
+        document.getElementById('new_quantity-' + cartProductId).value = newQuantity;
+        let form = document.getElementById('quantity-form-' + cartProductId);
+        form.submit();
+
+    }
+}
+
+</script>

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background: white; margin: auto; color: black; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    <h1>Agregar direccion</h1>
+    <form method="POST">
+        {% csrf_token %}
+    
+        <h2>Dirección</h2>
+        {{ address_form.as_p }}
+    
+        <button type="submit">Guardar</button>
+    </form>
+</div>
+{% endblock %}

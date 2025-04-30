@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 
+# URL base de la aplicación
+BASE_URL = 'http://localhost:8000'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', default='RQbybpHnBxqQYgmMVzZK')
@@ -178,3 +181,9 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'WyaxOH2EjgfLZAa-q4wBfRMgKU0'),
     secure=True
 )
+
+# Webpay - Django integration
+WEBPAY_COMMERCE_CODE = '597055555532' 
+WEBPAY_API_KEY = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'  
+WEBPAY_ENVIRONMENT = 'integration' 
+WEBPAY_BASE_URL = 'https://webpay3gint.transbank.cl' 

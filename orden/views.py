@@ -3,8 +3,10 @@ from orden.utils import funcionOrden, breadcrumb
 from cart.funciones import funcionCarrito
 from django.contrib.auth.decorators import login_required
 from profiles.models import Address
-from profiles.forms import AddressForm,OrderAddressForm
-from .models import OrderAddress,Orden
+from profiles.forms import AddressForm,OrderAddressForm,UserProfileForm
+from .models import DeliveryMethod, OrderAddress,Orden
+from payment.views import crearTransaccion  
+from django.contrib import messages
 
 
 # Create your views here.
@@ -15,25 +17,29 @@ def orden(request):
 
     direccion_existente = Address.objects.filter(user=request.user).first()
     address_form = AddressForm(request.POST or None)
-
+    
     if request.method == 'POST':
-        # delivery_method  = request.POST.get('delivery_method')
-        # if delivery_method == 'PICKUP':
-        #     orden.delivery_method = DeliveryMethod.PICKUP
-        #     orden.save()
-        # elif delivery_method == 'SHIPPING':
-        #     orden.delivery_method = DeliveryMethod.SHIPPING
-        #     orden.save()
+        if 'delivery_method' in request.POST:
+            delivery_method = request.POST.get('delivery_method')
+            if delivery_method == 'SHIPPING':
+                orden.delivery_method = DeliveryMethod.SHIPPING
+                orden.save()  # Guarda la orden después de cambiar el método de entrega
+            elif delivery_method == 'PICKUP':
+                orden.delivery_method = DeliveryMethod.PICKUP
+                orden.save()  # Guarda la orden después de cambiar el método de entrega
+        
+        if 'pagar' in request.POST:
+            return crearTransaccion(request)
 
-        if not direccion_existente:  # Solo se guarda la dirección si no existe una
-            address_form = AddressForm(request.POST)  # Asegúrate de instanciar con POST
+        if not direccion_existente and orden.delivery_method == 'SHIPPING':
+            address_form = AddressForm(request.POST)  
             if address_form.is_valid():
                 address = address_form.save(commit=False)
-                address.user = request.user 
+                address.user = request.user
                 address.save()
-                request.user.userprofile.address = address
+                request.user.userprofile.address = address 
                 request.user.userprofile.save()
-
+                messages.success(request, "Dirección agregada al perfil con éxito.")
                 return redirect('orden')
     
     breadcrumb_items = breadcrumb(Cart=False, products=True, confirmation=False)  
@@ -69,10 +75,33 @@ def modificar_direccion(request, orden_id):
             return redirect('orden')  
         else:
             print("Form Errors:", order_address_form.errors)  
+
     return render(request, 'modificar_direccion.html', {
         'direccion_existente': direccion_existente,
         'address_form': order_address_form
     })
+
+def add_new_address(request):
+    if request.user.userprofile.address:
+        address_form = AddressForm(instance=request.user.userprofile.address)
+    else:
+        address_form = AddressForm()
+
+    if request.method == 'POST':
+        address_form = AddressForm(request.POST, instance=request.user.userprofile.address)
+
+        if address_form.is_valid():
+            address = address_form.save(commit=False)
+            address.user = request.user
+            address.save() 
+            request.user.userprofile.address = address
+            request.user.userprofile.save()
+            messages.success(request, "Dirección agregada al perfil con éxito.")
+            return redirect('orden') 
+
+
+    return render(request, 'add_newaddress.html', {'address_form': address_form})
+    
 
 
 # @login_required(login_url='login')

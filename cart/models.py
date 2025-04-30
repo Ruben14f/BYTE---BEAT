@@ -35,7 +35,7 @@ class Cart(models.Model):
         self.save()
 
     def product_related(self):
-        return self.cartproduct_set.select_related('productos')
+        return self.cartproduct_set.select_related('productos').order_by('id')
     @property
     def orden (self):
         return self.orden_set.first()
