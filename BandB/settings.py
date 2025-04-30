@@ -12,18 +12,23 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+
 
 # URL base de la aplicación
 BASE_URL = 'http://localhost:8000'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get('SECRET_KEY', default='RQbybpHnBxqQYgmMVzZK')
+load_dotenv(BASE_DIR / '.env')
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+#Enviroments vari
+
 
 #Cloudinary imports
 import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+
 
 
 
@@ -100,11 +105,11 @@ WSGI_APPLICATION = 'BandB.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DB_NAME', 'bdproject_kcdq'),
-        'USER': os.environ.get('DB_USER', 'adminuser'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 've2Nqqb8arVkFKrXSJd1lL5D6xBTDwZi'),
-        'HOST': os.environ.get('DB_HOST', 'dpg-cvs2ai0gjchc73anmcs0-a.oregon-postgres.render.com'),
-        'PORT': '5432',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': int(os.environ.get('DB_PORT')),
     }
 }
 
@@ -166,24 +171,24 @@ if not DEBUG:
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = os.environ.get('EMAIL_HOST')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT'))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
 EMAIL_FILE_PATH = BASE_DIR / 'sent_emails'
 
 # Cloudinary - Django integration
 
 cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME', 'dg4dhdyzj'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY', '448132378639354'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET', 'WyaxOH2EjgfLZAa-q4wBfRMgKU0'),
+    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    api_key=os.environ.get('CLOUDINARY_API_KEY'),
+    api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
     secure=True
 )
 
 # Webpay - Django integration
-WEBPAY_COMMERCE_CODE = '597055555532' 
-WEBPAY_API_KEY = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C'  
+WEBPAY_COMMERCE_CODE = os.environ.get('WEBPAY_COMMERCE_CODE')
+WEBPAY_API_KEY = os.environ.get('WEBPAY_API_KEY')  
 WEBPAY_ENVIRONMENT = 'integration' 
 WEBPAY_BASE_URL = 'https://webpay3gint.transbank.cl' 
