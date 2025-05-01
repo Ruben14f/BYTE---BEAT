@@ -111,7 +111,7 @@ h1 {
     color: black;
 }
 
-button {
+.btn {
     background-color: var(--primary-color);
     border: none;
     padding: 0.8rem 1.5rem;
@@ -122,8 +122,20 @@ button {
     transition: background-color 0.2s;
 }
 
-button:hover {
+.btn:hover {
     background-color: #0cbda0;
+    color: black;
+}
+
+.btn:active{
+    background-color: #0cbda0 !important;
+    color: black !important;
+}
+
+.btn:focus{
+    background-color: #0cbda0 !important;
+    border: none !important;
+    color: black !important;
 }
 
 .user-info {

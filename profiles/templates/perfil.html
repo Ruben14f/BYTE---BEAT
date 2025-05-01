@@ -57,10 +57,31 @@
       </div>
     </div>
     <div class="buttons">
-        <button><a href="{% url 'change_password' %}">Cambiar contraseña</a></button>
+        <a id="btn" class="btn btn-primary" href="{% url 'change_password' %}">Cambiar contraseña</a>
         <br>
-        <button><a href="{% url 'edit_profile' %}">Editar perfil</a></button>
+        <a id="btn1" class="btn btn-primary" href="{% url 'edit_profile' %}">Editar perfil</a>
     </div>
     
 </section>
+<script>
+    
+  let ClickedA = false;
+  let ClickedB = false;
+
+  document.getElementById('btn')?.addEventListener('click', function (e) {
+      if (ClickedA) {
+          e.preventDefault();
+          return false;
+      }
+      ClickedA = true;
+  });
+
+  document.getElementById('btn1')?.addEventListener('click', function (e) {
+      if (ClickedB) {
+          e.preventDefault();
+          return false;
+      }
+      ClickedB = true;
+  });
+</script>
 {% endblock %}
