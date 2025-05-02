@@ -38,6 +38,7 @@ import cloudinary
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-1ts+!(*m^oa09%j%h9%(7vnj#wlv@b5y(_!c&)2632^y(6r8#g'
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
@@ -64,6 +65,7 @@ INSTALLED_APPS = [
     'profiles',
     'cart',
     'orden',
+    'payment'
     
 ]
 

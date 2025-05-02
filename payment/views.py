@@ -1,4 +1,5 @@
 from django.shortcuts import redirect,render
+from django.views.decorators.csrf import csrf_exempt
 import requests
 import json
 import random
@@ -14,26 +15,25 @@ def crearTransaccion(request):
     orden = Orden.objects.filter(user=user, status=OrdenStatus.CREATED).first()
 
     if not orden:
-        # Si no existe una orden activa, crear una nueva
+
         cart = Cart.objects.filter(user=user).order_by('id').first()
         try:
             orden = Orden.objects.create(user=user, cart=cart, status=OrdenStatus.CREATED)
         except Exception as e:
             orden = Orden.objects.create(user=user, cart=cart, status=OrdenStatus.CREATED)
             messages.error(request, f"Error al crear la orden: {str(e)}")
-            return redirect('carrito')
+            return redirect('orden')
 
-    # Asegurarse de que el costo de envío esté actualizado
     if orden.delivery_method == 'PICKUP':
-        orden.envio_total = 0  # Asegúrate de que no haya costo de envío
-    orden.update_total()  # Actualiza el total de la orden
+        orden.envio_total = 0  
+    orden.update_total()  
 
     price = orden.total
     buy_order = orden.id
     session_id = str(random.randint(10000, 99999))
     amount = float(price)
 
-    ruta = f"{settings.BASE_URL}/carro/webpay-respuesta"
+    ruta = f"{settings.BASE_URL}/webpay/"
 
     payload = {
         "buy_order": buy_order,
@@ -48,7 +48,7 @@ def crearTransaccion(request):
         return redirect(payment_url)
     else:
         messages.error(request, "Hubo un problema al procesar el pago. Intenta nuevamente.")
-        return redirect('carrito')
+        return redirect('orden')
 
 
     
@@ -74,7 +74,7 @@ def pagarConWebpay(payload):
         return None
 
 def obtener_estado_pago_webpay(token):
-    url = settings.WEBPAY_BASE_URL + f"/webpay/plus/v1.0/transactions/{token}"
+    url = settings.WEBPAY_BASE_URL + f"/rswebpaytransaction/api/webpay/v1.2/transactions/{token}"
 
     headers = {
         'Tbk-Api-Key-Id': settings.WEBPAY_COMMERCE_CODE,
@@ -82,9 +82,39 @@ def obtener_estado_pago_webpay(token):
         'Content-Type': 'application/json'
     }
 
-    response = requests.get(url, headers=headers)
-
-    if response.status_code == 200:
+    try:
+        response = requests.put(url, headers=headers) 
         return response.json()
-    else:
+    except Exception as e:
+        print("Error al obtener estado:", e)
         return None
+
+@csrf_exempt
+def webpay_respuesta(request):
+    token_ws = request.GET.get('token_ws') or request.POST.get('token_ws')
+
+    print("Método de la solicitud:", request.method)
+    print(f"Token recibido en return_url: {token_ws}")
+
+
+    if not token_ws:
+        return render(request, 'token_fallido.html', {'error':'token invalido'})
+    
+    print("Token recibido:", token_ws)
+
+    resultado = obtener_estado_pago_webpay(token_ws)
+    print("Resultado Webpay:", resultado)
+
+    if resultado:
+        estado = resultado.get('status')
+        if estado == 'AUTHORIZED':
+            return render(request, 'confirmed.html', {'resultado': resultado})
+        elif estado == 'INITIALIZED':
+            return render(request, 'peding.html', {'resultado': resultado , 'token_ws': token_ws})
+        elif estado == 'FAILED':
+            return render(request, 'paymen_failed.html', {'resultado': resultado})
+        else:
+            return render(request, 'payment_unknown.html', {'resultado': resultado})
+    else:
+        return render(request, 'payment_failed.html', {'error': 'No se pudo obtener el estado del pago'})
+    
