@@ -1,12 +1,13 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import get_object_or_404, render,redirect
 from orden.utils import funcionOrden, breadcrumb
 from cart.funciones import funcionCarrito
 from django.contrib.auth.decorators import login_required
 from profiles.models import Address
-from profiles.forms import AddressForm,OrderAddressForm,UserProfileForm
+from profiles.forms import AddressForm,OrderAddressForm
 from .models import DeliveryMethod, OrderAddress,Orden
 from payment.views import crearTransaccion  
 from django.contrib import messages
+from orden.models import Orden, OrdenStatus
 
 
 # Create your views here.
@@ -23,10 +24,10 @@ def orden(request):
             delivery_method = request.POST.get('delivery_method')
             if delivery_method == 'SHIPPING':
                 orden.delivery_method = DeliveryMethod.SHIPPING
-                orden.save()  # Guarda la orden después de cambiar el método de entrega
+                orden.save()  
             elif delivery_method == 'PICKUP':
                 orden.delivery_method = DeliveryMethod.PICKUP
-                orden.save()  # Guarda la orden después de cambiar el método de entrega
+                orden.save()  
         
         if 'pagar' in request.POST:
             return crearTransaccion(request)
@@ -42,7 +43,7 @@ def orden(request):
                 messages.success(request, "Dirección agregada al perfil con éxito.")
                 return redirect('orden')
     
-    breadcrumb_items = breadcrumb(Cart=False, products=True, confirmation=False)  
+    breadcrumb_items = breadcrumb(products=True, confirmation=False)  
 
     return render(request, 'orden.html',{
         'cart': cart,
@@ -99,10 +100,35 @@ def add_new_address(request):
             messages.success(request, "Dirección agregada al perfil con éxito.")
             return redirect('orden') 
 
-
     return render(request, 'add_newaddress.html', {'address_form': address_form})
     
+def historial_orden(request):
+    user = request.user
+    if user.is_authenticated:
+        ordenes = Orden.objects.filter(user=request.user).order_by('-create_at').prefetch_related('productos_orden__producto')
+        return render(request, 'historial_compras.html', {
+            'ordenes': ordenes
+        })
+    else:
+        messages.error(request, "Debes estar autenticado para ver tu historial de compras.")
+        return redirect('login')
 
+def detalle_compra(request, id):  
+    orden = get_object_or_404(Orden, id=id) 
+    return render(request, 'detalle_compra.html', {
+        'orden': orden
+    })
+
+
+def cancelar_orden(request,id):
+    orden = get_object_or_404(Orden, id=id)
+
+    orden.status = OrdenStatus.CANCELED
+    orden.save(update_fields=['status'])
+
+    return render(request, 'historial_compras.html', {
+        'orden': orden
+    })
 
 # @login_required(login_url='login')
 # def confirmacion(request):

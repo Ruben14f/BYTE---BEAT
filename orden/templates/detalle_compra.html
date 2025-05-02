@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background: white;">
+    <h1>Detalle de la compra</h1>
+    <h3>Orden: {{ orden.ordenID }}</h3>
+    <p>Estado: {{ orden.get_status_display }}</p>
+    <p>Total: ${{ orden.total }}</p>
+    <p>Fecha de pago: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
+    
+    <h4>Productos:</h4>
+    <ul>
+        {% for item in orden.productos_orden.all %}
+            <li>
+                <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+                {{ item.producto.name }} x{{ item.quantity }} - ${{ item.producto.price }}
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'historial_orden' %}">Atras</a>
+</div>
+{% endblock %}

@@ -10,7 +10,6 @@
                 <!-- Formulario para elegir el método de entrega -->
                 <form method="POST" >
                     {% csrf_token %}
-                    <!-- Botón para Envio -->
                      
                     <button id="envio-btn" type="submit" name="delivery_method" value="SHIPPING" class="btn btn-primary" {% if orden.delivery_method == 'SHIPPING' %}disabled{% endif %}>
                         Envío
@@ -24,14 +23,14 @@
         
                 <div style="display:flex; flex-direction: row; background-color: aqua;">
                     {% if orden.delivery_method == 'SHIPPING' %}
-                        <!-- Si es "Envio", se valida si tiene dirección registrada en el perfil -->
+
                         {% if orden.orderaddress_set.first %}
                             <p>Dirección para este pedido {{ orden.id }}:
                                 {{ orden.orderaddress_set.first.calle }} {{ orden.orderaddress_set.first.num_direccion }},
                                 {{ orden.orderaddress_set.first.comuna.name }} - {{ orden.orderaddress_set.first.ciudad }}
                             </p>
                         {% else %}
-                            <!-- Si no hay dirección para el pedido, mostramos la dirección del perfil -->
+
                             {% if direccion_existente %}
                                 <p>Dirección de envío registrada en tu perfil:
                                     {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }},
@@ -45,7 +44,7 @@
                             {% endif %}
                         {% endif %}
                     {% elif orden.delivery_method == 'PICKUP' %}
-                        <!-- Si es "Retiro", mostramos la dirección registrada en el perfil -->
+
                         {% if direccion_existente %}
                             <p>Dirección de retiro: {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }},
                                 {{ direccion_existente.comuna.name }} - {{ direccion_existente.ciudad }}</p>

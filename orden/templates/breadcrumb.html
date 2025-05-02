@@ -24,9 +24,9 @@
       <ol class="breadcrumb">
         {% for item in breadcrumb %}
           {% if item.active %}
-            <li class="breadcrumb-item active" aria-current="page">{{item.title}}</li> <!-- No enlace para el item activo -->
+            <li class="breadcrumb-item active" aria-current="page">{{item.title}}</li>
           {% else %}
-            <li class="breadcrumb-item"><a href="{{item.url}}">{{item.title}}</a></li> <!-- Enlace para los demás items -->
+            <li class="breadcrumb-item"><a href="{{item.url}}">{{item.title}}</a></li> 
           {% endif %}
         {% endfor %}
       </ol>

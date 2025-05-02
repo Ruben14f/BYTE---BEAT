@@ -5,7 +5,7 @@ from .models import CartProduct
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
-from orden.utils import breadcrumb
+
 
 # Create your views here.
 
@@ -14,11 +14,9 @@ def cart(request):
     
     print(cart.productos.all())
 
-    breadcrumb_items = breadcrumb(Cart=True, products=False, confirmation=False)  
 
     return render(request, 'cart_detail.html', {
         'cart': cart,
-        'breadcrumb' : breadcrumb_items
     })
 
 

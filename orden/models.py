@@ -1,9 +1,11 @@
 from django.db import models
 from users.models import User
 from cart.models import Cart
+from products.models import Product
 from profiles.models import Comuna, Ciudad
 from django.db.models.signals import pre_save
 import uuid
+
 
 class OrdenStatus(models.TextChoices):
     CREATED = 'CREATED', 'Creado'
@@ -28,30 +30,37 @@ class Orden(models.Model):
     envio_total = models.DecimalField(default=0, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0, max_digits=9, decimal_places=2)
     create_at = models.DateField(auto_now_add=True)
-    
+    token_ws = models.CharField(max_length=255, blank=True, null=True)
+    fecha_pagada = models.DateTimeField(null=True, blank=True)
+
     def __str__(self):
         return self.ordenID
     
     def get_total(self):
-        return self.cart.total + self.envio_total
+        return self.cart.subtotal + self.envio_total
     
     def update_total(self):
         self.total = self.get_total()
         self.save()
 
     def save(self, *args, **kwargs):
-        if not self.delivery_method:
-            self.delivery_method = DeliveryMethod.SHIPPING  # Default a Envío
-
-        # Ajustar el costo de envío según el método de entrega
         if self.delivery_method == DeliveryMethod.SHIPPING:
             self.envio_total = 3990
         elif self.delivery_method == DeliveryMethod.PICKUP:
             self.envio_total = 0
 
-        # Recalcular el total
-        self.total = self.cart.subtotal + self.envio_total
         super().save(*args, **kwargs)
+
+
+
+class OrdenProducto(models.Model):
+    orden = models.ForeignKey('Orden', on_delete=models.CASCADE, related_name='productos_orden')
+    producto = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    
+
+    def __str__(self):
+        return f"{self.producto.name} x{self.quantity} (Orden {self.orden.ordenID})"
 
 
 class OrderAddress(models.Model):
@@ -74,7 +83,8 @@ def enviarOrden(sender, instance, *args, **kwargs):
         instance.ordenID = str(uuid.uuid4())
 
 def enviar_total(sender, instance, *args, **kwargs):
-    instance.total = instance.get_total()
+    if instance._state.adding:
+        instance.total = instance.get_total()
 
 pre_save.connect(enviarOrden, sender=Orden)
 pre_save.connect(enviar_total, sender=Orden)
