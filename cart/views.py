@@ -1,4 +1,5 @@
-from django.http import HttpResponseServerError
+
+from django.http import HttpResponse
 from django.shortcuts import render
 from .funciones import *
 from products.models import Product
@@ -35,9 +36,9 @@ def addCart(request):
         
     except Exception as e:
         messages.error(request, f'Ocurrió un error al agregar el producto: {str(e)}')
+
         error_trace = traceback.format_exc()
-        print("🔥 ERROR DETECTADO EN addCart:\n", error_trace)
-        return HttpResponseServerError(f"<pre>{error_trace}</pre>")
+        return HttpResponse(f"<pre>{error_trace}</pre>")
 
     return render(request, 'cart_detail.html', {
         'product': product,
