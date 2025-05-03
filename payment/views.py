@@ -122,23 +122,31 @@ def webpay_respuesta(request):
                     orden.save(update_fields=['status'])
                     print(f'estado actualizado: {Orden.status}')
                     cart = orden.cart
+
                     if cart:
+
                         for cart_product in orden.cart.cartproduct_set.all():
                             OrdenProducto.objects.create(
                                 orden=orden,
                                 producto=cart_product.productos,
                                 quantity=cart_product.quantity
                             )
+                            
                         cart.productos.clear()
                         cart.update_totals()
                         print(f'carrito limpiado: {cart}')
+
+
                     orden.total = total_original
                     orden.save(update_fields=['total'])
                     transaction_date = resultado.get("transaction_date")
+
                     if transaction_date:
                         orden.fecha_pagada = parse_datetime(transaction_date)
                     orden.save(update_fields=['fecha_pagada'])
                     print(total_original)
+
+
             return render(request, 'confirmed.html', {'resultado': resultado})
         elif estado == 'INITIALIZED':
             return render(request, 'peding.html', {'resultado': resultado , 'token_ws': token_ws})
