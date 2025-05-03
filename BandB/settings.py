@@ -13,21 +13,15 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+#Cloudinary imports
+import cloudinary
 
 
-# URL base de la aplicación
-BASE_URL = 'http://localhost:8000'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = os.environ.get('SECRET_KEY')
-
-#Enviroments vari
-
-
-#Cloudinary imports
-import cloudinary
 
 
 
@@ -37,12 +31,17 @@ import cloudinary
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-1ts+!(*m^oa09%j%h9%(7vnj#wlv@b5y(_!c&)2632^y(6r8#g'
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
 ALLOWED_HOSTS = ['*']
+
+# URL base de la aplicación
+if DEBUG:
+    BASE_URL = 'http://localhost:8000'
+else:
+    BASE_URL = os.environ.get('BASE_URL', 'https://byte-beat-pr3b.onrender.com')
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
 if RENDER_EXTERNAL_HOSTNAME:
@@ -156,9 +155,8 @@ USE_L10N = True  # Habilitar la localización
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-)
+if DEBUG:
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 MEDIA_URL = '/media/'  
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  
@@ -166,6 +164,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 if not DEBUG:
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
