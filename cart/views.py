@@ -6,6 +6,8 @@ from .models import CartProduct
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.shortcuts import get_object_or_404
+import traceback
+
 
 
 # Create your views here.
@@ -30,9 +32,12 @@ def addCart(request):
         product_cart = CartProduct.objects.crearActualizar(cart=cart, productos=product, quantity=quantity)
 
         messages.info(request, 'Producto agregado al carrito correctamente')
-        messages.error(request, f'Ocurrió un error al agregar el producto: {e}')
+        
     except Exception as e:
-        return HttpResponseServerError(f"Error interno del servidor: {str(e)}")
+        messages.error(request, f'Ocurrió un error al agregar el producto: {str(e)}')
+        error_trace = traceback.format_exc()
+        print("🔥 ERROR DETECTADO EN addCart:\n", error_trace)
+        return HttpResponseServerError(f"<pre>{error_trace}</pre>")
 
     return render(request, 'cart_detail.html', {
         'product': product,
