@@ -23,8 +23,6 @@ import cloudinary
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / '.env')
 
-# URL base de la aplicación
-BASE_URL = os.environ.get('BASE_URL', 'http://localhost:8000') 
 
 
 

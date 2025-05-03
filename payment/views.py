@@ -1,5 +1,6 @@
 from django.shortcuts import redirect,render
 from django.views.decorators.csrf import csrf_exempt
+from django.urls import reverse
 import requests
 import json
 import random
@@ -35,7 +36,7 @@ def crearTransaccion(request):
     session_id = str(random.randint(10000, 99999))
     amount = float(price)
 
-    ruta = f"{settings.BASE_URL}/webpay/"
+    ruta = request.build_absolute_uri(reverse('webpay_respuesta'))
 
     payload = {
         "buy_order": buy_order,
