@@ -35,8 +35,7 @@ def addCart(request):
         messages.info(request, 'Producto agregado al carrito correctamente')
         
     except Exception as e:
-        messages.error(request, f'Ocurrió un error al agregar el producto: {str(e)}')
-
+        messages.error(request, f'Ocurrió un error al agregar el producto')
         error_trace = traceback.format_exc()
         return HttpResponse(f"<pre>{error_trace}</pre>")
 
