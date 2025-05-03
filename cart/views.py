@@ -21,14 +21,19 @@ def cart(request):
 
 
 def addCart(request):
-    cart = funcionCarrito(request)
-    product = get_object_or_404(Product, pk=request.POST.get('product_id'))
-    quantity = int(request.POST.get('quantity', 1))
-    
-    product_cart = CartProduct.objects.crearActualizar(cart=cart, productos=product, quantity=quantity)
+    try:
+        cart = funcionCarrito(request)
+        product = get_object_or_404(Product, pk=request.POST.get('product_id'))
+        quantity = int(request.POST.get('quantity', 1))
 
-    messages.info(request, 'Producto agregado al carrito correctamente')
-    return render(request, 'cart_detail.html',{
+        product_cart = CartProduct.objects.crearActualizar(cart=cart, productos=product, quantity=quantity)
+
+        messages.info(request, 'Producto agregado al carrito correctamente')
+    except Exception as e:
+        messages.error(request, f'Ocurrió un error al agregar el producto: {e}')
+        return render(request, 'cart_detail.html', {'error_message': 'Ocurrió un error inesperado.'})
+
+    return render(request, 'cart_detail.html', {
         'product': product,
         'cart': cart
     })
