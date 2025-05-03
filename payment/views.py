@@ -97,7 +97,6 @@ def obtener_estado_pago_webpay(token):
         print("Error al obtener estado:", e)
         return None
 
-@csrf_exempt
 def webpay_respuesta(request):
     token_ws = request.GET.get('token_ws') or request.POST.get('token_ws')
 

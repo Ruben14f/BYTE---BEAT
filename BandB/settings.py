@@ -31,10 +31,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',
-    'https://byte-beat-pr3b.onrender.com', 
-]
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'RENDER' not in os.environ
