@@ -1,3 +1,4 @@
+from django.http import HttpResponseServerError
 from django.shortcuts import render
 from .funciones import *
 from products.models import Product
@@ -29,9 +30,9 @@ def addCart(request):
         product_cart = CartProduct.objects.crearActualizar(cart=cart, productos=product, quantity=quantity)
 
         messages.info(request, 'Producto agregado al carrito correctamente')
-    except Exception as e:
         messages.error(request, f'Ocurrió un error al agregar el producto: {e}')
-        return render(request, 'cart_detail.html', {'error_message': 'Ocurrió un error inesperado.'})
+    except Exception as e:
+        return HttpResponseServerError(f"Error interno del servidor: {str(e)}")
 
     return render(request, 'cart_detail.html', {
         'product': product,
