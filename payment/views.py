@@ -113,11 +113,14 @@ def webpay_respuesta(request):
     if resultado:
         estado = resultado.get('status')
         if estado == 'AUTHORIZED':
+
             if request.user.is_authenticated:
                 orden = Orden.objects.filter(token_ws=token_ws, status=OrdenStatus.CREATED).first()
+
                 if orden:
                     if orden.status == OrdenStatus.PAYED:
                         return render(request, 'confirmed.html', {'resultado': resultado})
+                    
                     orden.status = OrdenStatus.PAYED
                     orden.save(update_fields=['status'])
                     print(f'estado actualizado: {Orden.status}')

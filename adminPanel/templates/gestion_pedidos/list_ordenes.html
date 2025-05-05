@@ -1,0 +1,19 @@
+{% extends 'base_admin.html' %}
+
+
+{% block content_admin %}
+
+<div style="background: lightblue; color: black;">
+    {% for ordenes in ordens %}
+    <div style="display: flex; flex-direction: column;">
+        {{ordenes.ordenID}}
+        {{ordenes.user}}
+        {{ordenes.fecha_pagada}}
+    </div>
+     
+     
+    {% endfor %}
+    TOTAL ORDENES: {{ordens | length}}
+</div>
+
+{% endblock %}

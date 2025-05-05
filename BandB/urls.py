@@ -28,7 +28,8 @@ urlpatterns = [
     path('carrito/', include('cart.urls')),
     path('orden/', include('orden.urls')),
     path('perfil/', include('profiles.urls')),
-    path('webpay/', include('payment.urls'))
+    path('webpay/', include('payment.urls')),
+    path('admin_view/', include('adminPanel.urls'))
 ]
 
 if settings.DEBUG:

@@ -1,0 +1,22 @@
+{% extends "base_admin.html" %}
+{% load static %}
+
+
+{% block content_admin %}
+<h1 style="background: lightcoral;">
+    Administracion
+</h1>
+<div style="display: flex; flex-direction: row;">
+    <div style="background: lightblue; display: flex; flex-direction: column; align-items: start;">
+        <h3>Gestion pedidos</h3>
+        <h3>Gestion productos</h3>
+        <h3>Dashboard</h3>
+        <h3>Reporte de ventas</h3>
+    </div>
+    <div style="background: cadetblue; margin-left: 50px;">
+        Detalle de apartado elegido
+        <a href="{% url 'agregar_product' %}">Ir </a>
+    </div>
+</div>
+
+{% endblock %}

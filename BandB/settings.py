@@ -60,7 +60,8 @@ INSTALLED_APPS = [
     'profiles',
     'cart',
     'orden',
-    'payment'
+    'payment',
+    'adminPanel'
     
 ]
 
