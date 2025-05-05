@@ -50,7 +50,8 @@
             <hr style="border-top: 1px solid #333;">
             <p style="font-size: 18px; font-weight: bold;">Total: {{ cart.total | format_price }}</p>
             <a href="{% url 'orden' %}" class="btn btn-primary">Proceder al pago</a>
-            <button class="btn btn-secondary" style="margin-top: 10px; background-color: #444; border: none;">Continuar comprando</button>
+            <a class="btn btn-secondary" style="margin-top: 10px; background-color: #444; border: none;" href="{% url 'view_products' %}">Continuar comprando</a>
+
         </div>
         {% else %}
          <a href="{% url 'view_products' %}" style="background: black; text-decoration: none; color: white; padding: 10px; border-radius: 8px;">Comprar ahora</a>

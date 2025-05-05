@@ -24,10 +24,12 @@ def orden(request):
             delivery_method = request.POST.get('delivery_method')
             if delivery_method == 'SHIPPING':
                 orden.delivery_method = DeliveryMethod.SHIPPING
-                orden.save()  
+                orden.save() 
+                orden.update_total()
             elif delivery_method == 'PICKUP':
                 orden.delivery_method = DeliveryMethod.PICKUP
                 orden.save()  
+                orden.update_total()
         
         if 'pagar' in request.POST:
             return crearTransaccion(request)
@@ -105,7 +107,7 @@ def add_new_address(request):
 def historial_orden(request):
     user = request.user
     if user.is_authenticated:
-        ordenes = Orden.objects.filter(user=request.user).order_by('-create_at').prefetch_related('productos_orden__producto')
+        ordenes = Orden.objects.filter(user=request.user , status=OrdenStatus.PAYED).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
         return render(request, 'historial_compras.html', {
             'ordenes': ordenes
         })

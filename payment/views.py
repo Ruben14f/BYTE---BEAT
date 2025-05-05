@@ -10,26 +10,24 @@ from orden.models import Orden, OrdenStatus
 from django.contrib import messages
 from orden.models import OrdenProducto
 from django.utils.dateparse import parse_datetime
+from django.utils import timezone
 
 
 
 def crearTransaccion(request):
     user = request.user if request.user.is_authenticated else None
-    cart = Cart.objects.filter(user=user).order_by('id').first()
-    
-    orden = Orden.objects.filter(user=user, status=OrdenStatus.CREATED).first()
+    cart = Cart.objects.filter(user=user).order_by('-id').first()
+
+    orden = Orden.objects.filter(user=user, status=OrdenStatus.CREATED, token_ws__isnull=True).order_by('-ordenID').first()
+
 
     if not orden:
         try:
             orden = Orden.objects.create(user=user, cart=cart, status=OrdenStatus.CREATED)
         except Exception as e:
-            orden = Orden.objects.create(user=user, cart=cart, status=OrdenStatus.CREATED)
             messages.error(request, f"Error al crear la orden: {str(e)}")
             return redirect('orden')
 
-    if orden.delivery_method == 'PICKUP':
-        orden.envio_total = 0  
-    orden.update_total()  
 
     price = orden.total
     buy_order = orden.id
@@ -116,12 +114,15 @@ def webpay_respuesta(request):
         estado = resultado.get('status')
         if estado == 'AUTHORIZED':
             if request.user.is_authenticated:
-                orden = Orden.objects.filter(token_ws=token_ws).first()
+                orden = Orden.objects.filter(token_ws=token_ws, status=OrdenStatus.CREATED).first()
                 if orden:
-                    total_original = orden.total
+                    if orden.status == OrdenStatus.PAYED:
+                        return render(request, 'confirmed.html', {'resultado': resultado})
                     orden.status = OrdenStatus.PAYED
                     orden.save(update_fields=['status'])
                     print(f'estado actualizado: {Orden.status}')
+                    original_total = orden.total
+
                     cart = orden.cart
 
                     if cart:
@@ -137,15 +138,19 @@ def webpay_respuesta(request):
                         cart.update_totals()
                         print(f'carrito limpiado: {cart}')
 
-
-                    orden.total = total_original
-                    orden.save(update_fields=['total'])
                     transaction_date = resultado.get("transaction_date")
+                    print("transaction_date cruda:", transaction_date)
 
                     if transaction_date:
-                        orden.fecha_pagada = parse_datetime(transaction_date)
-                    orden.save(update_fields=['fecha_pagada'])
-                    print(total_original)
+                        parsed_date = parse_datetime(transaction_date)
+                        print("parsed_date:", parsed_date)
+                        if parsed_date:
+                            orden.fecha_pagada = timezone.localtime(parsed_date)
+                            print("Fecha con hora local guardada:", orden.fecha_pagada)
+
+                    orden.total = original_total
+                    orden.save(update_fields=['total','fecha_pagada'])
+                    print(f"Total después de la transacción: {orden.total}")
 
 
             return render(request, 'confirmed.html', {'resultado': resultado})
