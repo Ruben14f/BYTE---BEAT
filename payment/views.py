@@ -11,6 +11,10 @@ from django.contrib import messages
 from orden.models import OrdenProducto
 from django.utils.dateparse import parse_datetime
 from django.utils import timezone
+from django.core.mail import send_mail
+import os
+from django.template.loader import render_to_string
+
 
 
 
@@ -110,13 +114,15 @@ def webpay_respuesta(request):
     resultado = obtener_estado_pago_webpay(token_ws)
     print("Resultado Webpay:", resultado)
 
+
     if resultado:
         estado = resultado.get('status')
         if estado == 'AUTHORIZED':
+            
 
             if request.user.is_authenticated:
                 orden = Orden.objects.filter(token_ws=token_ws, status=OrdenStatus.CREATED).first()
-
+                
                 if orden:
                     if orden.status == OrdenStatus.PAYED:
                         return render(request, 'confirmed.html', {'resultado': resultado})
@@ -155,6 +161,8 @@ def webpay_respuesta(request):
                     orden.save(update_fields=['total','fecha_pagada'])
                     print(f"Total después de la transacción: {orden.total}")
 
+                    #envio de correo de confirmacion del pedido
+                    confirmacion_pedido_email(request, token_ws)
 
             return render(request, 'confirmed.html', {'resultado': resultado})
         elif estado == 'INITIALIZED':
@@ -166,3 +174,32 @@ def webpay_respuesta(request):
     else:
         return render(request, 'payment_failed.html', {'error': 'No se pudo obtener el estado del pago'})
     
+
+
+def confirmacion_pedido_email(request,token_ws):
+
+    orden = Orden.objects.filter(token_ws=token_ws, status=OrdenStatus.PAYED).first()
+
+    print('orden pagada y enviando correo',orden)
+    email = request.user.email if request.user.is_authenticated else None
+    print(email)
+    email_host = os.environ.get('EMAIL_HOST_USER')
+    print(email_host)
+
+    html_message = render_to_string('email_confirm.html', {
+        'orden' : orden
+    })
+    print("HTML generado para el correo:\n", html_message)
+    
+    send_mail(
+        'Pedido confirmado',
+        'Detalle del pedido confirmado:',
+        from_email=email_host, 
+        recipient_list = [email],
+        fail_silently=False,
+        html_message= html_message
+    )
+
+    print('correo enviado',send_mail)
+
+    messages.success(request, 'compra confirmada y correo enviado')

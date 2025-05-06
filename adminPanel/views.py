@@ -3,7 +3,8 @@ from .forms import ProductForm
 from django.contrib import messages
 from products.models import Product
 from orden.models import Orden
-
+from django.core.mail import send_mail
+import os
 # Create your views here.
 
 #GESTION DE PRODUCTOS
@@ -55,6 +56,7 @@ def eliminar_producto(request, id):
 #GESTION DE PEDIDOS
 def listado_ordenes(request):
     ordenes = Orden.objects.all().order_by('-fecha_pagada')
+    
     return render(request, 'gestion_pedidos/list_ordenes.html',{
         'ordens' : ordenes
     })

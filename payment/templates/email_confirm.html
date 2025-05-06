@@ -1,0 +1,14 @@
+
+<html>
+    <body>
+        {% for products in orden.productos_orden.all %}
+                Nombre producto: {{products.producto.name}}
+                Cantidad: {{products.quantity}}
+                Nombre producto: {{products.producto.price}}
+                {{products.producto.main_image.url}}
+                Envio: {{orden.envio_total}}
+                Total: {{orden.total}}
+        {% endfor %}
+
+    </body>
+</html>

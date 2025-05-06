@@ -12,6 +12,7 @@ from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+import os
 
 
 
@@ -106,7 +107,7 @@ def password_reset(request):
                 send_mail(
                     'Restablece tu contraseña',
                     'Para restablecer tu contraseña, haz clic en el enlace',
-                    'rmansilla.tech@gmail.com', 
+                    os.getenv('EMAIL_HOST_USER'), 
                     [email],
                     fail_silently=False,
                     html_message= html_message
@@ -128,6 +129,7 @@ def password_reset_confirm(request, uidb64, token):
     try:
         #Decodificacion del id
         uidb64 = urlsafe_base64_decode(uidb64).decode('ascii')
+        print(uidb64)
         uid = uidb64
         user = get_object_or_404(User, pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
