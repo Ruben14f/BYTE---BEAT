@@ -10,7 +10,9 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
-
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from django.conf import settings
 
 
 # Create your views here.
@@ -69,26 +71,45 @@ def password_reset(request):
         email = form.cleaned_data['email']
         
         try:
-            # Intentamos encontrar al usuario con el correo electrónico
             user = User.objects.get(email=email)
         except User.DoesNotExist:
             user = None
         
         if user:
             if not request.session.get('password_reset_sent', False):
-            # Generar token y enviar el correo con el enlace de restablecimiento
-                token = default_token_generator.make_token(user)
-                reset_url = request.build_absolute_uri(
-                    reverse_lazy('password_reset_confirm', kwargs={'uidb64': user.pk, 'token': token})
-                )
 
-                # Enviar el correo de restablecimiento
+                uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+
+                # Generar token y enviar el correo con el enlace de restablecimiento
+                token = default_token_generator.make_token(user)
+                reset_url = f'{settings.FRONTEND_DOMAIN}/recuperar-clave/{uidb64}/{token}'
+                
+                # request.build_absolute_uri(
+                #     reverse_lazy('password_reset_confirm', kwargs={'uidb64': user.pk, 'token': token})
+                # )
+
+                html_message = f"""
+                                    <html>
+                                        <body>
+                                            <p>Hola,</p>
+                                            <p>Haz clic en el siguiente botón para restablecer tu contraseña:</p>
+                                            <p>
+                                                <a href="{reset_url}" style="display:inline-block;padding:10px 20px;background-color:#4CAF50;color:white;text-decoration:none;border-radius:5px;">
+                                                    Restablecer contraseña
+                                                </a>
+                                            </p>
+                                            <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
+                                        </body>
+                                    </html>
+                                """
                 send_mail(
                     'Restablece tu contraseña',
-                    f'Para restablecer tu contraseña, haz clic en el siguiente enlace: {reset_url}',
-                    'rmansilla.tech@gmail.com',  # Cambia esto a la dirección que usarás para enviar correos
+                    'Para restablecer tu contraseña, haz clic en el enlace',
+                    # f'Para restablecer tu contraseña, haz clic en el siguiente enlace: {reset_url}',
+                    'rmansilla.tech@gmail.com', 
                     [email],
                     fail_silently=False,
+                    html_message= html_message
                 )
 
                 request.session['password_reset_sent'] = True
@@ -97,7 +118,7 @@ def password_reset(request):
                 messages.error(request, 'Ya hemos enviado un correo para restablecer la contraseña. Por favor, revisa tu bandeja de entrada.')
 
         else:
-            # Si el usuario no se encuentra, puedes mostrar un mensaje de error (opcional)
+
             form.add_error('email', 'El correo no está registrado.')
     return render(request, template_name, {
         'form': form 
@@ -105,24 +126,23 @@ def password_reset(request):
     
 def password_reset_confirm(request, uidb64, token):
     try:
-        # Decodifica el 'uidb64' (aquí se debería realizar la decodificación si usas base64)
-        uid = uidb64  # Asegúrate de hacer la decodificación si usas base64
+        uid = uidb64 
         user = get_object_or_404(User, pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
     validlink = False
     if user is not None and default_token_generator.check_token(user, token):
-        validlink = True  # Si el token es válido, actualizamos validlink
+        validlink = True  
 
         if request.method == 'POST':
             form = SetPasswordForm(user=user, data=request.POST)
             if form.is_valid():
-                form.save()  # Guarda la nueva contraseña
+                form.save()  
                 messages.success(request, f'Contraseña restablecida con exito')
                 return redirect('login')
         else:
-            form = SetPasswordForm(user=user)  # Crea un formulario vacío
+            form = SetPasswordForm(user=user) 
 
         return render(request, 'reset_password/password_reset_confirm.html', {'form': form, 'validlink': validlink})
     else:

@@ -5,13 +5,22 @@
 
 <div style="background: lightblue; color: black;">
     {% for ordenes in ordens %}
-    <div style="display: flex; flex-direction: column;">
-        {{ordenes.ordenID}}
-        {{ordenes.user}}
-        {{ordenes.fecha_pagada}}
-    </div>
-     
-     
+        <div style="display: flex; flex-direction: column;">
+            {{ordenes.ordenID}}
+            {{ordenes.id}}
+            {{ordenes.get_status_display}}
+            {{ordenes.user.first_name | title }} {{ordenes.user.last_name | title}}
+            valor pedido: {{ordenes.total}}
+            Pagado el: {{ ordenes.fecha_pagada|date:"d/m/Y"}}
+        </div>
+        {% for products in ordenes.productos_orden.all %}
+            <div style="display: flex; flex-direction: column;">
+                nombre producto: {{products.producto.name}}
+                SKU: {{products.producto.sku}}
+                ID: {{products.producto.id}}
+                Cantidad: {{products.quantity}}
+            </div>
+        {% endfor %}
     {% endfor %}
     TOTAL ORDENES: {{ordens | length}}
 </div>
