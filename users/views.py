@@ -76,46 +76,46 @@ def password_reset(request):
             user = None
         
         if user:
-            if not request.session.get('password_reset_sent', False):
+            # if not request.session.get('password_reset_sent', False):
 
-                uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
+            uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
 
-                # Generar token y enviar el correo con el enlace de restablecimiento
-                token = default_token_generator.make_token(user)
-                reset_url = f'{settings.FRONTEND_DOMAIN}/recuperar-clave/{uidb64}/{token}'
-                
-                # request.build_absolute_uri(
-                #     reverse_lazy('password_reset_confirm', kwargs={'uidb64': user.pk, 'token': token})
-                # )
+            # Generar token y enviar el correo con el enlace de restablecimiento
+            token = default_token_generator.make_token(user)
+            reset_url = f'{settings.FRONTEND_DOMAIN}/recuperar-clave/{uidb64}/{token}'
+            
+            # request.build_absolute_uri(
+            #     reverse_lazy('password_reset_confirm', kwargs={'uidb64': user.pk, 'token': token})
+            # )
 
-                html_message = f"""
-                                    <html>
-                                        <body>
-                                            <p>Hola,</p>
-                                            <p>Haz clic en el siguiente botón para restablecer tu contraseña:</p>
-                                            <p>
-                                                <a href="{reset_url}" style="display:inline-block;padding:10px 20px;background-color:#4CAF50;color:white;text-decoration:none;border-radius:5px;">
-                                                    Restablecer contraseña
-                                                </a>
-                                            </p>
-                                            <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
-                                        </body>
-                                    </html>
-                                """
-                send_mail(
-                    'Restablece tu contraseña',
-                    'Para restablecer tu contraseña, haz clic en el enlace',
-                    # f'Para restablecer tu contraseña, haz clic en el siguiente enlace: {reset_url}',
-                    'rmansilla.tech@gmail.com', 
-                    [email],
-                    fail_silently=False,
-                    html_message= html_message
-                )
+            html_message = f"""
+                                <html>
+                                    <body>
+                                        <p>Hola,</p>
+                                        <p>Haz clic en el siguiente botón para restablecer tu contraseña:</p>
+                                        <p>
+                                            <a href="{reset_url}" style="display:inline-block;padding:10px 20px;background-color:#4CAF50;color:white;text-decoration:none;border-radius:5px;">
+                                                Restablecer contraseña
+                                            </a>
+                                        </p>
+                                        <p>Si no solicitaste este cambio, puedes ignorar este mensaje.</p>
+                                    </body>
+                                </html>
+                            """
+            send_mail(
+                'Restablece tu contraseña',
+                'Para restablecer tu contraseña, haz clic en el enlace',
+                # f'Para restablecer tu contraseña, haz clic en el siguiente enlace: {reset_url}',
+                'rmansilla.tech@gmail.com', 
+                [email],
+                fail_silently=False,
+                html_message= html_message
+            )
 
-                request.session['password_reset_sent'] = True
-                messages.success(request, f'Correo enviado con exito, por favor revisa tu bandeja de entrada.')
-            else:
-                messages.error(request, 'Ya hemos enviado un correo para restablecer la contraseña. Por favor, revisa tu bandeja de entrada.')
+            request.session['password_reset_sent'] = True
+            messages.success(request, f'Correo enviado con exito, por favor revisa tu bandeja de entrada.')
+            # else:
+            #     messages.error(request, 'Ya hemos enviado un correo para restablecer la contraseña. Por favor, revisa tu bandeja de entrada.')
 
         else:
 
