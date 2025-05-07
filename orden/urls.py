@@ -8,5 +8,7 @@ urlpatterns = [
     path('add_address', views.add_new_address, name='add_address'),
     path('crear-transaccion/', crearTransaccion, name='crear_transaccion'),
     path('historial-pedidos/', views.historial_orden, name='historial_orden'),
-    path('detalle-compra-realizada/<int:id>', views.detalle_compra, name='detalle_compra')
+    path('detalle-compra-realizada/<int:id>', views.detalle_compra, name='detalle_compra'),
+    path('cancelar-orden/<int:id>', views.cancelar_orden, name='cancelar_compra'),
+    path('search-compra/',views.compra_search, name="buscar_compra")
 ]

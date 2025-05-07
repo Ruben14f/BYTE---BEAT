@@ -1,4 +1,5 @@
-from django.db import models
+from django.db import models 
+from django.db.models import  Max   
 from users.models import User
 from cart.models import Cart
 from products.models import Product
@@ -23,6 +24,7 @@ class DeliveryMethod(models.TextChoices):
 # Create your models here.
 class Orden(models.Model):
     ordenID = models.CharField(max_length=100, null=False, blank=False, unique=True)
+    num_orden = models.PositiveIntegerField(unique=True, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     status = models.CharField(max_length=40, choices=OrdenStatus.choices, default=OrdenStatus.CREATED)
@@ -86,5 +88,15 @@ def enviar_total(sender, instance, *args, **kwargs):
     if instance._state.adding:
         instance.total = instance.get_total()
 
+def asig_num_oren(sender, instance, *args, **kwargs):
+    if instance.num_orden is None:
+        last = Orden.objects.aggregate(max_num=Max('num_orden'))['max_num']
+    if last:
+        instance.num_orden = last + 10
+    else:
+        instance.num_orden = instance.num_orden
+
+
+pre_save.connect(asig_num_oren, sender=Orden)
 pre_save.connect(enviarOrden, sender=Orden)
 pre_save.connect(enviar_total, sender=Orden)

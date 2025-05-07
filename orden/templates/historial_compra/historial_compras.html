@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="search-container">
+    <div class="search-bar">
+        {% include 'historial_compra/search_compra.html' %}
+    </div>
+</div>
+
+
+
+<div style="background: white;">
+    <h1>Historial de pedidos</h1>
+{% if query %}
+<p style="color: black;">Resultado de búsqueda para: {{ query }}</p>
+    {% if ordenes %}
+        <ul>
+            {% for orden in ordenes %}
+                <h3>Orden: {{ orden.num_orden | slice:":8"}}</h3>
+                <ul>
+                    {% for item in orden.productos_orden.all %}
+                        <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+                        {{ item.producto.name }} x{{ item.quantity }} - 
+                    {% endfor %}
+                    
+                    Estado orden: {{ orden.get_status_display }}
+                    total: ${{ orden.total }}
+                    {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
+                        <a class="btn btn-danger" onclick="cancelarCompra({{orden.id}})">Cancelar</a>
+                    {% endif %}
+                    <p>Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
+                </ul>
+                <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+            {% endfor %}
+
+            <p>Total de órdenes: {{ ordenes|length }}</p>
+        </ul>
+    {% else %}
+    <p style="color: black;">No se encontro orden con ese numero de orden </p>
+    {% endif %}
+{% else %}
+{% if ordenes %}
+        <ul>
+            {% for orden in ordenes %}
+                <h3>Orden: {{ orden.num_orden | slice:":8"}}</h3>
+                <ul>
+                    {% for item in orden.productos_orden.all %}
+                        <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+                        {{ item.producto.name }} x{{ item.quantity }} - 
+                    {% endfor %}
+                    
+                    Estado orden: {{ orden.get_status_display }}
+                    total: ${{ orden.total }}
+                    {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
+                        <a class="btn btn-danger" onclick="cancelarCompra({{orden.id}})">Cancelar</a>
+                    {% endif %}
+                    <p>Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
+                </ul>
+                <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+            {% endfor %}
+
+            <p>Total de órdenes: {{ ordenes|length }}</p>
+        </ul>
+    {% else %}
+    <p style="color: black;">No tienes compras </p>
+    {% endif %}
+{% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function cancelarCompra(id){
+        const baseUrl = "{% url 'cancelar_compra' 0 %}".replace("0", id);
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Sí, eliminar',
+            reverseButtons: true,
+            confirmButtonColor: '#dc3545'
+        }).then(function(result){
+            if(result.isConfirmed){
+                window.location.href = baseUrl;
+            }
+        });
+    }
+</script>
+
+{% endblock %}

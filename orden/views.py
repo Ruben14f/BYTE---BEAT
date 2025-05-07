@@ -8,6 +8,7 @@ from .models import DeliveryMethod, OrderAddress,Orden
 from payment.views import crearTransaccion  
 from django.contrib import messages
 from orden.models import Orden, OrdenStatus
+from django.db.models import Q
 
 
 # Create your views here.
@@ -107,8 +108,8 @@ def add_new_address(request):
 def historial_orden(request):
     user = request.user
     if user.is_authenticated:
-        ordenes = Orden.objects.filter(user=request.user , status=OrdenStatus.PAYED).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
-        return render(request, 'historial_compras.html', {
+        ordenes = Orden.objects.filter(user=request.user).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
+        return render(request, 'historial_compra/historial_compras.html', {
             'ordenes': ordenes
         })
     else:
@@ -124,16 +125,30 @@ def detalle_compra(request, id):
 
 def cancelar_orden(request,id):
     orden = get_object_or_404(Orden, id=id)
+    try:
+        orden.status = OrdenStatus.CANCELED
+        orden.save(update_fields=['status'])
+    except:
+        messages.error(request, 'No se logro cancelar la orden')
 
-    orden.status = OrdenStatus.CANCELED
-    orden.save(update_fields=['status'])
+    return redirect('historial_orden')
 
-    return render(request, 'historial_compras.html', {
-        'orden': orden
-    })
 
-# @login_required(login_url='login')
-# def confirmacion(request):
-#     cart = funcionCarrito(request)
-#     orden = funcionOrden(cart, request)
+def compra_search(request):
+    query = request.GET.get('searchcompraQ')
+    if query:
+        filter = Q(num_orden__startswith=query)
+        print(filter)
+        orden_list = Orden.objects.filter(filter)
+        print('true',orden_list)
+    else:
+        orden_list = Orden.objects.filter(user=request.user).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
+        print('false',orden_list)
+    context = {
+        'ordenes' : orden_list,
+        'query' : query
+    }
+
+    return render(request, 'historial_compra/historial_compras.html', context)
+
 
