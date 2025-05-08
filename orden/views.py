@@ -152,3 +152,4 @@ def compra_search(request):
     return render(request, 'historial_compra/historial_compras.html', context)
 
 
+

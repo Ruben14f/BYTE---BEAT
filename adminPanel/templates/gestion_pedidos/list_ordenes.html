@@ -2,7 +2,7 @@
 
 
 {% block content_admin %}
-
+{% if query %}
 <div style="background: lightblue; color: black;">
     {% for ordenes in ordens %}
         <div style="display: flex; flex-direction: column;">
@@ -23,8 +23,96 @@
         {% endfor %}
     {% endfor %}
     TOTAL ORDENES: {{ordens | length}}
-
-    
 </div>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
+            <th><select name="" id="">
+                {% for value, label in statusorden %}
+                    <option value="{{value}}">{{label}}</option>
+                {% endfor %}
+                
+            </select></th>
+            <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
+            <th>{% include 'gestion_pedidos/filtros/filtro_fecha_pedido.html' %}</th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th>Numero orden</th>
+            <th>Valor pedido</th>
+            <th>Estado pedido</th>
+            <th>Fecha pedido</th>
+        </tr>
+    </thead>
+    {% for ordenes in ordens %}
+        {% if not ordenes.status == 'CREATED' %}
+            <tbody>
+                <tr>
+                    <td>#{{ordenes.num_orden}}</td>
+                    <td>{{ordenes.total}}</td>
+                    <td>{{ordenes.get_status_display}}</td>
+                    <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                </tr>
+            </tbody>
+        {% endif %}
+    {% endfor %}
+</table>
+{% else %}
+<div style="background: lightblue; color: black;">
+    {% for ordenes in ordens %}
+        <div style="display: flex; flex-direction: column;">
+            {{ordenes.ordenID}}
+            {{ordenes.id}}
+            {{ordenes.get_status_display}}
+            {{ordenes.user.first_name | title }} {{ordenes.user.last_name | title}}
+            valor pedido: {{ordenes.total}}
+            Pagado el: {{ ordenes.fecha_pagada|date:"d/m/Y"}}
+        </div>
+        {% for products in ordenes.productos_orden.all %}
+            <div style="display: flex; flex-direction: column;">
+                nombre producto: {{products.producto.name}}
+                SKU: {{products.producto.sku}}
+                ID: {{products.producto.id}}
+                Cantidad: {{products.quantity}}
+            </div>
+        {% endfor %}
+    {% endfor %}
+    TOTAL ORDENES: {{ordens | length}}
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
+            <th></th>
+            <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
+            <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th>Numero orden</th>
+            <th>Valor pedido</th>
+            <th>Estado pedido</th>
+            <th>Fecha pedido</th>
+        </tr>
+    </thead>
+    {% for ordenes in ordens %}
+        {% if not ordenes.status == 'CREATED' %}
+            <tbody>
+                <tr>
+                    <td>#{{ordenes.num_orden}}</td>
+                    <td>{{ordenes.total}}</td>
+                    <td>{{ordenes.get_status_display}}</td>
+                    <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                </tr>
+            </tbody>
+        {% endif %}
+    {% endfor %}
+</table>
+{% endif %}
+TOTAL ORDENES: {{ordens | length}}
 {% endblock %}

@@ -13,10 +13,9 @@
 {% if query %}
 <p style="color: white;">Resultado de búsqueda para: {{ query | title }}</p>
 <h2 class="section-title">Listado de Productos</h2>
-
 <div class="product-container">
-    {% for product in product_list %}
     <div class="products-grid">
+        {% for product in product_list %}
         <div class="product-card">
             <div class="product-image">
                 {% if product.main_image %}
@@ -26,7 +25,8 @@
                 {% endif %}
             </div>
             <div class="product-info">
-                <div class="product-brand">{{ product.brand }}</div>
+                <div class="product-brand">{{ product.brand }} categoria</div>
+                <div class="product-brand">{{ product.category }}</div>
                 <div class="product-name">{{ product.name }}</div>
                 <div class="product-price">{{ product.price | format_price }}</div>
                 <!-- <button class="add-to-cart">Agregar al carrito</button> -->
@@ -37,30 +37,72 @@
     {% endfor %}
 </div>
 {% else %}
-{% for product in product_list %}
-<div class="product-container">
-<div class="products-grid">
-    <div class="product-card">
-        <div class="product-image">
-            {% if product.main_image %}
-            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
-            {% else %}
-            <p>No image available</p>
-            {% endif %}
-        </div>
-        <div class="product-info">
-            <div class="product-brand">{{ product.brand }}</div>
-            <div class="product-name">{{ product.name }}</div>
-            <div class="product-price">{{ product.price | format_price }}</div>
-            <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-            <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al producto</a></button>
+<div class="container" style="display: flex; flex-direction: row;">
+    <div class="filter-container" style="background: lightcoral;">
+        <h4>Filtros</h4>
+        <div class="content-filter" style="background: lightblue; display:flex; flex-direction: column;">
+            <h6>Filtro por categoria</h6>
+                {% for categoys in categorias %}
+                    <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id %}">
+                        {{categoys.name}}
+                    </a>
+                {% endfor %}
+                <h6>Filtro por marcas</h6>
+                
+                {% for brand in marcas %}
+                <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id %}">
+                    {{brand.name}}
+                </a>
+                {% endfor %}
+            <h6>Filtro por precio</h6>
+            <label for="precio">Selecciona un precio:</label>
+            <input type="range" id="precio" name="precio" min="1000" max="100000" step="300" value="50000">
+            <span id="precio-valor">$50.000</span>
+            <select>
+                <option value="" disabled  selected>Ordenar por</option>
+                <option value="volvo">Precio mayor a menor</option>
+                <option value="saab">Precio menor a mayor</option>
+            </select>
         </div>
     </div>
-</div>
-{% endfor %}
-{% endif %}
 
+    <div class="product-container">
+        {% for product in product_list %}
+        <div class="product-card">
+            <div class="product-image">
+                {% if product.main_image %}
+                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                {% else %}
+                <p>No image available</p>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <div class="product-brand">{{ product.category }}</div>
+                <div class="product-brand">{{ product.brand }}</div>
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-price">{{ product.price | format_price }}</div>
+                <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al producto</a></button>
+            </div>
+        </div>
+    {% endfor %}
+{% endif %}
+    
+    </div>
 </div>
+
+<script>
+  const slider = document.getElementById("precio");
+  const output = document.getElementById("precio-valor");
+
+  // Mostrar el valor inicial
+  output.textContent = `$${parseInt(slider.value).toLocaleString()}`;
+
+  // Actualizar el valor cuando se mueve el slider
+  slider.addEventListener("input", function () {
+    output.textContent = `$${parseInt(this.value).toLocaleString()}`;
+  });
+</script>
 
 {% endblock %}
 

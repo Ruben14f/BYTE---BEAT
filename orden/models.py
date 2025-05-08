@@ -18,8 +18,8 @@ class OrdenStatus(models.TextChoices):
     CANCELED = 'CANCELED', 'Cancelado'
 
 class DeliveryMethod(models.TextChoices):
-        SHIPPING = 'SHIPPING', 'Envío'
-        PICKUP = 'PICKUP', 'Retiro'
+    SHIPPING = 'SHIPPING', 'Envío'
+    PICKUP = 'PICKUP', 'Retiro'
 
 # Create your models here.
 class Orden(models.Model):
@@ -88,14 +88,15 @@ def enviar_total(sender, instance, *args, **kwargs):
     if instance._state.adding:
         instance.total = instance.get_total()
 
+
 def asig_num_oren(sender, instance, *args, **kwargs):
     if instance.num_orden is None:
+        #buscar el numero mas alto en la base de datos
         last = Orden.objects.aggregate(max_num=Max('num_orden'))['max_num']
-    if last:
-        instance.num_orden = last + 10
-    else:
-        instance.num_orden = instance.num_orden
-
+        if last is not None:
+            instance.num_orden = last + 10
+        else:
+            instance.num_orden = 1010
 
 pre_save.connect(asig_num_oren, sender=Orden)
 pre_save.connect(enviarOrden, sender=Orden)

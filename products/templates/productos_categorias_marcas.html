@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load precios_tag %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/list_products.css' %}">
+
+<div class="search-container">
+    <div class="search-bar">
+        {% include 'search.html' %} <p>okla</p>
+    </div>
+</div>
+
+
+<div class="container" style="display: flex; flex-direction: row;">
+    <div class="filter-container" style="background: lightcoral;">
+        <h4>Filtros</h4>
+        <div class="content-filter" style="background: lightblue; display:flex; flex-direction: column;">
+            <h6>Filtro por categoria</h6>
+            {% for categoys in categorias %}
+            <a href="{% url 'categorias_marcas_filtro' 'categorias' categoys.id %}">
+                {{categoys.name}}
+            </a>
+            {% endfor %}
+            
+
+            <h6>Filtro por marcas</h6>
+            {% for brand in marcas %}
+            <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id %}">
+                {{brand.name}}
+            </a>
+            {% endfor %}
+
+            <a href="{% url 'view_products' %}">Ver todos los productos</a>
+            <h6>Filtro por precio</h6>
+            Min <input type="range"> Max
+        </div>
+
+    </div>
+
+    <div class="product-container">
+        {% for product in productos %}
+        <div class="product-card">
+            <div class="product-image">
+                {% if product.main_image %}
+                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                {% else %}
+                <p>No image available</p>
+                {% endif %}
+            </div>
+            <div class="product-info">
+                <div class="product-brand">{{ product.category }}</div>
+                <div class="product-brand">{{ product.brand }}</div>
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-price">{{ product.price | format_price }}</div>
+                <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
+                        producto</a></button>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endblock %}

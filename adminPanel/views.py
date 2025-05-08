@@ -2,16 +2,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm
 from django.contrib import messages
 from products.models import Product
-from orden.models import Orden
-from django.core.mail import send_mail
-import os
+from orden.models import Orden, OrdenStatus
+from django.db.models import Q
 # Create your views here.
 
 #GESTION DE PRODUCTOS
 def listado_productos(request):
     productos = Product.objects.all()
+    orden_status = OrdenStatus.choices
+    print('estados disponible', orden_status)
     return render(request, 'gestion_productos/list_product.html',{
-        'products': productos
+        'products': productos,
+        'statusorden' : orden_status
     })
 
 def agregar_producto(request):
@@ -60,3 +62,43 @@ def listado_ordenes(request):
     return render(request, 'gestion_pedidos/list_ordenes.html',{
         'ordens' : ordenes
     })
+
+def orden_search(request):
+    query = request.GET.get('searchOrden')
+    if query:
+        filter = Q(num_orden__startswith=query)
+        order_list = Orden.objects.filter(filter)
+        print('filtro',filter)
+        print('lista de ordenes',order_list)
+    else:
+        messages.error(request, 'Debe ingresar un numero de orden para buscar')
+        return redirect('list_ordenes_admin')
+    context = {
+        'ordens' : order_list,
+        'query' : query
+    }
+    print('contexto enviado', context)
+
+    return render(request, 'gestion_pedidos/list_ordenes.html', context)
+
+# def estado_search(request):
+#     query = request.GET.get('searchEstado')
+#     orden_status = OrdenStatus.choices
+
+#     if query:
+#         filter = Q(num_orden__startswith=query)
+#         order_list = Orden.objects.filter(filter)
+#         print('filtro',filter)
+#         print('lista de ordenes',order_list)
+#     else:
+#         messages.error(request, 'Debe ingresar un numero de orden para buscar')
+#         return redirect('list_ordenes_admin')
+    
+#     context = {
+#         'ordens' : order_list,
+#         'query' : query,
+#         'statusorden' : orden_status
+#     }
+#     print('contexto enviado', context)
+
+#     return render(request, 'gestion_pedidos/list_ordenes.html', context)

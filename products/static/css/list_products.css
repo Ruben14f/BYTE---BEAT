@@ -45,8 +45,7 @@
 .product-container {
     display: flex;
     justify-content: center;
-    max-width: 1200px;
-    margin-left: 15px;
+    align-items: center;
     padding: 0 1rem;
 }
 
@@ -56,6 +55,7 @@
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
     width: 280px;  
+    margin: 10px;
     margin-bottom: 1rem;
 }
 .product-card {
