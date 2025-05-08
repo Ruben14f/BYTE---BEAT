@@ -9,12 +9,11 @@ from django.db.models import Q
 #GESTION DE PRODUCTOS
 def listado_productos(request):
     productos = Product.objects.all()
-    orden_status = OrdenStatus.choices
-    print('estados disponible', orden_status)
+
     return render(request, 'gestion_productos/list_product.html',{
-        'products': productos,
-        'statusorden' : orden_status
+        'products': productos
     })
+    
 
 def agregar_producto(request):
     form = ProductForm()
@@ -58,9 +57,13 @@ def eliminar_producto(request, id):
 #GESTION DE PEDIDOS
 def listado_ordenes(request):
     ordenes = Orden.objects.all().order_by('-fecha_pagada')
+    orden_status = OrdenStatus.choices
+    print('estados disponible', orden_status)
+    
     
     return render(request, 'gestion_pedidos/list_ordenes.html',{
-        'ordens' : ordenes
+        'ordens' : ordenes,
+        'statusorden' : orden_status
     })
 
 def orden_search(request):
