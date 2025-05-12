@@ -22,28 +22,40 @@
     document.addEventListener('DOMContentLoaded', function () {
         let allSpinners = document.querySelectorAll('.loading-spinner');
         allSpinners.forEach(function(spinner) {
-            spinner.style.display = 'none';  
+            spinner.style.display = 'none';  // Asegúrate de que todos los spinners estén ocultos al cargar la página.
         });
     });
 
     function updateQuantity(cartProductId, change) {
-    let quantityElement = document.getElementById('quantity-' + cartProductId);
-    let currentQuantity = parseInt(quantityElement.innerText);
-    let newQuantity = currentQuantity + change;
+        let quantityElement = document.getElementById('quantity-' + cartProductId);
+        let currentQuantity = parseInt(quantityElement.innerText);
+        let newQuantity = currentQuantity + change;
+        const stock = {{ product.stock }};
 
-    if (newQuantity > 0) {
+        if(newQuantity == stock+1)
+        {
+            console.log("new quantity REVIERDSW " + newQuantity);
+            document.getElementById('loading-spinner-' + cartProductId).style.display = 'none';
 
-        document.getElementById('loading-spinner-' + cartProductId).style.display = 'flex';
-        document.getElementById('remove-' + cartProductId).disabled = true;
-        document.getElementById('add-' + cartProductId).disabled = true;
-
-        quantityElement.innerText = newQuantity;
-
-        document.getElementById('new_quantity-' + cartProductId).value = newQuantity;
-        let form = document.getElementById('quantity-form-' + cartProductId);
-        form.submit();
-
+        }else{
+            if (newQuantity > stock) {
+                newQuantity = stock; 
+                console.log("La cantidad solicitada excede el stock disponible. Se ajustará a " + stock);
+            }
+            if (newQuantity > 0 && newQuantity <= stock) {
+                document.getElementById('loading-spinner-' + cartProductId).style.display = 'flex';
+                document.getElementById('remove-' + cartProductId).disabled = true;
+                document.getElementById('add-' + cartProductId).disabled = true;
+                quantityElement.innerText = newQuantity;
+                console.log("new quantity " + newQuantity);
+                document.getElementById('new_quantity-' + cartProductId).value = newQuantity;
+                console.log("new quantity " + newQuantity);
+                let form = document.getElementById('quantity-form-' + cartProductId);
+                console.log("new quantity " + form);
+                form.submit();
+            } else {
+                document.getElementById('loading-spinner-' + cartProductId).style.display = 'none'; 
+            }
+        }
     }
-}
-
 </script>

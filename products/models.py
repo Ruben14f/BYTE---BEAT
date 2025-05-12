@@ -5,6 +5,10 @@ import uuid
 from cloudinary.models import CloudinaryField
 from cloudinary.uploader import upload
 
+class ProductStatus(models.TextChoices):
+    ACTIVE = 'ACTIVE', 'Activo'
+    INACTIVE = 'INACTIVE', 'Agotado'
+
 class Category(models.Model):
     name = models.CharField(max_length=50, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -31,6 +35,7 @@ class Product(models.Model):
     secondary_image = CloudinaryField('image', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=100, null=False, blank=False, unique=True)
+    status = models.CharField(max_length=40, choices=ProductStatus.choices, default=ProductStatus.ACTIVE)
 
     def __str__(self):
         return self.name
@@ -45,6 +50,13 @@ class Product(models.Model):
             self.__original_secondary_image = self.secondary_image
 
         super(Product, self).save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.stock == 0:
+            self.status = ProductStatus.INACTIVE 
+        else:
+            self.status = ProductStatus.ACTIVE  
+        super().save(*args, **kwargs)
 
 def new_slug(sender, instance, *args, **kwargs):
     if instance.name and not instance.slug:

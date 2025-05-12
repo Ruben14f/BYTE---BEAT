@@ -28,7 +28,8 @@ def addCart(request):
     try:
         cart = funcionCarrito(request)
         product = get_object_or_404(Product, pk=request.POST.get('product_id'))
-        quantity = int(request.POST.get('quantity', 1))
+        quantity = int(request.POST.get('quantity', 1)) 
+
 
         product_cart = CartProduct.objects.crearActualizar(cart=cart, productos=product, quantity=quantity)
 

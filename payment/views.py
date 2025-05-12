@@ -1,5 +1,4 @@
 from django.shortcuts import redirect,render
-from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 import requests
 import json
@@ -14,6 +13,8 @@ from django.utils import timezone
 from django.core.mail import send_mail
 import os
 from django.template.loader import render_to_string
+from django.db import transaction
+
 
 
 
@@ -135,17 +136,29 @@ def webpay_respuesta(request):
                     cart = orden.cart
 
                     if cart:
+                        try:
+                            with transaction.atomic():
+                                for cart_product in orden.cart.cartproduct_set.all():
+                                    product = cart_product.productos
+                                    quantity = cart_product.quantity
 
-                        for cart_product in orden.cart.cartproduct_set.all():
-                            OrdenProducto.objects.create(
-                                orden=orden,
-                                producto=cart_product.productos,
-                                quantity=cart_product.quantity
-                            )
-                            
-                        cart.productos.clear()
-                        cart.update_totals()
-                        print(f'carrito limpiado: {cart}')
+                                    if product.stock >= cart_product.quantity:
+                                        product.stock -= quantity
+                                        product.save()
+
+                                        OrdenProducto.objects.create(
+                                        orden=orden,
+                                        producto=cart_product.productos,
+                                        quantity=cart_product.quantity)
+                                    else:
+                                        messages.error(request, f"Stock insuficiente para el producto {product.name}.")
+                                        return redirect('orden')    
+                                cart.productos.clear()
+                                cart.update_totals()
+                                print(f'carrito limpiado: {cart}')
+                        except Exception as e:
+                            messages.error(request, f"Error al procesar la transacción")
+                            return redirect('orden')
 
                     transaction_date = resultado.get("transaction_date")
                     print("transaction_date cruda:", transaction_date)

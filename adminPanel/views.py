@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm
 from django.contrib import messages
-from products.models import Product
+from products.models import Product, Brand
 from orden.models import Orden, OrdenStatus
 from django.db.models import Q
 # Create your views here.
@@ -9,11 +9,16 @@ from django.db.models import Q
 #GESTION DE PRODUCTOS
 def listado_productos(request):
     productos = Product.objects.all()
+<<<<<<< HEAD
+=======
+    marca = Brand.objects.all()
+
+>>>>>>> 9a3bb8749b82fddfbfd995678229365525ba6e8d
     return render(request, 'gestion_productos/list_product.html',{
-        'products': productos
+        'products': productos,
+        'brands' : marca
     })
     
-
 def agregar_producto(request):
     form = ProductForm()
 
@@ -40,7 +45,7 @@ def modificar_producto(request, id):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Producto editado correctamente')
-            # return redirect('') redirigir al apartado que estan todos los productos agregados por el admin
+            return redirect('list_product_admin')
         formulario
 
 
@@ -53,6 +58,49 @@ def eliminar_producto(request, id):
     producto.delete()
     return redirect('list_product_admin')
 
+
+#Filtros productos
+def sku_search(request):
+    query = request.GET.get('searchSku')
+    if query:
+        filter = Q(sku__startswith=query)
+        product_list = Product.objects.filter(filter)
+        if not product_list:
+            messages.error(request, 'No se encontraron productos con ese sku')
+            return redirect('list_product_admin')
+        print('filtro',filter)
+        print('lista de productos',product_list)
+    else:
+        messages.error(request, 'Debe ingresar un sku valido')
+        return redirect('list_product_admin')
+    
+    context ={
+        'products' : product_list,
+        'queryOrden' : query
+    }
+    return render(request, 'gestion_productos/list_product.html', context)
+
+def marca_search(request):
+    query = request.GET.get('searchMarca')
+    marca = Brand.objects.all()
+    if query and query != 'borrarFiltro':
+        filter = Q(brand__name__icontains=query)
+        product_list = Product.objects.filter(filter)
+        print('filtro',filter)
+        print('lista de marcas',product_list)
+    elif query == 'borrarFiltro':
+        return redirect('list_product_admin') 
+    else:
+        messages.error(request, 'Debe ingresar una marca valida')
+        return redirect('list_product_admin')
+    
+    context ={
+        'brands' : marca,
+        'products' : product_list,
+        'queryMarca' : query
+    }
+    return render(request, 'gestion_productos/list_product.html', context)
+
 #GESTION DE PEDIDOS
 def listado_ordenes(request):
     ordenes = Orden.objects.all().order_by('-fecha_pagada')
@@ -63,6 +111,7 @@ def listado_ordenes(request):
         'statusorden' : orden_status
     })
 
+#Filtros ordenes
 def orden_search(request):
     query = request.GET.get('searchNumOrden')
     orden_status = OrdenStatus.choices

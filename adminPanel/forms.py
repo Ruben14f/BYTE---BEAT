@@ -1,6 +1,7 @@
 from products.models import Product
 from django import forms
 
+
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
@@ -33,7 +34,7 @@ class ProductForm(forms.ModelForm):
             'category': forms.Select(attrs={'class': 'form-select mb-3'}),
             'stock': forms.NumberInput(attrs={'class': 'form-control mb-3'}),
             'description': forms.Textarea(attrs={'class': 'form-control mb-3'}),
-            'main_image': forms.ClearableFileInput(attrs={'class': 'form-control mb-3', 'accept' : 'image/*'}),
-            'secondary_image': forms.ClearableFileInput(attrs={'class': 'form-control mb-3' , 'accept' : 'image/*'}),
+            'main_image': forms.FileInput(attrs={'class': 'form-control mb-3', 'accept' : 'image/*'}),
+            'secondary_image': forms.FileInput(attrs={'class': 'form-control mb-3' , 'accept' : 'image/*'}),
         }
         
