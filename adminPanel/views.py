@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm
 from django.contrib import messages
-from products.models import Product, Brand
+from products.models import Product, Brand, Category
 from orden.models import Orden, OrdenStatus
 from django.db.models import Q
 # Create your views here.
@@ -10,10 +10,12 @@ from django.db.models import Q
 def listado_productos(request):
     productos = Product.objects.all()
     marca = Brand.objects.all()
+    categorias = Category.objects.all()
 
     return render(request, 'gestion_productos/list_product.html',{
         'products': productos,
-        'brands' : marca
+        'brands' : marca,
+        'categories' : categorias,
     })
     
 def agregar_producto(request):
@@ -86,6 +88,7 @@ def marca_search(request):
         print('filtro',filter)
         print('lista de marcas',product_list)
     elif query == 'borrarFiltro':
+        messages.success(request, 'Filtro eliminado')
         return redirect('list_product_admin') 
     else:
         messages.error(request, 'Debe ingresar una marca valida')
@@ -95,6 +98,27 @@ def marca_search(request):
         'brands' : marca,
         'products' : product_list,
         'queryMarca' : query
+    }
+    return render(request, 'gestion_productos/list_product.html', context)
+
+def categoria_search(request):
+    query =request.GET.get('searchCategoria')
+    categoria = Category.objects.all()
+    if query and query != 'borrarFiltro':
+        filter = Q(category__name__icontains=query)
+        product_list = Product.objects.filter(filter)
+        print('filtro',filter)
+        print('lista de categorias',product_list)
+    elif query == 'borrarFiltro':
+        messages.success(request, 'Filtro eliminado')
+        return redirect('list_product_admin') 
+    else:
+        messages.error(request, 'Debe ingresar una categoria valida')
+        return redirect('list_product_admin')
+    context = {
+        'categories' : categoria,
+        'products' : product_list,
+        'queryCategory' : query
     }
     return render(request, 'gestion_productos/list_product.html', context)
 
@@ -147,7 +171,7 @@ def estado_search(request):
             print('filtro',filter)
             print('lista de ordenes',order_list)
         elif query.lower() == 'borrarfiltro':
-            messages.success(request, 'Filtro eliminar')
+            messages.success(request, 'Filtro eliminado')
             return redirect('list_ordenes_admin')
     else:
         print('Query buscada',query)

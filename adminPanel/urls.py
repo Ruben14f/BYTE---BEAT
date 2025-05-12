@@ -12,6 +12,7 @@ urlpatterns = [
     path('filter-status', estado_search, name='buscar_estado'),
     path('filter-sku', sku_search, name='buscar_sku'),
     path('filter-marca', marca_search, name='buscar_marca'),
+    path('filter-categoria', categoria_search, name='buscar_categoria'),
     # path('filter-status', estado_search, name='buscar_estado'),
 
 ]

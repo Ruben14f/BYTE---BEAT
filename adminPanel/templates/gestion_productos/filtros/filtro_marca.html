@@ -1,13 +1,13 @@
 <form action="{% url 'buscar_marca' %}" method="GET">
-    <select name="searchMarca">
-        <option value="" disabled {% if not queryMarca %}selected{% endif %}>Buscar por marca</option>
+    <select name="searchMarca" value="{{queryMarca}}">
+        <option  disabled {% if not queryMarca %}selected{% endif %}>Buscar por marca</option>
         {% for brand in brands %}
             <option value="{{ brand.name }}" {% if brand.name == queryMarca %}selected{% endif %}>
                 {{ brand.name }}
             </option>
         {% endfor %}
         {% if queryMarca %}
-            <option value="borrarFiltro" selected>Eliminar filtro</option>
+            <option value="borrarFiltro">Borrar filtro</option>
         {% endif %}
     </select>
     <button type="submit" class="btn btn-primary">

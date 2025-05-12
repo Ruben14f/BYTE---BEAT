@@ -1,6 +1,6 @@
 <form action="{% url 'buscar_estado' %}" method="GET">
     <select name="searchEstado" value="{{queryestado}}">
-        <option disabled {% if not queryestado %}selected{% endif %} value="">Seleccione estado</option>
+        <option disabled {% if not queryestado %}selected{% endif %}>Seleccione estado</option>
         {% for value, label in statusorden %}
             {% if label != 'Creado' %}
                 <option value="{{ label }}" {% if label == queryestado %}selected{% endif %}>{{label}}</option>
@@ -9,7 +9,6 @@
         {% if queryestado %}
             <option value="borrarfiltro">Borrar filtro</option>
         {% endif %}
-        
     </select>
     <button type="submit" class="btn btn-primary" >
         Buscar por estado
