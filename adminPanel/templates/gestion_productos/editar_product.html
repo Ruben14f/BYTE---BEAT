@@ -10,16 +10,43 @@
                 <hr>
                 <div class="card-body">
                     <form action="" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            
-                            {{productForm}}
-                       
-                        <div class="d-flex justify-content-end mt-5">
-                            <input class="btn btn-secondary" type="submit" value="Cancelar"></input>
-                            &nbsp; <!--Espacio entre botones-->
-                            <input class="btn btn-primary" type="submit" value="Guardar"></input>
+                        {% csrf_token %}
+
+                        {% for field in productForm %}
+                            {% if field.name != 'main_image' and field.name != 'secondary_image' %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <div class="text-danger small">{{ field.errors }}</div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ productForm.main_image.id_for_label }}">Imagen principal</label><br>
+
+                            {% if productForm.instance.main_image %}
+                                <img src="{{ productForm.instance.main_image.url }}" alt="Imagen actual" width="150" class="mb-2"><br>
+                            {% endif %}
+
+                            {{ productForm.main_image.as_widget }}
                         </div>
 
+                        <div class="mb-3">
+                            <label class="form-label" for="{{ productForm.secondary_image.id_for_label }}">Imagen secundaria</label><br>
+
+                            {% if productForm.instance.secondary_image %}
+                                <img src="{{ productForm.instance.secondary_image.url }}" alt="Imagen secundaria actual" width="150" class="mb-2"><br>
+                            {% endif %}
+
+                            {{ productForm.secondary_image.as_widget }}
+                        </div>
+
+                        <div class="d-flex justify-content-end mt-4">
+                            <a class="btn btn-secondary me-2" href="#">Cancelar</a>
+                            <input class="btn btn-primary" type="submit" value="Guardar">
+                        </div>
                     </form>
 
                 </div>

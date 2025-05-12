@@ -29,7 +29,7 @@
     <thead>
         <tr>
             <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
-            <th><select name="" id="">
+            <th><select>
                 {% for value, label in statusorden %}
                     <option value="{{value}}">{{label}}</option>
                 {% endfor %}

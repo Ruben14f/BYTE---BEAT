@@ -2,12 +2,12 @@
 <html>
     <body>
         {% for products in orden.productos_orden.all %}
-                Numero Orden: {{orden.ordenID | slice:":8"}}
+                Numero Orden: {{orden.num_orden}}
                 Nombre producto: {{products.producto.name}}
                 Cantidad: {{products.quantity}}
                 Nombre producto: {{products.producto.price}}
                 {% if products.producto.main_image %}
-                    <img src="{{products.producto.main_image.url}}" alt="ImagenProductosComprados">
+                    <img src="{{products.producto.main_image.url}}" alt="ImagenProductosComprados" width="50px" height="50px">
                 {% endif %}  
                 Envio: {{orden.envio_total}}
                 Total: {{orden.total}}
