@@ -29,14 +29,9 @@
     <thead>
         <tr>
             <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
-            <th><select name="" id="">
-                {% for value, label in statusorden %}
-                    <option value="{{value}}">{{label}}</option>
-                {% endfor %}
-                
-            </select></th>
+            <th></th>
             <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
-            <th>{% include 'gestion_pedidos/filtros/filtro_fecha_pedido.html' %}</th>
+            <th>filtro por fecha</th>
         </tr>
     </thead>
     <thead>
@@ -89,7 +84,7 @@
             <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
             <th></th>
             <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
-            <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
+            <th>filtro por fecha</th>
         </tr>
     </thead>
     <thead>

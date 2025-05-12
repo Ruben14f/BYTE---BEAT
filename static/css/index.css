@@ -65,7 +65,9 @@
     padding: 20px;
 }
 
-.featured-products{
+.container-featured-products{
+    display: flex;
+    justify-content: center;
     margin-top: 5%;
     padding-top: 5%;
 }
@@ -74,9 +76,8 @@
 .container-featured-products .card{
     display: flex;
     flex-direction: column;
-    margin: 10px 10px;
+    margin: 20px 10px;
 }
-
 
 
 @media screen and (max-width: 768px) {

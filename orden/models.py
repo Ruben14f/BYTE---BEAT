@@ -1,5 +1,5 @@
 from django.db import models 
-from django.db.models import  Max   
+from django.db.models import  Max, Sum
 from users.models import User
 from cart.models import Cart
 from products.models import Product
@@ -60,6 +60,13 @@ class OrdenProducto(models.Model):
     producto = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
     
+    @classmethod
+    def total_product_vendido(cls,limite=5):
+        return (
+            Product.objects
+            .annotate(total_vendido=Sum('ordenproducto__quantity'))
+            .order_by('-total_vendido')[:limite]
+        )
 
     def __str__(self):
         return f"{self.producto.name} x{self.quantity} (Orden {self.orden.ordenID})"
