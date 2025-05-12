@@ -9,11 +9,8 @@ from django.db.models import Q
 #GESTION DE PRODUCTOS
 def listado_productos(request):
     productos = Product.objects.all()
-<<<<<<< HEAD
-=======
     marca = Brand.objects.all()
 
->>>>>>> 9a3bb8749b82fddfbfd995678229365525ba6e8d
     return render(request, 'gestion_productos/list_product.html',{
         'products': productos,
         'brands' : marca
