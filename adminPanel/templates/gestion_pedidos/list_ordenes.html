@@ -29,16 +29,13 @@
     <thead>
         <tr>
             <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
-<<<<<<< HEAD
             <th></th>
-=======
             <th><select>
                 {% for value, label in statusorden %}
                     <option value="{{value}}">{{label}}</option>
                 {% endfor %}
                 
             </select></th>
->>>>>>> 9a3bb8749b82fddfbfd995678229365525ba6e8d
             <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
             <th>filtro por fecha</th>
         </tr>
