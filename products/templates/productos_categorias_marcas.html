@@ -35,8 +35,8 @@
             <h6>Filtro por precio</h6>
             Min <input type="range"> Max
             <form method="get" action="{% url 'categorias_marcas_filtro' tipo uidb64 %}">
-                <label for="price_order">Ordenar por:</label>
                 <select name="price_order" id="price_order">
+                    <option value="recomendado" disabled {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Ordenar por</option>
                     <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Recomendados</option>
                     <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor</option>
                     <option value="desc" {% if request.GET.price_order == 'desc' %}selected{% endif %}>Precio: Mayor a menor</option>
