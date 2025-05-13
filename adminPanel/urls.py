@@ -10,9 +10,10 @@ urlpatterns = [
     path('list-ordenes', listado_ordenes, name="list_ordenes_admin"),
     path('filter-orden', orden_search, name='buscar_orden'),
     path('filter-status', estado_search, name='buscar_estado'),
+    path('detail-orden-admin/<int:id>', detail_orden, name='detail_orden_admin'),
+    path('update-status-orden/<int:id>', update_status_orden, name='actualizar_estado_orden'),
     path('filter-sku', sku_search, name='buscar_sku'),
     path('filter-marca', marca_search, name='buscar_marca'),
     path('filter-categoria', categoria_search, name='buscar_categoria'),
-    # path('filter-status', estado_search, name='buscar_estado'),
-
+    path('filter-status-product', estado_product_search, name='buscar_estado_producto'),
 ]

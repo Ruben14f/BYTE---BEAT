@@ -35,7 +35,7 @@
                                 <p>Dirección de envío registrada en tu perfil:
                                     {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }},
                                     {{ direccion_existente.comuna.name }} - {{ direccion_existente.ciudad }}</p>
-                                <a href="{% url 'modificar_direccion' orden.id %}">Modificar dirección</a>
+                                <a href="{% url 'modificar_direccion' orden.id %}">Modificar dirección solo para este pedido</a>
                                 <p>Valor de envío: {{ orden.envio_total }}</p>
                             {% else %}
                                 <p>No tienes una dirección registrada en tu perfil. Puedes agregar una dirección para este pedido o en tu perfil.</p>

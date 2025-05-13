@@ -46,6 +46,8 @@
             <th>Valor pedido</th>
             <th>Estado pedido</th>
             <th>Fecha pedido</th>
+            <th>Ver detalle orden</th>
+            <th>Accion</th>
         </tr>
     </thead>
     {% for ordenes in ordens %}
@@ -56,6 +58,8 @@
                     <td>{{ordenes.total}}</td>
                     <td>{{ordenes.get_status_display}}</td>
                     <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}">Ir al detalle</a></td>
+                    <td>{% include 'gestion_pedidos/update_status.html' %}</td>
                 </tr>
             </tbody>
         {% endif %}
@@ -99,6 +103,8 @@
             <th>Valor pedido</th>
             <th>Estado pedido</th>
             <th>Fecha pedido</th>
+            <th>Ver detalle orden</th>
+            <th>Accion</th>
         </tr>
     </thead>
     {% for ordenes in ordens %}
@@ -109,6 +115,8 @@
                     <td>{{ordenes.total}}</td>
                     <td>{{ordenes.get_status_display}}</td>
                     <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}">Ir al detalle </a></td>
+                    <td>{% include 'gestion_pedidos/update_status.html' %}</td>
                 </tr>
             </tbody>
         {% endif %}
@@ -116,4 +124,24 @@
 </table>
 {% endif %}
 TOTAL ORDENES: {{ordens | length}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function updateEstadoOrden(id,form){
+        event.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro que deseas actualizar estado?',
+            text: 'Se le enviara correo al cliente con la actualizacion de estado', 
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Sí, actualizar',
+            reverseButtons: true,
+            confirmButtonColor: '#dc3545'
+        }).then(function(result){
+            if (result.isConfirmed) {
+                form.submit(); 
+            }
+        });
+    }
+</script>
 {% endblock %}

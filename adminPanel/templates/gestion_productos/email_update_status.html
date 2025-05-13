@@ -1,0 +1,34 @@
+
+<html>
+    <body>
+        <h1>Hola {{user.first_name | title}} {{user.last_name | title}}</h1>
+        {% for products in orden.productos_orden.all %}
+            {% if orden.status == 'PREPARING' %}
+                <p>Tu orden esta en proceso de preparación.</p>
+            {% elif orden.status == 'SHIPPED' %}
+                <p>Tu orden ha sido enviada y está en camino.</p>
+            {% elif orden.status == 'DELIVERED' %}
+                {% if orden.delivery_method == 'SHIPPING' %}
+                    <p>Tu orden ha sido entregada. Esperamos que estés satisfecho con tu compra.</p>
+                {% elif orden.delivery_method == 'PICKUP' %}
+                    <p>Tu orden ha sido retirada. Esperamos que estés satisfecho con tu compra.</p>
+                {% endif %}
+            {% elif orden.status == 'CANCELED' %}
+                <p>Tu orden ha sido cancelada. Si tienes alguna pregunta, no dudes en contactarnos.</p>
+            {% else %}
+                <p>Estado de la orden: {{orden.get_status_display}}</p>
+            {% endif %}
+            estado orden: {{ orden.get_status_display | title}}
+            Numero Orden: {{orden.num_orden}}
+            Nombre producto: {{products.producto.name}}
+            Cantidad: {{products.quantity}}
+            Nombre producto: {{products.producto.price}}
+            {% if products.producto.main_image %}
+                <img src="{{products.producto.main_image.url}}" alt="ImagenProductosComprados" width="50px" height="50px">
+            {% endif %}  
+            Envio: {{orden.envio_total}}
+            Total: {{orden.total}}
+        {% endfor %}
+
+    </body>
+</html>

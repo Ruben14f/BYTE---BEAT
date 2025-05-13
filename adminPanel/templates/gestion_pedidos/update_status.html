@@ -1,0 +1,17 @@
+
+<form method="POST" action="{% url 'actualizar_estado_orden' ordenes.id %}" onsubmit="updateEstadoOrden(event, this)"">
+    {% csrf_token %}
+    <select name="estadoOrdenUpdate">
+        <option disabled selected>Estado: {{ ordenes.get_status_display }}</option>
+        {% for value, label in statusorden %}
+            {% if label != 'Creado' %}
+                <option value="{{ label }}">{{ label }}</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">
+        Actualizar estado
+    </button>
+</form>
+
+

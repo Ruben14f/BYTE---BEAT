@@ -1,9 +1,9 @@
 <form action="{% url 'buscar_categoria' %}" method="GET">
     <select name="searchCategoria" value="{{queryCategory}}">
-        <option  disabled {% if not queryCategory %}selected{% endif %}>Buscar por marca</option>
+        <option  disabled {% if not queryCategory %}selected{% endif %}>Buscar por categoria</option>
         {% for category in categories %}
-            <option value="{{ brand.name }}" {% if brand.name == queryCategory %}selected{% endif %}>
-                {{ brand.name }}
+            <option value="{{ category.name }}" {% if category.name == queryCategory %}selected{% endif %}>
+                {{ category.name }}
             </option>
         {% endfor %}
         {% if queryCategory %}

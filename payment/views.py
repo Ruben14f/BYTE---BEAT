@@ -185,12 +185,11 @@ def webpay_respuesta(request):
         else:
             return render(request, 'payment_unknown.html', {'resultado': resultado})
     else:
-        return render(request, 'payment_failed.html', {'error': 'No se pudo obtener el estado del pago'})
+        return render(request, 'paymen_failed.html', {'error': 'No se pudo obtener el estado del pago'})
     
 
 
 def confirmacion_pedido_email(request,token_ws):
-
     orden = Orden.objects.filter(token_ws=token_ws, status=OrdenStatus.PAYED).first()
 
     print('orden pagada y enviando correo',orden)
