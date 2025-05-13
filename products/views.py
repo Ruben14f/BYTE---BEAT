@@ -4,28 +4,42 @@ from .models import Product,Category,Brand
 from django.db.models import Q
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from orden.models import OrdenProducto
 
 # Create your views here.
 class ProductListView(ListView):
     template_name = 'list_products.html'
     queryset = Product.objects.all()
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        order_by_price = self.request.GET.get('price_order')
 
+        if order_by_price == 'recomendado':
+            queryset = OrdenProducto.product_recomendate()
+        elif order_by_price == 'desc':
+            queryset = queryset.order_by('-price') 
+        elif order_by_price == 'asc':
+            queryset = queryset.order_by('price')  
+
+        return queryset
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['products'] = self.queryset
-        context['categorias'] = Category.objects.all()
-        context['marcas'] = Brand.objects.all()
+        context['categorias'] = Category.objects.filter(product__isnull=False).distinct()
+        context['marcas'] = Brand.objects.filter(product__isnull=False).distinct()
 
         #Codificacion del id
         context['categorias'] = [{
             'name': c.name,
             'id' : urlsafe_base64_encode(force_bytes(c.id))
-        }for c in Category.objects.all()]
+        }for c in context['categorias']]
         context['marcas'] = [{
             'name' : m.name,
             'id' : urlsafe_base64_encode(force_bytes(m.id))
-        }for m in Brand.objects.all()]
+        }for m in context['marcas']]
+        
         return context
 
 class ProductDateilView(DetailView):
@@ -57,8 +71,9 @@ class ProductSearchListView(ListView):
         context['query'] = self.query()
 
         return context
-
-class CategoriasListView(ListView):
+    
+#filtro de marcas y categorias
+class CyMListView(ListView):
     model = Product
     template_name = 'productos_categorias_marcas.html'
     context_object_name = 'productos'
@@ -66,6 +81,8 @@ class CategoriasListView(ListView):
     def get_queryset(self):
         uidb64 = self.kwargs['uidb64']
         tipo = self.kwargs['tipo']
+        order_by_price = self.request.GET.get('price_order', 'recomendado')
+        
         try:
             decoded_id = urlsafe_base64_decode(uidb64).decode('ascii')
         except:
@@ -73,20 +90,34 @@ class CategoriasListView(ListView):
         print('tipo elegido:',tipo)
 
         if tipo == 'categoria':
-            return Product.objects.filter(category__id=decoded_id)
+            queryset = Product.objects.filter(category__id=decoded_id)
         elif tipo == 'marca':
-            return Product.objects.filter(brand__id=decoded_id)
+            queryset =  Product.objects.filter(brand__id=decoded_id)
         else:
-            return Product.objects.none()
+            queryset =  Product.objects.none()
+        
+        if order_by_price == 'recomendado':
+            queryset = OrdenProducto.product_recomendate().filter(id__in=queryset.values_list('id', flat=True))
+        elif order_by_price == 'desc':
+            queryset = queryset.order_by('-price')
+        elif order_by_price == 'asc':
+            queryset = queryset.order_by('price')
+
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
         #Decodificacion del id
+        tipo = self.kwargs['tipo']
         uidb64 = self.kwargs['uidb64']
         decoded_id = urlsafe_base64_decode(uidb64).decode('ascii')
-        context['categorias'] = Category.objects.all()
-        context['marcas'] = Brand.objects.all()
+        
+        context['tipo'] = tipo
+        context['uidb64'] = uidb64
+        
+        context['categorias'] = Category.objects.filter(product__isnull=False).distinct()
+        context['marcas'] = Brand.objects.filter(product__isnull=False).distinct()  
 
         tipo = self.kwargs['tipo']
         if tipo == 'categoria':

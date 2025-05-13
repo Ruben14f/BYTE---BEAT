@@ -1,4 +1,4 @@
-.banner-container{
+s.banner-container{
     display: flex;
     justify-content: center;
 }
@@ -51,7 +51,6 @@
     cursor: pointer;
 }
 
-
 .overlay {
     position: absolute;
     top: 0;
@@ -68,7 +67,6 @@
 .container-featured-products{
     display: flex;
     justify-content: center;
-    margin-top: 5%;
     padding-top: 5%;
 }
 

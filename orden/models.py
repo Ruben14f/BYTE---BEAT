@@ -6,6 +6,7 @@ from products.models import Product
 from profiles.models import Comuna, Ciudad
 from django.db.models.signals import pre_save
 import uuid
+from django.db.models.functions import Coalesce
 
 
 class OrdenStatus(models.TextChoices):
@@ -65,8 +66,18 @@ class OrdenProducto(models.Model):
         return (
             Product.objects
             .annotate(total_vendido=Sum('ordenproducto__quantity'))
+            .filter(total_vendido__gt=0)
             .order_by('-total_vendido')[:limite]
         )
+    
+    @classmethod
+    def product_recomendate(cls):
+        return (
+            Product.objects
+            .annotate(total_vendido=Coalesce(Sum('ordenproducto__quantity'), 0))  # Reemplazar None por 0
+            .order_by('-total_vendido')  # Ordenar de mayor a menor ventas
+        )
+    
 
     def __str__(self):
         return f"{self.producto.name} x{self.quantity} (Orden {self.orden.ordenID})"

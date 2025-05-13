@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load precios_tag %}
 {% load static %}
+{% load custom_filter %}
 {% block content %}
 <link rel="stylesheet" href="{% static 'css/list_products.css' %}">
 
@@ -58,11 +59,16 @@
             <label for="precio">Selecciona un precio:</label>
             <input type="range" id="precio" name="precio" min="1000" max="100000" step="300" value="50000">
             <span id="precio-valor">$50.000</span>
-            <select>
-                <option value="" disabled  selected>Ordenar por</option>
-                <option value="volvo">Precio mayor a menor</option>
-                <option value="saab">Precio menor a mayor</option>
-            </select>
+            <br>
+            <form method="get" action="{% url 'view_products' %}">
+                <label for="price_order">Ordenar por:</label>
+                <select name="price_order" id="price_order">
+                    <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Recomendados</option>
+                    <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor</option>
+                    <option value="desc" {% if request.GET.price_order == 'desc' %}selected{% endif %}>Precio: Mayor a menor</option>
+                </select>
+                <button type="submit">Filtrar</button>
+            </form>
         </div>
     </div>
 
@@ -105,39 +111,3 @@
 </script>
 
 {% endblock %}
-
-<!-- {% include 'search.html' %}
-
-    <hr style="color: aliceblue;">
-    <p style="color: aliceblue;"></p>
-    
-    <div class="card" style="width: 250px;">
-        <div class="card-body">
-            <div style="background-color: white;">
-                
-                <p><b></b></p>
-                <p></p>
-                <p></p>
-                
-            </div>
-        </div>
-    </div>
-   
-
-
-
-<div class="card" style="width: 250px;">
-    <div class="card-body">
-        <div style="background-color: white;">
-            {% if product.main_image %}
-            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
-            {% else %}
-            <p>No image available</p>
-            {% endif %}
-            <p><b>{{ product.brand }}</b></p>
-            <p>{{ product.name  }}</p>
-            <p>{{ product.price | format_price }}</p>
-            <a style="color: black;" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
-        </div>
-    </div>
-</div> -->
