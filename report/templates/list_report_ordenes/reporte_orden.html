@@ -1,0 +1,42 @@
+{% extends 'base_admin.html' %}
+
+
+{% block content_admin %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Exportar a excel</th>
+            <th></th>
+            <th></th>
+            <th>{% include 'list_report_ordenes/filtros/filtro_estado_report.html' %}</th>
+            <th>{% include 'list_report_ordenes/filtros/filtro_fecha_report.html' %}</th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th>Numero orden</th>
+            <th>Cliente</th>
+            <th>Valor pedido</th>
+            <th>Estado pedido</th>
+            <th>Fecha pedido</th>
+
+        </tr>
+    </thead>
+    {% for ordenes in ordens %}
+            {% if not ordenes.status == 'CREATED' %}
+                <tbody>
+                    <tr>
+                        <td>#{{ordenes.num_orden}}</td>
+                        <td>{{ordenes.user.first_name | title}} {{ordenes.user.last_name | title}}</td>
+                        <td>{{ordenes.total}}</td>
+                        <td>{{ordenes.get_status_display}}</td>
+                        <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                    </tr>
+                </tbody>
+            {% endif %}
+    {% endfor %}
+</table>
+
+
+{% endblock %}

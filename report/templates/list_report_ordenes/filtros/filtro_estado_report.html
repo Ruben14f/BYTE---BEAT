@@ -1,0 +1,16 @@
+<form action="{% url 'buscar_estado_report' %}" method="GET">
+    <select name="searchEstadoreporte" value="{{queryestadoreport}}">
+        <option disabled {% if not queryestadoreport %}selected{% endif %}>Seleccione estado</option>
+        {% for value, label in statusorden %}
+            {% if label != 'Creado' %}
+                <option value="{{ label }}" {% if label == queryestadoreport %}selected{% endif %}>{{label}}</option>
+            {% endif %}
+        {% endfor %}
+        {% if queryestadoreport %}
+            <option value="borrarfiltro">Borrar filtro</option>
+        {% endif %}
+    </select>
+    <button type="submit" class="btn btn-primary" >
+        Buscar por estado
+    </button>
+</form>

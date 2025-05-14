@@ -167,9 +167,6 @@ def listado_ordenes(request):
     ordenes = Orden.objects.all().order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
     
-    
-    print('estados disponibles vista ordenes', orden_status)
-    
     return render(request, 'gestion_pedidos/list_ordenes.html',{
         'ordens' : ordenes,
         'statusorden' : orden_status
@@ -194,7 +191,6 @@ def update_status_orden(request, id):
     orden_status = OrdenStatus.choices
     user = User.objects.get(id=orden.user.id)
     usermail = user.email
-    
     
     label_to_value = {
         label.lower() : value 
@@ -230,7 +226,6 @@ def send_email(request, nuevo_estado, usermail, orden, user):
     html_message = render_to_string('gestion_productos/email_update_status.html', {
         'orden' : orden,
         'user' : user
-
     })
     
     send_mail(
@@ -289,7 +284,7 @@ def estado_search(request):
             return redirect('list_ordenes_admin')
     else:
         print('Query buscada',query)
-        messages.error(request, 'Debe seleccionar un numero de estado para filtrar')
+        messages.error(request, 'Debe seleccionar un estado para filtrar')
         return redirect('list_ordenes_admin')
     
     context = {

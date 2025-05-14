@@ -29,7 +29,8 @@ urlpatterns = [
     path('orden/', include('orden.urls')),
     path('perfil/', include('profiles.urls')),
     path('webpay/', include('payment.urls')),
-    path('admin_view/', include('adminPanel.urls'))
+    path('admin-view/', include('adminPanel.urls')),
+    path('admin-report/', include('report.urls')),
 ]
 
 if settings.DEBUG:

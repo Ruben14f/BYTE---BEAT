@@ -1,0 +1,50 @@
+<form action="{% url 'buscar_fecha_report' %}" method="GET">
+  <label for="fecha_inicio">Desde:</label>
+  <input type="date" name="fecha_inicio" id="fecha_inicio">
+
+  <label for="fecha_fin">Hasta:</label>
+  <input type="date" name="fecha_fin" id="fecha_fin">
+
+  <button type="submit" id="submitform">Filtrar</button>
+</form>
+
+
+<script>
+    const fechainicio = document.getElementById('fecha_inicio');
+    const fechafin = document.getElementById('fecha_fin');
+    const submitform = document.getElementById('submitform');
+
+    function compararFechas() {
+        const fecha1 = fechainicio.value;
+        const fecha2 = fechafin.value;
+
+        if (fecha1 && fecha2) {
+            if (fecha1 > fecha2) {
+                event.preventDefault(); 
+                submitform.disabled = true;
+                console.log('⚠️ La fecha de inicio es mayor a la de fin');
+                Swal.fire({
+                    title: 'Fecha incorrecta',
+                    text: 'La fecha de inicio es mayor a la de fin, debe elegir otro rango de fechas',
+                    icon: 'warning',
+                    confirmButtonText: 'Ok',
+                    reverseButtons: true,
+                    confirmButtonColor: '#dc3545',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                }).then(function(result){
+                    if(result.isConfirmed){
+                        fechainicio.value = '';
+                        fechafin.value = '';
+                        submitform.disabled = false;
+                    }
+                });
+            } else {
+                console.log('✅ La fecha de inicio está correcta');
+            }
+        }
+    }
+
+    fechainicio.addEventListener('change', compararFechas);
+    fechafin.addEventListener('change', compararFechas);
+</script>

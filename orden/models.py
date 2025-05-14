@@ -74,8 +74,8 @@ class OrdenProducto(models.Model):
     def product_recomendate(cls):
         return (
             Product.objects
-            .annotate(total_vendido=Coalesce(Sum('ordenproducto__quantity'), 0))  # Reemplazar None por 0
-            .order_by('-total_vendido')  # Ordenar de mayor a menor ventas
+            .annotate(total_vendido=Coalesce(Sum('ordenproducto__quantity'), 0))  
+            .order_by('-total_vendido') 
         )
     
 
