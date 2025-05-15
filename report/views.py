@@ -1,4 +1,5 @@
 from datetime import timedelta, datetime 
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from orden.models import Orden, OrdenStatus
 from django.contrib import messages
@@ -12,29 +13,32 @@ def orden_list_report(request):
     orden = Orden.objects.select_related('user').all().order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
     
-    ruta = r'C:\Users\ruben.mansilla\Desktop\BYTE---BEAT\reporte_excel'
-    datos = pd.DataFrame({
-        'orden' : [o.ordenID for o in orden],
-        'numero orden': [f'#{o.num_orden}' for o in orden],
-        'cliente' : [f"{o.user.first_name.capitalize()} {o.user.last_name.capitalize()}" for o in orden],
-        'estado': [o.get_status_display() for o in orden],
-        'metodo de envio': [o.delivery_method for o in orden],
-        'total envio': [f'${int(o.envio_total)}' for o in orden],
-        'total pedido': [f'${int(o.total)}' for o in orden],
-        'fecha pedido': [o.fecha_pagada.replace(tzinfo=None).date() if o.fecha_pagada else 'Sin fecha' for o in orden]
-    })
-    datos = datos[['orden','numero orden','cliente', 'estado', 'metodo de envio', 'total envio', 'total pedido', 'fecha pedido']]
     
-    writer = ExcelWriter(ruta +"/reporte.xlsx" , engine='xlsxwriter')
+    if 'descargar' in request.GET:
+        datos = pd.DataFrame({
+            'orden' : [o.ordenID for o in orden],
+            'numero orden': [f'#{o.num_orden}' for o in orden],
+            'cliente' : [f"{o.user.first_name.capitalize()} {o.user.last_name.capitalize()}" for o in orden],
+            'estado': [o.get_status_display() for o in orden],
+            'metodo de envio': [o.delivery_method for o in orden],
+            'total envio': [f'${int(o.envio_total)}' for o in orden],
+            'total pedido': [f'${int(o.total)}' for o in orden],
+            'fecha pedido': [o.fecha_pagada.replace(tzinfo=None).date() if o.fecha_pagada else 'Sin fecha' for o in orden]
+        })
+        datos = datos[['orden','numero orden','cliente', 'estado', 'metodo de envio', 'total envio', 'total pedido', 'fecha pedido']]
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename="reporte_ordenes.xlsx"'
+        
+        with ExcelWriter(response, engine='xlsxwriter') as writer:
+            datos.to_excel(writer, sheet_name='reporte', index=False)
 
-    datos.to_excel(writer, sheet_name='reporte', index=False)
 
-    writer.close()
+        return response
     
     
-    return render(request, 'list_report_ordenes/reporte_orden.html',{
-        'ordens' : orden,
-        'statusorden' : orden_status
+    return render(request, 'list_report_ordenes/reporte_orden.html', {
+        'ordens': orden,
+        'statusorden': orden_status
     })
     
 def estado_report_filter(request):
