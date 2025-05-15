@@ -1,7 +1,6 @@
 from datetime import timedelta, datetime 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from orden.models import Orden, OrdenStatus
 from django.contrib import messages
 from django.db.models import Q
@@ -12,7 +11,7 @@ from pandas import ExcelWriter
 # Create your views here.
 
 def orden_list_report(request):
-    ordenes = Orden.objects.select_related('user').all().order_by('-fecha_pagada')
+    ordenes = Orden.objects.select_related('user').prefetch_related('productos_orden__producto').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
     
     if 'descargar' in request.GET:
@@ -24,7 +23,7 @@ def orden_list_report(request):
     })
 
 def orden_list_filter(request):
-    ordenes = Orden.objects.select_related('user').all().order_by('-fecha_pagada')
+    ordenes = Orden.objects.select_related('user').prefetch_related('productos_orden__producto').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
     query_estado = request.GET.get('searchEstadoreporte')
     fecha_inicio = request.GET.get('fecha_inicio')
@@ -37,7 +36,8 @@ def orden_list_filter(request):
     is_fecha_filter = 'fecha_inicio' in request.GET and 'fecha_fin' in request.GET
     
     if not is_estado_filter and not is_fecha_filter and 'descargar' not in request.GET:
-        return generar_reporte_excel(ordenes)
+        messages.error(request, 'Debe ingresar estado para filtrar')
+        return redirect('orden_list_report')
 
     if not is_estado_filter and not is_fecha_filter and 'descargar' not in request.GET:
         return redirect('orden_list_report')
@@ -50,9 +50,9 @@ def orden_list_filter(request):
         return redirect('orden_list_report')
     
     if is_estado_filter:
-        # if not query_estado:
-        #     messages.error(request, 'Debe seleccionar un estado para filtrar.')
-        #     return redirect('orden_list_report')
+        if not query_estado:
+            messages.error(request, 'Debe seleccionar un estado para filtrar.')
+            return redirect('orden_list_report')
         try:
             ordenes = estado_report_filter(request, ordenes, query_estado)
         except ValueError as e:
@@ -98,11 +98,7 @@ def estado_report_filter(request, ordenes, query_estado):
     label_to_value = {
         label.lower() : value 
         for value, label in orden_status}
-    print('Query buscada',query_estado)
-    # if query_estado is None:
-    #     messages.error(request, 'Debe seleccionar un estado para filtrar.')
-    #     return redirect('orden_list_report')
-    
+        
     internal_value = label_to_value.get(query_estado.lower())
     if internal_value:
         filter = Q(status__startswith=internal_value)
@@ -131,87 +127,33 @@ def fecha_filter_report(request, ordenes, fecha_inicio, fecha_fin):
     return ordenes
 
 def generar_reporte_excel(ordenes):
-    datos = pd.DataFrame({
-        'orden': [o.ordenID for o in ordenes],
-        'numero orden': [f'#{o.num_orden}' for o in ordenes],
-        'cliente': [f"{o.user.first_name.capitalize()} {o.user.last_name.capitalize()}" for o in ordenes],
-        'estado': [o.get_status_display() for o in ordenes],
-        'metodo de envio': [o.get_delivery_method_display() for o in ordenes],
-        'total envio': [f'${int(o.envio_total)}' for o in ordenes],
-        'total pedido': [f'${int(o.total)}' for o in ordenes],
-        'fecha pedido': [o.fecha_pagada.replace(tzinfo=None).date() if o.fecha_pagada else 'Sin fecha' for o in ordenes]
-    })
+    data = []
 
-    datos = datos[['orden', 'numero orden', 'cliente', 'estado', 'metodo de envio', 'total envio', 'total pedido', 'fecha pedido']]
-    
+    for orden in ordenes:
+        for producto_orden in orden.productos_orden.all():
+            data.append({
+                'orden': orden.ordenID,
+                'numero orden': f'#{orden.num_orden}',
+                'cliente': f"{orden.user.first_name.capitalize()} {orden.user.last_name.capitalize()}",
+                'estado': orden.get_status_display(),
+                'metodo de envio': orden.get_delivery_method_display(),
+                'total envio': f'${int(orden.envio_total)}',
+                'total pedido': f'${int(orden.total)}',
+                'fecha pedido': orden.fecha_pagada.replace(tzinfo=None).date() if orden.fecha_pagada else 'Sin fecha',
+                'producto': producto_orden.producto.name,
+                'cantidad': producto_orden.quantity,
+            })
+
+    df = pd.DataFrame(data)
+
     # Crear el archivo Excel
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="reporte_ordenes.xlsx"'
 
     with ExcelWriter(response, engine='xlsxwriter') as writer:
-        datos.to_excel(writer, sheet_name='reporte', index=False)
+        df.to_excel(writer, sheet_name='reporte', index=False)
 
     return response
 
-# def estado_report_filter(request):
-#     query = request.GET.get('searchEstadoreporte')
-#     orden_status = OrdenStatus.choices
-#     print('estados disponibles vista filtro', orden_status)
 
-#     label_to_value = {
-#         label.lower() : value 
-#         for value, label in orden_status}
-#     print('Query buscada',query)
-#     print('estados disponibles vista filtro mapeado', orden_status)
-    
-#     if query: 
-#         internal_value = label_to_value.get(query.lower())
-#         if internal_value:
-#             filter = Q(status__startswith=internal_value)
-#             order_list = Orden.objects.filter(filter).order_by('-fecha_pagada')
-#             print('filtro',filter)
-#             print('lista de ordenes',order_list)
-#         elif query.lower() == 'borrarfiltro':
-#             messages.success(request, 'Filtro eliminado') -> AGREGAR ESTA VALIDACION 2
-#             return redirect('orden_list_report')
-#     else:
-#         print('Query buscada',query)
-#         messages.error(request, 'Debe seleccionar estado para filtrar') - AGREGAR ESTA VALIDACION 1
-#         return redirect('orden_list_report')
-#     context = {
-#         'ordens' : order_list,
-#         'queryestadoreport' : query,
-#         'statusorden' : orden_status
-#     }
-#     print('contexto enviado', context)
-
-#     return render(request, 'list_report_ordenes/reporte_orden.html', context)
-
-# def fecha_filter_report(request):
-#     ordenes = Orden.objects.all()
-#     fecha_inicio = request.GET.get('fecha_inicio')
-#     fecha_fin = request.GET.get('fecha_fin')
-#     q = Q()
-#     print('Query buscada',q)
-#     print('Query buscada',fecha_inicio, fecha_fin)
-#     if not fecha_inicio or not fecha_fin:
-#         messages.error(request, 'Debe ingresar ambas fechas para filtrar.') -> AGREGAR ESTA VALIDACION 3
-#         return redirect('orden_list_report')
-    
-#     if fecha_inicio:
-#         q &= Q(fecha_pagada__gte=fecha_inicio)
-#     if fecha_fin:
-#         fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d') + timedelta(days=1)
-#         q &= Q(fecha_pagada__lte=fecha_fin)
-        
-#     ordenes = ordenes.filter(q).order_by('-fecha_pagada')
-
-#     if not ordenes.exists():
-#         messages.error(request, 'No se encontraron ordenes en esta fecha')
-#         return redirect('orden_list_report')
-#     context = {
-#         'ordens' : ordenes
-#     }
-    
-#     return render(request, 'list_report_ordenes/reporte_orden.html', context)
 
