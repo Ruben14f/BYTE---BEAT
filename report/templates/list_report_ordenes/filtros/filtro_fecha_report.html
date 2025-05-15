@@ -1,18 +1,30 @@
-<form action="{% url 'buscar_fecha_report' %}" method="GET">
-  <label for="fecha_inicio">Desde:</label>
-  <input type="date" name="fecha_inicio" id="fecha_inicio">
+<form action="{% url 'orden_list_filter' %}" method="GET">
+    <label for="fecha_inicio">Desde:</label>
+    <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}">
 
-  <label for="fecha_fin">Hasta:</label>
-  <input type="date" name="fecha_fin" id="fecha_fin">
+    <label for="fecha_fin">Hasta:</label>
+    <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}">
 
-  <button type="submit" id="submitform">Filtrar</button>
+    <button type="submit" id="submitform">Filtrar</button>
+
+     {% if fecha_inicio or fecha_fin %}
+        <button type="submit" name="borrarFiltro" value="true" id="borrarfiltro">Borrar filtro</button>
+    {% endif %}
 </form>
-
 
 <script>
     const fechainicio = document.getElementById('fecha_inicio');
     const fechafin = document.getElementById('fecha_fin');
     const submitform = document.getElementById('submitform');
+    const borrarfiltro = document.getElementById('borrarfiltro');
+
+    if (borrarfiltro) {
+        borrarfiltro.addEventListener('click', function(event) {
+            fechainicio.value = '';
+            fechafin.value = '';
+        });
+    }
+
 
     function compararFechas() {
         const fecha1 = fechainicio.value;

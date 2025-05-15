@@ -38,8 +38,13 @@
     {% endfor %}
 </table>
 
-
-<a href="{% url 'descargar_ordenes' %}?descargar=true&searchEstadoreporte={{ queryestadoreport }}{% if fecha_inicio %}&fecha_inicio={{ fecha_inicio }}{% endif %}{% if fecha_fin %}&fecha_fin={{ fecha_fin }}{% endif %}" class="btn btn-primary">Descargar Reporte Excel</a>
+<a href="{% url 'descargar_ordenes_filtradas' %}?descargar=true
+    {% if fecha_inicio and fecha_fin %}
+        &fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}
+    {% else %}
+        &searchEstadoreporte={{ queryestadoreport|default:'' }}
+    {% endif %}
+" class="btn btn-primary">Descargar Reporte Excel</a>
 
 
 {% endblock %}
