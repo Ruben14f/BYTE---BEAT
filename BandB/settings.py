@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'payment',
     'adminPanel',
     'report',
+    'dashboard',
     
 ]
 

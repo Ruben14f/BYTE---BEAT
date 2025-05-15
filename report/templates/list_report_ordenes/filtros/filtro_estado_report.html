@@ -2,7 +2,7 @@
     <select name="searchEstadoreporte" id="searchEstadoreporte">
         <option disabled {% if not queryestadoreport %}selected{% endif %}>Seleccione estado</option>
         {% for value, label in statusorden %}
-            {% if label != 'CREATED' %}
+            {% if value != 'CREATED' %}
                 <option value="{{ label }}" {% if label == queryestadoreport %}selected{% endif %}>{{ label }}</option>
             {% endif %}
         {% endfor %}

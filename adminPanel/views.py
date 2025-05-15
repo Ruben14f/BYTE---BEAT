@@ -4,7 +4,7 @@ from django.contrib import messages
 from products.models import Product, Brand, Category,ProductStatus
 from orden.models import Orden, OrdenStatus
 from profiles.models import UserProfile
-from django.db.models import Q
+from django.db.models import Q, Count
 from users.models import User
 from django.core.mail import send_mail
 import os
@@ -64,6 +64,12 @@ def eliminar_producto(request, id):
     producto.delete()
     return redirect('list_product_admin')
 
+def detail_product(request, id):
+    product = get_object_or_404(Product, id=id)
+    
+    return render(request, 'gestion_productos/detail_product.html', {
+        'product' : product
+    })
 #Filtros productos
 def sku_search(request):
     query = request.GET.get('searchSku')
@@ -167,9 +173,22 @@ def listado_ordenes(request):
     ordenes = Orden.objects.all().order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
     
+    resumen_estados_qs = (
+        ordenes
+        .values('status')
+        .annotate(total=Count('id'))
+    )
+
+    # Convertir a dict con los nombres legibles
+    resumen_estados = {
+        dict(OrdenStatus.choices)[item['status']]: item['total']
+        for item in resumen_estados_qs
+    }
+    
     return render(request, 'gestion_pedidos/list_ordenes.html',{
         'ordens' : ordenes,
-        'statusorden' : orden_status
+        'statusorden' : orden_status,
+        'resumen_estados' : resumen_estados
     })
 
 def detail_orden(request,id):
@@ -217,7 +236,6 @@ def update_status_orden(request, id):
             print('testmail',send_mail)
     return redirect('list_ordenes_admin')
 
-
 def send_email(request, nuevo_estado, usermail, orden, user):
     print('nuevo estado email', nuevo_estado)
     print('email user change status',usermail)
@@ -238,7 +256,6 @@ def send_email(request, nuevo_estado, usermail, orden, user):
     )
     
     print('correo enviado desde', email_host ,'hacia' , usermail, orden.id)
-
 
 #Filtros ordenes
 def orden_search(request):
@@ -295,4 +312,3 @@ def estado_search(request):
     print('contexto enviado', context)
 
     return render(request, 'gestion_pedidos/list_ordenes.html', context)
-

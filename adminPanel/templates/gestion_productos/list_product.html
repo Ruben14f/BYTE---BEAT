@@ -7,7 +7,9 @@
     <div class="card">
         <div class="card-body">
             <table class="table">
+                
                 <thead>
+                    <p>Total productos: {{products | length}}</p>
                     <tr>
                         <th>{% include 'gestion_productos/filtros/filtro_sku.html' %}</th>
                         <th></th>
@@ -54,7 +56,7 @@
                             &ndash;
                             <a class="btn btn-danger" onclick="eliminarProducto({{product.id}})">Eliminar</a>
                         </td>
-                        <td><a href="#">Ir a producto</a></td>
+                        <td><a href="{% url 'detail_product_admin' product.id %}">Ir a producto</a></td>
                         <th>
                             {% if product.status == 'ACTIVE' %} <p style="color: greenyellow; background-color: green;">{{product.get_status_display}}</p> 
                             {% elif product.status == 'INACTIVE' %} <p style="color: red; background-color: rgb(100, 2, 2);">{{product.get_status_display}}</p> 
@@ -65,7 +67,6 @@
                 </tbody>
                 {% endfor %}
             </table>
-
             <a href="{% url 'list_ordenes_admin' %}">Ir a listado ordenes</a>
             <a href="{% url 'agregar_product' %}">Agregar nuevo producto</a>
         </div>

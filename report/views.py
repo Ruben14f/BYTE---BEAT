@@ -132,7 +132,6 @@ def generar_reporte_excel(ordenes):
     for orden in ordenes:
         for producto_orden in orden.productos_orden.all():
             data.append({
-                'orden': orden.ordenID,
                 'numero orden': f'#{orden.num_orden}',
                 'cliente': f"{orden.user.first_name.capitalize()} {orden.user.last_name.capitalize()}",
                 'estado': orden.get_status_display(),
@@ -140,13 +139,15 @@ def generar_reporte_excel(ordenes):
                 'total envio': f'${int(orden.envio_total)}',
                 'total pedido': f'${int(orden.total)}',
                 'fecha pedido': orden.fecha_pagada.replace(tzinfo=None).date() if orden.fecha_pagada else 'Sin fecha',
+                'sku' : producto_orden.producto.sku,
                 'producto': producto_orden.producto.name,
                 'cantidad': producto_orden.quantity,
+                'precio producto unitario' : f'${int(producto_orden.producto.price)}',
+                
             })
 
     df = pd.DataFrame(data)
 
-    # Crear el archivo Excel
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = 'attachment; filename="reporte_ordenes.xlsx"'
 

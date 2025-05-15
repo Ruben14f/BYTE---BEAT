@@ -1,0 +1,30 @@
+{% extends 'base_admin.html' %}
+
+
+{% block content_admin %}
+<div style="background: white;">
+    <h1>Detalle del producto </h1>
+    {% if product.main_image.url %}
+            <img src="{{ product.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+    {% else %}
+        <p>No hay imagen disponible</p>
+    {% endif %}
+    {% if product.secondary_image.url %}
+        <img src="{{ product.secondary_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+    {% endif %}
+   
+    
+    <h3>Sku: {{ product.sku }}</h3>
+    <p>Estado: {{ product.get_status_display }}</p>
+    <p>Precio producto: ${{ product.price }}</p>
+    <p>Nombre: {{ product.name }}</p>
+    <p>Stock: {{ product.stock }}</p>
+    <p>Descripcion: {{ product.description }}</p>
+    <p>Fecha de creacion: {{ product.created_at|date:"d/m/Y H:i" }}</p>
+    <p>Categoria: {{ product.category }}</p>
+    <p>Marca: {{ product.brand }}</p>
+
+
+    <a href="{% url 'historial_orden' %}">Atras</a>
+</div>
+{% endblock %}

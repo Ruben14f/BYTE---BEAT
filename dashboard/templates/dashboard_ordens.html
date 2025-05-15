@@ -1,0 +1,8 @@
+
+<div style="width: 700px; height: 500px;">
+{% if grafico != "No hay datos para mostrar" %}
+  <div>{{ grafico|safe }}</div>
+{% else %}
+  <p>{{ grafico }}</p>
+{% endif %}
+</div>

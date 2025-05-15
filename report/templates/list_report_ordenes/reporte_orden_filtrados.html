@@ -3,10 +3,18 @@
 
 {% block content_admin %}
 
+TOTAL ORDENES: {{ordens | length}}
 <table class="table">
     <thead>
         <tr>
-            <th>Exportar a excel</th>
+            <th>
+            <a href="{% url 'descargar_ordenes_filtradas' %}?descargar=true
+            {% if fecha_inicio and fecha_fin %}
+                &fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}
+            {% else %}
+                &searchEstadoreporte={{ queryestadoreport|default:'' }}
+            {% endif %}" class="btn btn-primary">Descargar Reporte Excel</a>
+            </th>
             <th></th>
             <th></th>
             <th>{% include 'list_report_ordenes/filtros/filtro_estado_report.html' %}</th>
@@ -24,27 +32,22 @@
         </tr>
     </thead>
     {% for ordenes in ordens %}
-            {% if not ordenes.status == 'CREATED' %}
-                <tbody>
-                    <tr>
-                        <td>#{{ordenes.num_orden}}</td>
-                        <td>{{ordenes.user.first_name | title}} {{ordenes.user.last_name | title}}</td>
-                        <td>{{ordenes.total}}</td>
-                        <td>{{ordenes.get_status_display}}</td>
-                        <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
-                    </tr>
-                </tbody>
-            {% endif %}
+        <tbody>
+            <tr>
+                <td>#{{ordenes.num_orden}}</td>
+                <td>{{ordenes.user.first_name | title}} {{ordenes.user.last_name | title}}</td>
+                <td>{{ordenes.total}}</td>
+                <td>{{ordenes.get_status_display}}</td>
+                {% if ordenes.status == 'CREATED' %}
+                    <td>{{ordenes.create_at |date:"d/m/Y"}}</td>
+                {% else %}
+                    <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                {% endif %}
+            </tr>
+        </tbody>
     {% endfor %}
 </table>
 
-<a href="{% url 'descargar_ordenes_filtradas' %}?descargar=true
-    {% if fecha_inicio and fecha_fin %}
-        &fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}
-    {% else %}
-        &searchEstadoreporte={{ queryestadoreport|default:'' }}
-    {% endif %}
-" class="btn btn-primary">Descargar Reporte Excel</a>
 
 
 {% endblock %}

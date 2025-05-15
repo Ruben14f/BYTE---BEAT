@@ -31,6 +31,7 @@ urlpatterns = [
     path('webpay/', include('payment.urls')),
     path('admin-view/', include('adminPanel.urls')),
     path('admin-report/', include('report.urls')),
+    path('admin-dashboard/', include('dashboard.urls')),
 ]
 
 if settings.DEBUG:

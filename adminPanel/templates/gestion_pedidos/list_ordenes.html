@@ -2,31 +2,14 @@
 
 
 {% block content_admin %}
-{% if query %}
-<div style="background: lightblue; color: black;">
-    {% for ordenes in ordens %}
-        <div style="display: flex; flex-direction: column;">
-            {{ordenes.ordenID}}
-            {{ordenes.id}}
-            {{ordenes.get_status_display}}
-            {{ordenes.user.first_name | title }} {{ordenes.user.last_name | title}}
-            valor pedido: {{ordenes.total}}
-            Pagado el: {{ ordenes.fecha_pagada|date:"d/m/Y"}}
-        </div>
-        {% for products in ordenes.productos_orden.all %}
-            <div style="display: flex; flex-direction: column;">
-                nombre producto: {{products.producto.name}}
-                SKU: {{products.producto.sku}}
-                ID: {{products.producto.id}}
-                Cantidad: {{products.quantity}}
-            </div>
-        {% endfor %}
-    {% endfor %}
-    TOTAL ORDENES: {{ordens | length}}
-</div>
+TOTAL ORDENES: {{ordens | length}}
 
+{% if query %}
 <table class="table">
     <thead>
+        {% for estado, cantidad in resumen_estados.items %}
+            {{ estado }}: {{ cantidad }}
+        {% endfor %}
         <tr>
             <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
             <th></th>
@@ -68,30 +51,15 @@
     {% endfor %}
 </table>
 {% else %}
-<div style="background: lightblue; color: black;">
-    {% for ordenes in ordens %}
-        <div style="display: flex; flex-direction: column;">
-            {{ordenes.ordenID}}
-            {{ordenes.id}}
-            {{ordenes.get_status_display}}
-            {{ordenes.user.first_name | title }} {{ordenes.user.last_name | title}}
-            valor pedido: {{ordenes.total}}
-            Pagado el: {{ ordenes.fecha_pagada|date:"d/m/Y"}}
-        </div>
-        {% for products in ordenes.productos_orden.all %}
-            <div style="display: flex; flex-direction: column;">
-                nombre producto: {{products.producto.name}}
-                SKU: {{products.producto.sku}}
-                ID: {{products.producto.id}}
-                Cantidad: {{products.quantity}}
-            </div>
-        {% endfor %}
-    {% endfor %}
-    TOTAL ORDENES: {{ordens | length}}
-</div>
 
 <table class="table">
     <thead>
+        <div style="margin-top: 10px;">
+            {% for estado, cantidad in resumen_estados.items %}
+            {{ estado }}: ({{ cantidad }})
+            {% endfor %}
+        </div>
+        
         <tr>
             <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
             <th></th>
@@ -128,7 +96,7 @@
     {% endfor %}
 </table>
 {% endif %}
-TOTAL ORDENES: {{ordens | length}}
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     function updateEstadoOrden(id,form){
