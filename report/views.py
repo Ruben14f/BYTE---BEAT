@@ -77,8 +77,6 @@ def orden_list_filter(request):
             messages.error(request, 'Formato de fecha inválido.')
             return redirect('orden_list_report')
 
-
-
     if 'descargar' in request.GET:
         return generar_reporte_excel(ordenes) 
 
@@ -91,7 +89,6 @@ def orden_list_filter(request):
         'fecha_fin': fecha_fin,
     })
     
-
 def estado_report_filter(request, ordenes, query_estado):
     orden_status = OrdenStatus.choices
 
@@ -108,7 +105,6 @@ def estado_report_filter(request, ordenes, query_estado):
         return redirect('orden_list_report')
 
     return ordenes
-
 
 # Filtro por fecha
 def fecha_filter_report(request, ordenes, fecha_inicio, fecha_fin):
