@@ -1,92 +1,198 @@
 {% extends 'base.html' %}
-
+{% load precios_tag %}
 {% block content %}
 
+<style>
+  body {
+    background-color: #0f1125;
+    color: #00f7e0;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  .search-container {
+    margin: 30px auto;
+    max-width: 700px;
+    background-color: #1d213a;
+    padding: 20px;
+    border-radius: 10px;
+  }
+
+  .order-history {
+    max-width: 900px;
+    margin: 40px auto;
+    background-color: #1d213a;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #00f7e0;
+  }
+
+  h3 {
+    margin-top: 25px;
+    color: #a1f9ff;
+  }
+
+  ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 15px;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  .order-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #2a2f4a;
+    padding: 10px;
+    border-radius: 8px;
+    color: #ffffff;
+  }
+
+  .order-item img {
+    border-radius: 5px;
+  }
+
+  .order-details {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #303558;
+    border-radius: 8px;
+    color: #e5faff;
+  }
+
+  a.btn-danger {
+    margin-top: 10px;
+    background-color: #dc3545;
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+
+  a.btn-danger:hover {
+    background-color: #bb2d3b;
+  }
+
+  a {
+    color: #00f7e0;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  .total-ordenes {
+    margin-top: 20px;
+    font-weight: bold;
+    color: #00f7e0;
+    text-align: center;
+  }
+
+  p {
+    color: #e5faff;
+  }
+</style>
+
 <div class="search-container">
-    <div class="search-bar">
-        {% include 'historial_compra/search_compra.html' %}
-    </div>
+  <div class="search-bar">
+    {% include 'historial_compra/search_compra.html' %}
+  </div>
 </div>
 
+<div class="order-history">
+  <h1>Historial de pedidos</h1>
 
-
-<div style="background: white;">
-    <h1>Historial de pedidos</h1>
-{% if query %}
-<p style="color: black;">Resultado de búsqueda para: {{ query }}</p>
+  {% if query %}
+    <p>Resultado de búsqueda para: <strong>{{ query }}</strong></p>
     {% if ordenes %}
-        <ul>
-            {% for orden in ordenes %}
-                <h3>Orden: {{ orden.num_orden | slice:":8"}}</h3>
-                <ul>
-                    {% for item in orden.productos_orden.all %}
-                        <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
-                        {{ item.producto.name }} x {{ item.quantity }} - 
-                    {% endfor %}
-                    
-                    Estado orden: {{ orden.get_status_display }}
-                    total: ${{ orden.total }}
-                    {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
-                        <a class="btn btn-danger" onclick="cancelarCompra({{orden.id}})">Cancelar</a>
-                    {% endif %}
-                    <p>Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
-                </ul>
-                <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+      <ul>
+        {% for orden in ordenes %}
+          <h3>Orden: {{ orden.num_orden|slice:":8" }}</h3>
+          <ul>
+            {% for item in orden.productos_orden.all %}
+              <li class="order-item">
+                <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+                {{ item.producto.name }} x {{ item.quantity }}
+              </li>
             {% endfor %}
-
-            <p>Total de órdenes: {{ ordenes|length }}</p>
-        </ul>
+            <div class="order-details">
+              Estado orden: <strong>{{ orden.get_status_display }}</strong><br>
+              Total: <strong>{{ orden.total | format_price }}</strong><br>
+              {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
+                <a class="btn btn-danger" onclick="cancelarCompra({{ orden.id }})">Cancelar</a><br>
+              {% endif %}
+              Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}
+            </div>
+          </ul>
+          <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+        {% endfor %}
+      </ul>
+      <p class="total-ordenes">Total de órdenes: {{ ordenes|length }}</p>
     {% else %}
-    <p style="color: black;">No se encontro orden con ese numero de orden </p>
+      <p>No se encontró orden con ese número de orden</p>
     {% endif %}
-{% else %}
-{% if ordenes %}
-        <ul>
-            {% for orden in ordenes %}
-                <h3>Orden: {{ orden.num_orden | slice:":8"}}</h3>
-                <ul>
-                    {% for item in orden.productos_orden.all %}
-                        <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
-                        {{ item.producto.name }} x{{ item.quantity }} - 
-                    {% endfor %}
-                    
-                    Estado orden: {{ orden.get_status_display }}
-                    total: ${{ orden.total }}
-                    {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
-                        <a class="btn btn-danger" onclick="cancelarCompra({{orden.id}})">Cancelar</a>
-                    {% endif %}
-                    <p>Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
-                </ul>
-                <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+  {% else %}
+    {% if ordenes %}
+      <ul>
+        {% for orden in ordenes %}
+          <h3>Orden: {{ orden.num_orden|slice:":8" }}</h3>
+          <ul>
+            {% for item in orden.productos_orden.all %}
+              <li class="order-item">
+                <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+                {{ item.producto.name }} x {{ item.quantity }}
+              </li>
             {% endfor %}
-
-            <p>Total de órdenes: {{ ordenes|length }}</p>
-        </ul>
+            <div class="order-details">
+              Estado orden: <strong>{{ orden.get_status_display }}</strong><br>
+              Total: <strong>{{ orden.total | format_price}}</strong><br>
+              {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
+                <a class="btn btn-danger" onclick="cancelarCompra({{ orden.id }})">Cancelar</a><br>
+              {% endif %}
+              Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}
+            </div>
+          </ul>
+          <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+        {% endfor %}
+      </ul>
+      <p class="total-ordenes">Total de órdenes: {{ ordenes|length }}</p>
     {% else %}
-    <p style="color: black;">No tienes compras </p>
+      <p>No tienes compras</p>
     {% endif %}
-{% endif %}
+  {% endif %}
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function cancelarCompra(id){
-        const baseUrl = "{% url 'cancelar_compra' 0 %}".replace("0", id);
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer',
-            icon: 'question',
-            showCancelButton: true,
-            cancelButtonText: 'No, cancelar',
-            confirmButtonText: 'Sí, eliminar',
-            reverseButtons: true,
-            confirmButtonColor: '#dc3545'
-        }).then(function(result){
-            if(result.isConfirmed){
-                window.location.href = baseUrl;
-            }
-        });
-    }
+  function cancelarCompra(id){
+    const baseUrl = "{% url 'cancelar_compra' 0 %}".replace("0", id);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Esta acción no se puede deshacer',
+      icon: 'question',
+      showCancelButton: true,
+      cancelButtonText: 'No, cancelar',
+      confirmButtonText: 'Sí, eliminar',
+      reverseButtons: true,
+      confirmButtonColor: '#dc3545'
+    }).then(function(result){
+      if(result.isConfirmed){
+        window.location.href = baseUrl;
+      }
+    });
+  }
 </script>
 
 {% endblock %}
