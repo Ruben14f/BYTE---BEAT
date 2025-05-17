@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load precios_tag %}
+{% load custom_filter %}
 {% block banner %}
 <link rel="stylesheet" href="{% static 'css/index.css' %}">
 <section class="text-center px-4 py-3 banner-container" style="background:  #2C2F47;">
@@ -28,15 +29,15 @@
             <div class="row">
                 {% for categorys in categoria %}
                     <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; ">
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
+                        <!-- <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
                             <span class="text-muted fs-4">400 × 320</span>
-                        </div>
+                        </div> -->
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{categorys.name}}</h5>
                             <p class="card-text">
                                 Descripcion de los productos en esta categoria
                             </p>
-                            <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Ver</a>
+                            <a href="{% url 'categorias_marcas_filtro' 'categoria' categorys.id|urlsafe_base64_encode_filter %}" class="btn rounded-pill px-4" style="background: #17F0D2;">Ver</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -46,7 +47,7 @@
     </div>
 </section>
 
-<section class="containter featured-products bg-secondary" style="padding-top: 5%;">
+<section class="containter featured-products bg-secondary" style="padding-top: 1%;">
     <div class="text-center" style="color: #17F0D2;">
         <h3 class="title-featured">Productos Destacados</h3>
     </div>
@@ -57,8 +58,8 @@
                 {% for product_vent in mas_vendido %}
                 <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
                     <div class="position-relative" style="height: 130px; border-radius: 10px;">
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px;">
-                            <span class="text-muted fs-4">400 × 320</span>
+                        <div class="d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px; background: white; margin-bottom: 20px;">
+                            <span class="text-muted fs-4"><img src="{{product_vent.main_image.url}}" alt="" width="90%" height="90%"></span>
                         </div>
                         
                         <div class="overlay">
@@ -68,7 +69,7 @@
                     
                     <div class="card-body">
                         <h5 class="card-title fw-bold">{{product_vent.name}}</h5>
-                        <p class="card-text mb-2" style="color: white;">{{product_vent.price}}</p>
+                        <p class="card-text mb-2" style="color: white;">{{product_vent.price | format_price }}</p>
                         <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
                     </div>
                 </div>  

@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from products.models import Category
 from orden.models import OrdenProducto
+from django.db.models import Count
 # Create your views here.
 def index(request):
-    category = Category.objects.all()
+    category = Category.objects.annotate(product_count=Count('product')).filter(product_count__gt=0)
+
     mayor_vendido = OrdenProducto.total_product_vendido()
 
 

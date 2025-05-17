@@ -1,6 +1,25 @@
-<form action="{% url 'remove' %}" method="post">
+<form action="{% url 'remove' %}" onsubmit="eliminarProductoCart(event, this)"  method="POST">
     {% csrf_token %}
     <input type="hidden" name="product_id" value="{{ product.id }}">
-
     <button type="submit" class="btn btn-secondary">Eliminar</button>
 </form>
+
+<script>
+    function eliminarProductoCart(id,form){
+        event.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro que deseas eliminar todas las unidades del carrito?',
+            text: 'Esta acción no se puede deshacer',
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Sí, eliminar',
+            reverseButtons: true,
+            confirmButtonColor: '#dc3545'
+        }).then(function(result){
+            if(result.isConfirmed){
+                form.submit(); 
+            }
+        });
+    }
+</script>

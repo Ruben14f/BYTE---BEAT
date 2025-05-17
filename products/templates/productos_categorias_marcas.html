@@ -12,39 +12,53 @@
 </div>
 
 
-<div class="container" style="display: flex; flex-direction: row;">
-    <div class="filter-container" style="background: lightcoral;">
-        <h4>Filtros</h4>
-        <div class="content-filter" style="background: lightblue; display:flex; flex-direction: column;">
+<div class="container-main" style="display: flex; flex-direction: row;">
+    <div class="filters">
+        <h4 class="filter-title">Filtros</h4>
+        <hr style=" color: white;">
+        <div class="filter-section">
             <h6>Filtro por categoria</h6>
             {% for categoys in categorias %}
-            <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id|urlsafe_base64_encode_filter %}">
-                {{categoys.name}}
-            </a>
+            <div class="filter-option">
+                <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id|urlsafe_base64_encode_filter %}" class="filter-label">
+                {{categoys.name}} <span class="filter-badge">{{categoys.productos_count }}</span>
+                </a>
+            </div>
             {% endfor %}
-            
 
             <h6>Filtro por marcas</h6>
             {% for brand in marcas %}
-            <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id|urlsafe_base64_encode_filter %}">
-                {{brand.name}}
-            </a>
+            <div class="filter-option">
+                <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id|urlsafe_base64_encode_filter %}" class="filter-label">
+                {{brand.name}} <span class="filter-badge">{{brand.productos_count }}</span>
+                </a>
+            </div>
             {% endfor %}
+        </div>
 
-            <a href="{% url 'view_products' %}">Ver todos los productos</a>
-            <h6>Filtro por precio</h6>
-            Min <input type="range"> Max
+        <div style="margin: 5px 0;">
+            <a href="{% url 'view_products' %}" class="filter-label">Ver todos los productos</a>
+        </div>
+        
+
+            <!-- <h6>Filtro por precio</h6>
+            Min <input type="range"> Max -->
+        <div class="filter-section orderby">
             <form method="get" action="{% url 'categorias_marcas_filtro' tipo uidb64 %}">
-                <select name="price_order" id="price_order">
-                    <option value="recomendado" disabled {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Ordenar por</option>
-                    <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Recomendados</option>
-                    <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor</option>
-                    <option value="desc" {% if request.GET.price_order == 'desc' %}selected{% endif %}>Precio: Mayor a menor</option>
-                </select>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <select name="price_order" id="price_order" style="margin-bottom: 15px;">
+                        <option value="recomendado" disabled {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Ordenar por</option>
+                        <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Recomendados</option>
+                        <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor</option>
+                        <option value="desc" {% if request.GET.price_order == 'desc' %}selected{% endif %}>Precio: Mayor a menor</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-filter-icon lucide-list-filter"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+                </div>
                 <button type="submit">Filtrar</button>
             </form>
         </div>
-
+            
+    
     </div>
 
     <div class="product-container">
@@ -69,4 +83,5 @@
         </div>
         {% endfor %}
     </div>
-    {% endblock %}
+</div>
+{% endblock %}

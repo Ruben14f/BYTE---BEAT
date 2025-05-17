@@ -1,60 +1,74 @@
 {% extends 'base.html' %}
 {% load precios_tag %}
+{% load static %}
 {% block content %}
 
-<div style="background: #2D2D2D; margin: 0px 200px; padding: 0px 50px;">
+<link rel="stylesheet" href="{% static 'css/cart.css' %}">
+<div class="cart-container">
 
-    <div style="display: flex; justify-content: space-between; padding: 20px; align-items: flex-start;">
-
-        <div style="color: white; width: 600px; margin-right: 30px;"> 
-            <div class="card">
-                <div class="card-body" style="display: flex; flex-direction: column;">
-                    {% if cart.productos.exists %}
-                        {% for cart_product in cart.product_related %}
-                        {% with product=cart_product.productos %}
-                        <div id="product-{{ cart_product.id }}" style="background: #444444; margin-bottom: 20px; padding: 15px; border-radius: 8px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div style="display: flex; flex-direction: row; align-items: center;">
-                                    {% if product.main_image %}
-                                        <img src="{{ product.main_image.url }}" alt="" width="120" height="120" style="border-radius: 8px; margin-right: 15px;">
-                                    {% endif %}
-                                    <div style="display: flex; flex-direction: column;">
-                                        <p style="font-size: 18px; color: #FFFFFF; margin: 5px 0;">{{ product.name }}</p>
-                                        <p style="font-size: 16px; color: #B8B8B8; margin: 5px 0;">Marca: {{ product.brand }}</p>
-                                        <p style="font-size: 16px; color: #FFFFFF; margin: 5px 0;">Precio: {{ product.price | format_price }}</p>
-                                        
-                                    </div>
-                                </div>
-                                <div style="display: flex; flex-direction: row; align-items: center; color: #FFFFFF;">
-                                    <p style="margin-right: 10px;">Cantidad: {{ cart_product.quantity }}</p>
-                                    {% include 'update_quantity.html' %}
-                                    <div>{% include 'remove.html' %}</div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endwith %}
-                        {% endfor %}
-
-                    {% else %}
-                    <h3 style="color: rgb(0, 0, 0);">El carrito está vacío</h3>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Resumen del pedido -->
+    <div class="cart-items">
         {% if cart.productos.exists %}
-        <div style="background-color: #1A1A1A; color: white; width: 300px; padding: 20px; border-radius: 8px;">
-            <h4 style="font-size: 24px; margin-bottom: 10px;">Resumen del Pedido</h4>
-            <p style="font-size: 18px; margin-bottom: 10px;">Subtotal: {{ cart.subtotal | format_price }}</p>
-            <hr style="border-top: 1px solid #333;">
-            <p style="font-size: 18px; font-weight: bold;">Total: {{ cart.total | format_price }}</p>
-            <a href="{% url 'orden' %}" class="btn btn-primary">Proceder al pago</a>
-            <a class="btn btn-secondary" style="margin-top: 10px; background-color: #444; border: none;" href="{% url 'view_products' %}">Continuar comprando</a>
+            {% for cart_product in cart.product_related %}
+                {% with product=cart_product.productos %}
+                <div class="cart-item" id="product-{{ cart_product.id }}">
 
-        </div>
+                    <div class="item-image">
+                        {% if product.main_image %}
+                            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" width="100px">
+                        {% else %}
+                            <div style="width:120px; height:120px; background:#fff; border-radius:0.5rem;"></div>
+                        {% endif %}
+                    </div>
+
+                    <div class="item-details">
+                        <div class="item-brand">{{ product.brand }}</div>
+                        <div class="item-name">{{ product.name }}</div>
+                        <div class="item-price">{{ product.price | format_price }}</div>
+                        <div class="item-quantity">
+                            {% include 'update_quantity.html' %}
+                        </div>
+                    </div>
+
+                    <div class="item-actions">
+                        <div class="item-total">
+                            {{ cart_product.get_subtotal_product | format_price }}
+                        </div>
+                        <div>
+                            {% include 'remove.html' %}
+                        </div>
+                    </div>
+
+                </div>
+                {% endwith %}
+            {% endfor %}
         {% else %}
-         <a href="{% url 'view_products' %}" style="background: black; text-decoration: none; color: white; padding: 10px; border-radius: 8px;">Comprar ahora</a>
+            <div class="empty-cart" style="display:flex; color: white;">
+                <div class="empty-cart-icon">🛒</div>
+                <h2>Tu carrito está vacío</h2>
+                <p class="empty-cart-message">Parece que aún no has añadido productos a tu carrito</p>
+                <a href="{% url 'view_products' %}" class="shop-now-button">Explorar productos</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="cart-summary">
+        {% if cart.productos.exists %}
+            <h3 class="summary-title">Resumen del Pedido</h3>
+
+            <div class="summary-row">
+                <span class="summary-label">Subtotal</span>
+                <span class="summary-value">{{ cart.subtotal | format_price }}</span>
+            </div>
+
+            <div class="summary-total">
+                <span>Total</span>
+                <span>{{ cart.total | format_price }}</span>
+            </div>
+            <a class="btn btn-gotopay" href="{% url 'orden' %}">Proceder al pago</a>
+
+            <div class="continue-shopping">
+                <a href="{% url 'view_products' %}">Continuar comprando</a>
+            </div>
         {% endif %}
     </div>
 </div>

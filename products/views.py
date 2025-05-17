@@ -1,7 +1,7 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Product,Category,Brand
-from django.db.models import Q
+from django.db.models import Q,Count
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from orden.models import OrdenProducto
@@ -27,17 +27,20 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['products'] = self.queryset
-        context['categorias'] = Category.objects.filter(product__isnull=False).distinct()
-        context['marcas'] = Brand.objects.filter(product__isnull=False).distinct()
+        context['categorias'] = Category.objects.annotate(productos_count=Count('product', distinct=True)).filter(product__isnull=False)
+        context['marcas'] = Brand.objects.annotate(productos_count=Count('product', distinct=True)).filter(product__isnull=False)
 
         #Codificacion del id
         context['categorias'] = [{
             'name': c.name,
-            'id' : urlsafe_base64_encode(force_bytes(c.id))
+            'id' : urlsafe_base64_encode(force_bytes(c.id)),
+            'count' : c.productos_count
         }for c in context['categorias']]
+        
         context['marcas'] = [{
             'name' : m.name,
-            'id' : urlsafe_base64_encode(force_bytes(m.id))
+            'id' : urlsafe_base64_encode(force_bytes(m.id)),
+            'count' : m.productos_count
         }for m in context['marcas']]
         
         return context
@@ -116,8 +119,8 @@ class CyMListView(ListView):
         context['tipo'] = tipo
         context['uidb64'] = uidb64
         
-        context['categorias'] = Category.objects.filter(product__isnull=False).distinct()
-        context['marcas'] = Brand.objects.filter(product__isnull=False).distinct()  
+        context['categorias'] = Category.objects.annotate(productos_count=Count('product', distinct=True)).filter(product__isnull=False).order_by('name')
+        context['marcas'] = Brand.objects.annotate(productos_count=Count('product', distinct=True)).filter(product__isnull=False).order_by('name')
 
         tipo = self.kwargs['tipo']
         if tipo == 'categoria':

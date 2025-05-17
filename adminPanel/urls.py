@@ -18,5 +18,4 @@ urlpatterns = [
     path('detail-orden-admin/<int:id>', detail_orden, name='detail_orden_admin'),
     path('update-status-orden/<int:id>', update_status_orden, name='actualizar_estado_orden'),
     
-
 ]

@@ -1,5 +1,5 @@
 
-<form method="POST" action="{% url 'actualizar_estado_orden' ordenes.id %}" onsubmit="updateEstadoOrden(event, this)"">
+<form method="POST" action="{% url 'actualizar_estado_orden' ordenes.id %}" onsubmit="updateEstadoOrden(event, this)">
     {% csrf_token %}
     <select name="estadoOrdenUpdate">
         <option disabled selected>Estado: {{ ordenes.get_status_display }}</option>

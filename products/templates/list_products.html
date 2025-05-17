@@ -7,69 +7,129 @@
 
 <div class="search-container">
     <div class="search-bar">
-        {% include 'search.html' %} <p>okla</p>
+        {% include 'search.html' %}
     </div>
 </div>
 
 {% if query %}
-<p style="color: white;">Resultado de búsqueda para: {{ query | title }}</p>
-<h2 class="section-title">Listado de Productos</h2>
-<div class="product-container">
-    <div class="products-grid">
-        {% for product in product_list %}
-        <div class="product-card">
-            <div class="product-image">
-                {% if product.main_image %}
-                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
-                {% else %}
-                <p>No image available</p>
-                {% endif %}
-            </div>
-            <div class="product-info">
-                <div class="product-brand">{{ product.brand }} categoria</div>
-                <div class="product-brand">{{ product.category }}</div>
-                <div class="product-name">{{ product.name }}</div>
-                <div class="product-price">{{ product.price | format_price }}</div>
-                <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-                <a href="{% url 'detail_product' product.slug %}">Ir al producto</a>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-{% else %}
-<div class="container" style="display: flex; flex-direction: row;">
+
+<div class="container-main" style="display: flex; flex-direction: row;">
     <div class="filter-container" style="background: lightcoral;">
         <h4>Filtros</h4>
         <div class="content-filter" style="background: lightblue; display:flex; flex-direction: column;">
             <h6>Filtro por categoria</h6>
-                {% for categoys in categorias %}
-                    <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id %}">
-                        {{categoys.name}}
-                    </a>
-                {% endfor %}
-                <h6>Filtro por marcas</h6>
-                
-                {% for brand in marcas %}
-                <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id %}">
-                    {{brand.name}}
-                </a>
-                {% endfor %}
-            <h6>Filtro por precio</h6>
+            {% for categoys in categorias %}
+            <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id %}">
+                {{categoys.name}}
+            </a>
+            {% endfor %}
+            <h6>Filtro por marcas</h6>
+
+            {% for brand in marcas %}
+            <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id %}">
+                {{brand.name}}
+            </a>
+            {% endfor %}
+            <!-- <h6>Filtro por precio</h6>
             <label for="precio">Selecciona un precio:</label>
             <input type="range" id="precio" name="precio" min="1000" max="100000" step="300" value="50000">
-            <span id="precio-valor">$50.000</span>
+            <span id="precio-valor">$50.000</span> -->
             <br>
+            <h6>Ordenar</h6>
             <form method="get" action="{% url 'view_products' %}">
                 <select name="price_order" id="price_order">
                     <option value="recomendado" disabled selected>Ordenar por</option>
-                    <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>Recomendados</option>
-                    <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor</option>
-                    <option value="desc" {% if request.GET.price_order == 'desc' %}selected{% endif %}>Precio: Mayor a menor</option>
+                    <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>
+                        Recomendados</option>
+                    <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor
+                    </option>
+                    <option value="desc" {% if request.GET.price_order == 'desc' %}selected{% endif %}>Precio: Mayor a
+                        menor</option>
                 </select>
                 <button type="submit">Filtrar</button>
             </form>
         </div>
+    </div>
+    <p style="color: white;">Resultado de búsqueda para: {{ query | title }}</p>
+    <h2 class="section-title">Listado de Productos</h2>
+    <div class="product-container">
+        <div class="products-grid">
+            {% for product in product_list %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if product.main_image %}
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}"
+                        style="width: 100px; height: 100px;">
+                    {% else %}
+                    <p>No image available</p>
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <div class="product-brand">{{ product.brand }} categoria</div>
+                    <div class="product-brand">{{ product.category }}</div>
+                    <div class="product-name">{{ product.name }}</div>
+                    <div class="product-price">{{ product.price | format_price }}</div>
+                    <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                    <a href="{% url 'detail_product' product.slug %}">Ir al producto</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+</div>
+{% else %}
+
+<div class="container-main" style="display: flex; flex-direction: row;">
+    <div class="filters">
+        <h4 class="filter-title">Filtros</h4>
+        <hr style=" color: white;">
+        <div class="filter-section">
+            <h6>Filtro por categoria</h6>
+            {% for categoys in categorias %}
+            <div class="filter-option">
+                <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id %}" class="filter-label">
+                {{categoys.name}}  <span class="filter-badge">{{categoys.count  }}</span>
+                </a> 
+            </div>
+            
+            {% endfor %}
+
+            <h6>Filtro por marcas</h6>
+            {% for brand in marcas %}
+            <div class="filter-option">
+                <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id %}" class="filter-label">
+                {{brand.name}} <span class="filter-badge">{{brand.count  }}</span>
+                </a>
+            </div>
+
+            {% endfor %}
+        </div>
+
+        <div class="filter-section orderby">
+            <form method="get" action="{% url 'view_products' %}">
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <select name="price_order" id="price_order" style="margin-bottom: 15px;">
+                        <option value="ordenpor"disabled  style="color: #0BEAD0" selected>Ordenar por</option>
+                        <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>
+                            Recomendados</option>
+                        <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor
+                        </option>
+                        <option value="desc" {% if request.GET.price_order == 'desc' %}selected{% endif %}>Precio: Mayor a
+                            menor</option>
+                    </select>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-filter-icon lucide-list-filter"><path d="M3 6h18"/><path d="M7 12h10"/><path d="M10 18h4"/></svg>
+                </div>
+                <button type="submit">Filtrar</button>
+            </form>
+        </div>
+
+            
+            <!-- <h6>Filtro por precio</h6>
+            <label for="precio">Selecciona un precio:</label>
+            <input type="range" id="precio" name="precio" min="1000" max="100000" step="300" value="50000">
+            <span id="precio-valor">$50.000</span> -->
     </div>
 
     <div class="product-container">
@@ -88,26 +148,27 @@
                 <div class="product-name">{{ product.name }}</div>
                 <div class="product-price">{{ product.price | format_price }}</div>
                 <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-                <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al producto</a></button>
+                <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
+                        producto</a></button>
             </div>
         </div>
-    {% endfor %}
-{% endif %}
-    
+        {% endfor %}
+        {% endif %}
+
     </div>
 </div>
 
-<script>
-  const slider = document.getElementById("precio");
-  const output = document.getElementById("precio-valor");
 
-  // Mostrar el valor inicial
-  output.textContent = `$${parseInt(slider.value).toLocaleString()}`;
+<!-- <script>
+    const slider = document.getElementById("precio");
+    const output = document.getElementById("precio-valor");
 
-  // Actualizar el valor cuando se mueve el slider
-  slider.addEventListener("input", function () {
-    output.textContent = `$${parseInt(this.value).toLocaleString()}`;
-  });
-</script>
+    // Mostrar el valor inicial
+    output.textContent = `$${parseInt(slider.value).toLocaleString()}`;
 
+    // Actualizar el valor cuando se mueve el slider
+    slider.addEventListener("input", function () {
+        output.textContent = `$${parseInt(this.value).toLocaleString()}`;
+    });
+</script> -->
 {% endblock %}

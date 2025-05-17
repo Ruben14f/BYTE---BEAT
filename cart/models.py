@@ -65,6 +65,9 @@ class CartProduct(models.Model):
     def update_quantity(self, quantity):
         self.quantity = quantity
         self.save()
+    
+    def get_subtotal_product(self):
+        return self.quantity * self.productos.price
         
     def __str__(self):
         return f"{self.cart.cart_id} - {self.productos.name}"

@@ -27,12 +27,20 @@ def login(request):
         if usuarios is not None:
             lg(request, usuarios)
             first_name = usuarios.first_name.capitalize()
-            messages.success(request, f'Bienvenido {first_name}')
+            mail = usuarios.username.capitalize()
+            if usuarios is first_name:
+                messages.success(request, f'Bienvenido {first_name}')
+            else:
+                messages.success(request, f'Bienvenido {mail}')
 
             if request.GET.get('next'):
                 return HttpResponseRedirect(request.GET['next'])
             
-            return redirect('index')
+            if usuarios.groups.filter(name='Admins').exists():
+                return redirect('list_product_admin')
+            else:
+                return redirect('index')
+            
         else:
             messages.error(request, 'Usuario o contraseña incorrectos.')
             return render(request, 'login.html', {'intento': True})
@@ -50,8 +58,6 @@ def register(request):
     if request.method == 'POST' and form.is_valid():
         usuario = form.save()
 
-        client_group = Group.objects.get(name='Clientes')
-        usuario.groups.add(client_group)
 
         usuario.set_password(form.cleaned_data['password'])
         usuario.save()

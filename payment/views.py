@@ -22,10 +22,25 @@ from django.db import transaction
 def crearTransaccion(request):
     user = request.user if request.user.is_authenticated else None
     cart = Cart.objects.filter(user=user).order_by('-id').first()
-
     orden = Orden.objects.filter(user=user, status=OrdenStatus.CREATED, token_ws__isnull=True).order_by('-ordenID').first()
 
-
+    if not user:
+        messages.error(request, "Debes iniciar sesión para continuar con el pago.")
+        return redirect('login')
+    
+    nombre = user.first_name.strip() if user.first_name else ''
+    apellido = user.last_name.strip() if user.last_name else ''
+    try:
+        direccion = user.profile.direccion.strip() if user.profile.direccion else ''
+        telefono = user.profile.telefono.strip() if user.profile.telefono else ''
+    except AttributeError:
+        direccion = ''
+        telefono = ''
+    
+    if not all([nombre, apellido, direccion, telefono]):
+        messages.error(request, "Debes completar nombre, apellido, dirección y teléfono antes de continuar.")
+        return redirect('edit_profile')
+    
     if not orden:
         try:
             orden = Orden.objects.create(user=user, cart=cart, status=OrdenStatus.CREATED)

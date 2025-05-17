@@ -54,6 +54,8 @@ def remove(request):
     messages.info(request, 'Producto eliminado de carrito')
     return redirect('cart')
 
+
+
 def update_cart_product(request):
     if request.method == 'POST':
         cart_product_id = request.POST.get('cart_product_id')
