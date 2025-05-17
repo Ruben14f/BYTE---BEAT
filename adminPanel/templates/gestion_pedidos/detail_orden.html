@@ -1,31 +1,116 @@
 {% extends 'base_admin.html' %}
-
+{% load precios_tag %}
 
 {% block content_admin %}
-<div style="background: white;">
-    <h1>Detalle de la compra</h1>
-    <h3>Orden: {{ orden.num_orden }}</h3>
-    <p>Estado: {{ orden.get_status_display }}</p>
-    <p>Total: ${{ orden.total }}</p>
-    <p>Fecha de pago: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
+  <title>Detalle de Compra</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f9;
+      padding: 30px;
+    }
 
-    <p>Nombre: {{orden.user.first_name | title }} {{orden.user.last_name | title}}</p>
-    <p>Direccion: {{profiledatos.address.calle | title}} {{ profiledatos.address.num_direccion }}, {{ profiledatos.address.comuna.name | title }}, {{ profiledatos.address.ciudad }}</p>
-    <p>Telefono: +56 {{profiledatos.phone_number}} </p>
-    <p>Correo: {{orden.user.email}}<p>
+    .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #333;
+    }
+
+    .detalle {
+      margin-bottom: 20px;
+    }
+
+    .detalle h3 {
+      color: #555;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 5px;
+    }
+
+    .detalle p {
+      margin: 5px 0;
+      color: #333;
+    }
+
+    .productos {
+      background-color: #fafafa;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .producto {
+      border-bottom: 1px solid #ddd;
+      padding: 8px 0;
+    }
+
+    .producto:last-child {
+      border-bottom: none;
+    }
+
+    .btn-atras {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 10px 15px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-atras:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Detalle de Compra</h1>
+
+    <div class="detalle">
+      <h3>Información General</h3>
+      <p><strong>N° Orden:</strong> #{{ orden.num_orden }}</p>
+      <p><strong>Estado:</strong> {{ orden.get_status_display }}</p>
+      <p><strong>Total:</strong> {{ orden.total | format_price }}</p>
+      <p><strong>Fecha de Pago:</strong> {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
+    </div>
+
+    <div class="detalle">
+      <h3>Cliente</h3>
+      <p><strong>Nombre:</strong> {{orden.user.first_name | title }} {{orden.user.last_name | title}}</p>
+      <p><strong>Dirección:</strong> {{profiledatos.address.calle | title}} {{ profiledatos.address.num_direccion }}, {{ profiledatos.address.comuna.name | title }}, {{ profiledatos.address.ciudad }}</p>
+      <p><strong>Teléfono:</strong> +56 {{profiledatos.phone_number}}</p>
+      <p><strong>Correo:</strong> {{orden.user.email}}</p>
+    </div>
+
+    <div class="detalle">
+      <h3>Productos</h3>
+      {% for item in orden.productos_orden.all %}
+      <div class="productos">
+        <div class="producto">
+            <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+          <p><strong>Producto:</strong> {{ item.producto.name }}</p>
+          <p><strong>Cantidad:</strong> {{ item.quantity }}</p>
+          <p><strong>Precio:</strong> {{ item.producto.price | format_price}} c/u</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <a href="javascript:history.back()" class="btn-atras">← Volver Atrás</a>
+  </div>
 
 
- 
-
-    <h4>Productos:</h4>
-    <ul>
-        {% for item in orden.productos_orden.all %}
-            <li>
-                <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
-                {{ item.producto.name }} x{{ item.quantity }} - ${{ item.producto.price }}
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'historial_orden' %}">Atras</a>
-</div>
 {% endblock %}

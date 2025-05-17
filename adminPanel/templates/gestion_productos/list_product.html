@@ -58,8 +58,8 @@
                         </td>
                         <td><a href="{% url 'detail_product_admin' product.id %}">Ir a producto</a></td>
                         <th>
-                            {% if product.status == 'ACTIVE' %} <p style="color: greenyellow; background-color: green;">{{product.get_status_display}}</p> 
-                            {% elif product.status == 'INACTIVE' %} <p style="color: red; background-color: rgb(100, 2, 2);">{{product.get_status_display}}</p> 
+                            {% if product.status == 'ACTIVE' %} <p style="color: greenyellow; background-color: green; width: 30%;">{{product.get_status_display}}</p> 
+                            {% elif product.status == 'INACTIVE' %} <p style="color: red; background-color: rgb(100, 2, 2); width: 30%;">{{product.get_status_display}}</p> 
                             {% endif %}
                         </th>
 
@@ -67,8 +67,8 @@
                 </tbody>
                 {% endfor %}
             </table>
-            <a href="{% url 'list_ordenes_admin' %}">Ir a listado ordenes</a>
-            <a href="{% url 'agregar_product' %}">Agregar nuevo producto</a>
+            <!-- <a href="{% url 'list_ordenes_admin' %}" class="btn btn-primary">Ir a listado ordenes</a> -->
+            <a href="{% url 'agregar_product' %}" class="btn btn-primary">Agregar nuevo producto</a>
         </div>
     </div>
     

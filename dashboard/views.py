@@ -16,16 +16,16 @@ def get_chart(request):
     ordenes = Orden.objects.prefetch_related('productos_orden__producto').filter(fecha_pagada__isnull=False)
     print("Original:", ordenes)
 
-    ordenes_filtradas = filtro_fecha_dash(request, ordenes)
+    # ordenes_filtradas = filtro_fecha_dash(request, ordenes)
 
-    if not ordenes_filtradas.exists():
-        print('No se encontraron órdenes con filtro, mostrando todas.')
-        messages.error(request, 'No se encontraron órdenes en la fecha seleccionada. Mostrando todos los datos.')
-        ordenes = ordenes 
-        reset_filtros = True
-    else:
-        ordenes = ordenes_filtradas
-        reset_filtros = False
+    # if not ordenes_filtradas.exists():
+    #     print('No se encontraron órdenes con filtro, mostrando todas.')
+    #     messages.error(request, 'No se encontraron órdenes en la fecha seleccionada. Mostrando todos los datos.')
+    #     ordenes = ordenes 
+    #     reset_filtros = True
+    # else:
+    #     ordenes = ordenes_filtradas
+    #     reset_filtros = False
 
     data = []
     for orden in ordenes:
@@ -35,9 +35,6 @@ def get_chart(request):
                 'cantidad': op.quantity,
                 'fecha': orden.fecha_pagada.date() if orden.fecha_pagada else None,
             })
-
-    if not data:
-        return JsonResponse({'error': 'No hay datos disponibles'})
 
     df = pd.DataFrame(data)
     df_agrupado = df.groupby('producto')['cantidad'].sum().reset_index()
@@ -61,29 +58,29 @@ def get_chart(request):
             'endAngle': 360,
             'data': chart_data
         }],
-        'resetFiltros': reset_filtros 
+        # 'resetFiltros': reset_filtros 
     }
 
     return JsonResponse(chart)
 
 
-def filtro_fecha_dash(request, ordenes ):
-    fecha_inicio = request.GET.get('desde')
-    fecha_fin = request.GET.get('hasta')
+# def filtro_fecha_dash(request, ordenes ):
+#     fecha_inicio = request.GET.get('desde')
+#     fecha_fin = request.GET.get('hasta')
 
-    print(ordenes)
+#     print(ordenes)
 
-    q = Q()
+#     q = Q()
 
-    if fecha_inicio:
-        q &= Q(fecha_pagada__gte=fecha_inicio)
-    if fecha_fin:
-        fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d') + timedelta(days=1)
-        q &= Q(fecha_pagada__lte=fecha_fin)
+#     if fecha_inicio:
+#         q &= Q(fecha_pagada__gte=fecha_inicio)
+#     if fecha_fin:
+#         fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d') + timedelta(days=1)
+#         q &= Q(fecha_pagada__lte=fecha_fin)
         
-    ordenes = ordenes.filter(q)
+#     ordenes = ordenes.filter(q)
     
 
     
-    print(ordenes,'filtro realizado?')
-    return ordenes
+#     print(ordenes,'filtro realizado?')
+#     return ordenes

@@ -43,7 +43,7 @@ TOTAL ORDENES: {{ordens | length}}
                     <td>{{ordenes.total}}</td>
                     <td>{{ordenes.get_status_display}}</td>
                     <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
-                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}">Ir al detalle</a></td>
+                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}" class="btn btn-primary">Ir al detalle</a></td>
                     <td>{% include 'gestion_pedidos/update_status.html' %}</td>
                 </tr>
             </tbody>
@@ -88,7 +88,7 @@ TOTAL ORDENES: {{ordens | length}}
                     <td>{{ordenes.total}}</td>
                     <td>{{ordenes.get_status_display}}</td>
                     <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
-                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}">Ir al detalle </a></td>
+                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}" class="btn btn-primary">Ir al detalle </a></td>
                     <td>{% include 'gestion_pedidos/update_status.html' %}</td>
                 </tr>
             </tbody>

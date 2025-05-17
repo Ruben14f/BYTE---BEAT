@@ -11,6 +11,9 @@ import os
 from django.template.loader import render_to_string
 
 
+def index_admin(request):
+    return render(request, 'index_admin.html')
+
 #GESTION DE PRODUCTOS
 def listado_productos(request):
     productos = Product.objects.all()

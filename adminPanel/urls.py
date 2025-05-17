@@ -3,6 +3,7 @@ from .views import  *
 
 
 urlpatterns = [
+    path('index-admin', index_admin, name='admin_index'),
     path('agregar-product', agregar_producto, name='agregar_product'),
     path('list-product', listado_productos, name='list_product_admin'),
     path('modificar-product/<int:id>', modificar_producto, name='editar_product_admin'),
