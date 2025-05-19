@@ -13,3 +13,13 @@
     align-items: center;
     text-decoration: none;
 }
+
+/* body{
+    display: grid;
+    min-height: 100dvh;
+    grid-template-rows: auto 1fr auto;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+} */
+ 

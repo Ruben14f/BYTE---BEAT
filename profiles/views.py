@@ -60,16 +60,21 @@ def change_password(request):
     form = ChangePasswordForm(request.POST or None)
 
     form.user = request.user  
+    user = request.user
 
     if request.method == 'POST' and form.is_valid():
         current_password = form.cleaned_data['current_password']
         new_password = form.cleaned_data['new_password']
+        
+        if not user.check_password(current_password):
+            form.add_error('current_password', 'La contraseña actual es incorrecta.')
+        elif user.check_password(new_password):
+            form.add_error('new_password', 'La nueva contraseña debe ser diferente a la contraseña actual.')
+        else:
+            user.set_password(new_password)  
+            user.save()  
 
-        user = request.user
-        user.set_password(new_password)  
-        user.save()  
-
-        messages.success(request, "Contraseña cambiada exitosamente")
-        return redirect('login') 
+            messages.success(request, "Contraseña cambiada exitosamente")
+            return redirect('login') 
 
     return render(request, 'changed_password.html', {'form': form})

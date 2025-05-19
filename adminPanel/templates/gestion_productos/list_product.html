@@ -1,5 +1,5 @@
 {% extends 'base_admin.html' %}
-
+{% load precios_tag %}
 
 {% block content_admin %}
 
@@ -42,7 +42,7 @@
                     <tr>
                         <td>{{product.sku}}</td>
                         <td>{{product.name}}</td>
-                        <td>{{product.price}}</td>
+                        <td>{{product.price | format_price }}</td>
                         <td>{{product.brand}}</td>
                         <td>{{product.category}}</td>
                         <td>{{product.stock}}</td>
@@ -56,7 +56,7 @@
                             &ndash;
                             <a class="btn btn-danger" onclick="eliminarProducto({{product.id}})">Eliminar</a>
                         </td>
-                        <td><a href="{% url 'detail_product_admin' product.id %}">Ir a producto</a></td>
+                        <td><a href="{% url 'detail_product_admin' product.id %}" class="btn btn-primary">Ir a producto</a></td>
                         <th>
                             {% if product.status == 'ACTIVE' %} <p style="color: greenyellow; background-color: green; width: 30%;">{{product.get_status_display}}</p> 
                             {% elif product.status == 'INACTIVE' %} <p style="color: red; background-color: rgb(100, 2, 2); width: 30%;">{{product.get_status_display}}</p> 
@@ -67,7 +67,6 @@
                 </tbody>
                 {% endfor %}
             </table>
-            <!-- <a href="{% url 'list_ordenes_admin' %}" class="btn btn-primary">Ir a listado ordenes</a> -->
             <a href="{% url 'agregar_product' %}" class="btn btn-primary">Agregar nuevo producto</a>
         </div>
     </div>

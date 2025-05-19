@@ -28,7 +28,7 @@ def login(request):
             lg(request, usuarios)
             first_name = usuarios.first_name.capitalize()
             mail = usuarios.username.capitalize()
-            if usuarios is first_name:
+            if first_name:
                 messages.success(request, f'Bienvenido {first_name}')
             else:
                 messages.success(request, f'Bienvenido {mail}')
@@ -37,7 +37,7 @@ def login(request):
                 return HttpResponseRedirect(request.GET['next'])
             
             if usuarios.groups.filter(name='Admins').exists():
-                return redirect('list_product_admin')
+                return redirect('admin_index')
             else:
                 return redirect('index')
             

@@ -70,7 +70,7 @@
                     <div class="card-body">
                         <h5 class="card-title fw-bold">{{product_vent.name}}</h5>
                         <p class="card-text mb-2" style="color: white;">{{product_vent.price | format_price }}</p>
-                        <a href="#" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
+                        <a href="{% url 'detail_product' product_vent.slug %}" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
                     </div>
                 </div>  
                 {% endfor %}             

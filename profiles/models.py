@@ -27,7 +27,7 @@ class Address(models.Model):
         return f"{self.calle}, {self.num_direccion}, {self.ciudad}, {self.comuna.name}"
 
     def full_address(self):
-        return f"{self.direccion}, {self.ciudad}, {self.comuna.name}"
+        return f"{self.calle} {self.num_direccion}, {self.ciudad.name}, {self.comuna.name}"
 
 
 class UserProfile(models.Model):

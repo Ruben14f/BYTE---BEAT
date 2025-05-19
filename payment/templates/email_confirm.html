@@ -1,17 +1,51 @@
-
 <html>
-    <body>
-        {% for products in orden.productos_orden.all %}
-                Numero Orden: {{orden.num_orden}}
-                Nombre producto: {{products.producto.name}}
-                Cantidad: {{products.quantity}}
-                Nombre producto: {{products.producto.price}}
-                {% if products.producto.main_image %}
-                    <img src="{{products.producto.main_image.url}}" alt="ImagenProductosComprados" width="50px" height="50px">
-                {% endif %}  
-                Envio: {{orden.envio_total}}
-                Total: {{orden.total}}
-        {% endfor %}
+  <body style="font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 20px;">
+    <div style="max-width: 600px; margin: auto; background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
+      <h2 style="color: #333;">Gracias por tu compra!</h2>
+      <p>Orden número: <strong>{{ orden.num_orden }}</strong></p>
 
-    </body>
+      <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+          <tr style="background-color: #0BEAD0; color: white;">
+            <th style="padding: 10px; text-align: left;">Producto</th>
+            <th style="padding: 10px; text-align: center;">Imagen</th>
+            <th style="padding: 10px; text-align: center;">Cantidad</th>
+            <th style="padding: 10px; text-align: right;">Precio Unitario</th>
+            <th style="padding: 10px; text-align: right;">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for products in orden.productos_orden.all %}
+          <tr style="border-bottom: 1px solid #ddd;">
+            <td style="padding: 10px; color: #555;">{{ products.producto.name }}</td>
+            <td style="padding: 10px; text-align: center;">
+              {% if products.producto.main_image %}
+                <img src="{{ products.producto.main_image.url }}" alt="{{ products.producto.name }}" width="50" height="50" style="border-radius: 4px;">
+              {% else %}
+                N/A
+              {% endif %}
+            </td>
+            <td style="padding: 10px; text-align: center;">{{ products.quantity }}</td>
+            <td style="padding: 10px; text-align: right;">${{ products.producto.price|floatformat:2 }}</td>
+            <td style="padding: 10px; text-align: right;">
+              ${{ products.quantity|floatformat:2|floatformat:"0"|add:"0" |floatformat:2|floatformat:"0" }} <!-- Calcula subtotal si lo quieres dinámico en backend -->
+              {% comment %} Mejor calcula subtotal en backend y pásalo al template {% endcomment %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div style="margin-top: 20px; text-align: right; font-size: 16px;">
+        <p>Envío: <strong>${{ orden.envio_total|floatformat:2 }}</strong></p>
+        <p>Total: <strong style="font-size: 18px; color: #0BEAD0;">${{ orden.total|floatformat:2 }}</strong></p>
+      </div>
+
+      <p style="margin-top: 30px; color: #777;">Si tienes alguna pregunta, responde este correo o contáctanos en nuestro servicio de atención al cliente.</p>
+
+      <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
+        © {{ now.year }} Tu Empresa. Todos los derechos reservados.
+      </p>
+    </div>
+  </body>
 </html>

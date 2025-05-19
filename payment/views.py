@@ -14,6 +14,7 @@ from django.core.mail import send_mail
 import os
 from django.template.loader import render_to_string
 from django.db import transaction
+from profiles.models import UserProfile
 
 
 
@@ -31,12 +32,23 @@ def crearTransaccion(request):
     nombre = user.first_name.strip() if user.first_name else ''
     apellido = user.last_name.strip() if user.last_name else ''
     try:
-        direccion = user.profile.direccion.strip() if user.profile.direccion else ''
-        telefono = user.profile.telefono.strip() if user.profile.telefono else ''
-    except AttributeError:
+        perfil = user.userprofile
+        telefono = perfil.phone_number.strip() if perfil.phone_number else ''
+        if perfil.address:
+            direccion = perfil.address.full_address()  # Asegúrate que full_address() esté bien implementado
+        else:
+            direccion = ''
+    except UserProfile.DoesNotExist:
         direccion = ''
         telefono = ''
-    
+    print(f"nombre: '{nombre}', apellido: '{apellido}', direccion: '{direccion}', telefono: '{telefono}'")
+    print(user.userprofile  )
+    profile = getattr(user, 'profile', None)
+    if profile:
+        print(f"direccion DB: '{profile.direccion}'")
+        print(f"telefono DB: '{profile.telefono}'")
+    else:
+        print("No se encontró perfil asociado")
     if not all([nombre, apellido, direccion, telefono]):
         messages.error(request, "Debes completar nombre, apellido, dirección y teléfono antes de continuar.")
         return redirect('edit_profile')

@@ -1,5 +1,5 @@
 {% extends 'base_admin.html' %}
-
+{% load precios_tag %}
 
 {% block content_admin %}
 TOTAL ORDENES: {{ordens | length}}
@@ -40,7 +40,7 @@ TOTAL ORDENES: {{ordens | length}}
             <tbody>
                 <tr>
                     <td>#{{ordenes.num_orden}}</td>
-                    <td>{{ordenes.total}}</td>
+                    <td>{{ordenes.total | format_price }}</td>
                     <td>{{ordenes.get_status_display}}</td>
                     <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
                     <td><a href="{% url 'detail_orden_admin' ordenes.id %}" class="btn btn-primary">Ir al detalle</a></td>
@@ -85,7 +85,7 @@ TOTAL ORDENES: {{ordens | length}}
             <tbody>
                 <tr>
                     <td>#{{ordenes.num_orden}}</td>
-                    <td>{{ordenes.total}}</td>
+                    <td>{{ordenes.total | format_price }}</td>
                     <td>{{ordenes.get_status_display}}</td>
                     <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
                     <td><a href="{% url 'detail_orden_admin' ordenes.id %}" class="btn btn-primary">Ir al detalle </a></td>

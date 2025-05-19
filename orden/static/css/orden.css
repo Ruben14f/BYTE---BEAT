@@ -310,7 +310,6 @@ body {
     text-decoration: none;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
     .container {
         flex-direction: column;

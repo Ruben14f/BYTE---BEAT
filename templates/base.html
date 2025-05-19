@@ -14,6 +14,113 @@
   <title>{% block title %} Byte & Beat {% endblock %}</title>
 </head>
 
+<style>
+  /* Estilos generales footer */
+  /* footer.footer {
+    background: #191B2A;
+    padding: 40px 0 20px; 
+    color: #fff;
+    flex-shrink: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  } */
+
+  /* Contenedor flex para centrar todo */
+
+
+  footer .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+  }
+
+  /* Redes sociales: íconos y textos */
+  .social-links a {
+    color: inherit;
+    text-decoration: none;
+    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 6px 0;
+    transition: color 0.3s ease, font-weight 0.3s ease;
+  }
+
+  .social-links a:hover {
+    font-weight: bold;
+    color: #000;
+  }
+
+  /* Íconos de redes */
+  #logo-instagram {
+    color: #E4405F;
+    font-size: 26px;
+  }
+
+  #logo-facebook {
+    color: #3b5998;
+    font-size: 26px;
+  }
+
+  #logo-whatsapp {
+    color: #25D366;
+    font-size: 26px;
+  }
+
+  /* Texto degradado para Instagram */
+  #nombre-red-social-instragam {
+    background: linear-gradient(to right, purple, rgb(172, 172, 24), #E4405F, brown);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-weight: 600;
+  }
+
+  /* Texto Whatsapp */
+  #nombre-red-social-whatsapp {
+    font-weight: 600;
+  }
+
+  /* Logo empresa (si decides usarlo) */
+  #logo-empresa-footer {
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  #logo-empresa-footer img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Copyright */
+  #copyright-footer {
+    color: #ccc;
+    font-weight: 500;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+  }
+
+  /* Responsive */
+  @media (min-width: 768px) {
+    footer .row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .social-links {
+      order: 2;
+    }
+    #copyright-footer {
+      order: 3;
+      font-size: 16px;
+    }
+    #logo-empresa-footer {
+      order: 1;
+    }
+  }
+</style>
 <body style="background-color: #1E1F36;">
 
   {% block navbar %}
@@ -69,9 +176,34 @@
     {% endblock %}
   </div>
 
-  <footer>
+  <footer class="footer mt-5 pt-5">
+  <!-- <div class="container">
+    <div class="row">
+    
 
-  </footer>
+      <div class="social-links">
+        <a href="#" aria-label="Instagram">
+          <i id="logo-instagram" class="bi bi-instagram"></i>
+          <span id="nombre-red-social-instragam">Instagram</span>
+        </a>
+        <a href="#" aria-label="Facebook">
+          <i id="logo-facebook" class="bi bi-facebook"></i>
+          <span>Facebook</span>
+        </a>
+        <a href="#" aria-label="Whatsapp">
+          <i id="logo-whatsapp" class="bi bi-whatsapp"></i>
+          <span id="nombre-red-social-whatsapp">Whatsapp</span>
+        </a>
+      </div>
+
+      <div>
+        <p id="copyright-footer">
+          Ruben Mansilla &copy; Derechos de autor
+        </p>
+      </div>
+    </div>
+  </div> -->
+</footer>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"

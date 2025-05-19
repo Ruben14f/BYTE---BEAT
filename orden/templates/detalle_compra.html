@@ -62,7 +62,7 @@
   <h1>Detalle de la compra</h1>
   <h3>Orden: {{ orden.num_orden }}</h3>
   <p>Estado: {{ orden.get_status_display }}</p>
-  <p>Total: ${{ orden.total }}</p>
+  <p>Total: {{ orden.total | format_price }}</p>
   <p>Fecha de pago: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
 
   <h4>Productos:</h4>

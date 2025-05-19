@@ -1,34 +1,51 @@
-
+{% load precios_tag %}
 <html>
-    <body>
-        <h1>Hola {{user.first_name | title}} {{user.last_name | title}}</h1>
-        {% for products in orden.productos_orden.all %}
-            {% if orden.status == 'PREPARING' %}
-                <p>Tu orden esta en proceso de preparación.</p>
-            {% elif orden.status == 'SHIPPED' %}
-                <p>Tu orden ha sido enviada y está en camino.</p>
-            {% elif orden.status == 'DELIVERED' %}
-                {% if orden.delivery_method == 'SHIPPING' %}
-                    <p>Tu orden ha sido entregada. Esperamos que estés satisfecho con tu compra.</p>
-                {% elif orden.delivery_method == 'PICKUP' %}
-                    <p>Tu orden ha sido retirada. Esperamos que estés satisfecho con tu compra.</p>
-                {% endif %}
-            {% elif orden.status == 'CANCELED' %}
-                <p>Tu orden ha sido cancelada. Si tienes alguna pregunta, no dudes en contactarnos.</p>
-            {% else %}
-                <p>Estado de la orden: {{orden.get_status_display}}</p>
-            {% endif %}
-            estado orden: {{ orden.get_status_display | title}}
-            Numero Orden: {{orden.num_orden}}
-            Nombre producto: {{products.producto.name}}
-            Cantidad: {{products.quantity}}
-            Nombre producto: {{products.producto.price}}
-            {% if products.producto.main_image %}
-                <img src="{{products.producto.main_image.url}}" alt="ImagenProductosComprados" width="50px" height="50px">
-            {% endif %}  
-            Envio: {{orden.envio_total}}
-            Total: {{orden.total}}
-        {% endfor %}
+  <body style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 20px; color: #333;">
+    <div style="max-width: 600px; margin: auto; background-color: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
 
-    </body>
+      <h1 style="color: #007bff; font-size: 24px; margin-bottom: 20px;">
+        Hola {{ user.first_name | title }} {{ user.last_name | title }},
+      </h1>
+
+      {% for products in orden.productos_orden.all %}
+        <div style="border-bottom: 1px solid #ddd; padding-bottom: 15px; margin-bottom: 15px;">
+
+          {% if orden.status == 'PREPARING' %}
+            <p style="font-weight: bold; color: #ff9800;">Tu orden está en proceso de preparación.</p>
+          {% elif orden.status == 'SHIPPED' %}
+            <p style="font-weight: bold; color: #2196f3;">Tu orden ha sido enviada y está en camino.</p>
+          {% elif orden.status == 'DELIVERED' %}
+            {% if orden.delivery_method == 'SHIPPING' %}
+              <p style="font-weight: bold; color: #4caf50;">Tu orden ha sido entregada. Esperamos que estés satisfecho con tu compra.</p>
+            {% elif orden.delivery_method == 'PICKUP' %}
+              <p style="font-weight: bold; color: #4caf50;">Tu orden ha sido retirada. Esperamos que estés satisfecho con tu compra.</p>
+            {% endif %}
+          {% elif orden.status == 'CANCELED' %}
+            <p style="font-weight: bold; color: #f44336;">Tu orden ha sido cancelada. Si tienes alguna pregunta, no dudes en contactarnos.</p>
+          {% else %}
+            <p>Estado de la orden: {{ orden.get_status_display | title }}</p>
+          {% endif %}
+
+          <p><strong>Estado orden:</strong> {{ orden.get_status_display | title }}</p>
+          <p><strong>Número de Orden:</strong> {{ orden.num_orden }}</p>
+
+          <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+            {% if products.producto.main_image %}
+              <img src="{{ products.producto.main_image.url }}" alt="Imagen Producto" style="width: 60px; height: 60px; object-fit: cover; border-radius: 6px; border: 1px solid #ccc;">
+            {% endif %}
+            <div>
+              <p style="margin: 0; font-weight: 600;">Producto: {{ products.producto.name }}</p>
+              <p style="margin: 0;">Cantidad: {{ products.quantity }}</p>
+              <p style="margin: 0;">Precio unitario: {{ products.producto.price | format_price }}</p>
+            </div>
+          </div>
+
+          <p style="margin-top: 10px;"><strong>Envío:</strong> {{ orden.envio_total | format_price }}</p>
+          <p><strong>Total:</strong> {{ orden.total | format_price }}</p>
+
+        </div>
+      {% endfor %}
+
+    </div>
+  </body>
 </html>
