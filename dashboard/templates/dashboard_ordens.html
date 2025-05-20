@@ -5,23 +5,33 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 Dashboard
 
-<!-- <div style="display: flex; flex-direction: row; justify-content: center; margin-bottom: -15px;">
-  <form id="filtro-fechas" >
-    <label>Desde: <input type="date" id="desde" name="desde"></label> 
-    <label>Hasta: <input type="date" id="hasta" name="hasta"></label>
-    <button type="submit">Filtrar</button>
-  </form>
+<label for="filtro">Filtrar por fecha:</label>
+<select id="filtro">
+  <option value="">Este año</option>
+  <option value="today">Hoy</option>
+  <option value="week">Esta semana</option>
+  <option value="month">Este mes</option>
+  <option value="year">Este año</option>
+</select>
+<button id="btn-filtrar">Aplicar filtro</button>
 
-</div> -->
 
   
-<div id="chart" class="chart">
-
-</div>
+<div id="chart" style="width: 600px; height: 400px;"></div>
 
 
 
-<!-- <div id="chart2" class="chart2"> -->
+<div id="chart2" style="width: 600px; height: 400px;"></div>
+
+
+<div id="chart3" style="width: 600px; height: 400px;"></div>
+
+
+<div id="chart4" style="width: 600px; height: 400px;"></div>
+
+
+
+
 
 </div>
 <script src="{% static 'js/main.js' %}" defer></script>

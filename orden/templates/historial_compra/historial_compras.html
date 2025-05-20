@@ -89,9 +89,7 @@
     text-decoration: none;
   }
 
-  a:hover {
-    text-decoration: underline;
-  }
+ 
 
   .total-ordenes {
     margin-top: 20px;
@@ -147,7 +145,7 @@
     {% if ordenes %}
       <ul>
         {% for orden in ordenes %}
-          <h3>Orden: {{ orden.num_orden|slice:":8" }}</h3>
+          <h3>Orden: {{ orden.num_orden }}</h3>
           <ul>
             {% for item in orden.productos_orden.all %}
               <li class="order-item">

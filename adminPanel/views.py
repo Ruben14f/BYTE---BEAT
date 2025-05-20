@@ -36,6 +36,7 @@ def agregar_producto(request):
         if formulario.is_valid():
             formulario.save()
             messages.success(request, 'Producto creado correctamente')
+            return redirect('list_product_admin')
         else:
             form
             messages.error(request, 'No se creo correctamente el producto')
