@@ -10,6 +10,9 @@
                 
                 <thead>
                     <p>Total productos: {{products | length}}</p>
+                    {% for estado, cantidad in resumen_estadosp.items %}
+                        {{ estado }}: ({{ cantidad }})
+                    {% endfor %}
                     <tr>
                         <th>{% include 'gestion_productos/filtros/filtro_sku.html' %}</th>
                         <th></th>

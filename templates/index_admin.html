@@ -86,13 +86,15 @@
 
   <header>
     <h1>Panel de Administración</h1>
+    <br>
+    <a href="{% url 'index' %}" class="btn btn-primary">Ir a inicio sitio web</a>
     <span>Hola, Rubén</span>
   </header>
 
   <section class="cards">
     <div class="card pedidos">
       <div class="card-icon">📦</div>
-      <h2>Gestión de Pedidos</h2>
+      <h2>Gestión de Ordenes</h2>
       <p>Administra pedidos pendientes, en proceso y finalizados.</p>
       <a href="{% url 'list_ordenes_admin' %}" class="btn btn-primary">Ir a pedidos</a>
     </div>

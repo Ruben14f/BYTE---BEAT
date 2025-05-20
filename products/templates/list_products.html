@@ -22,7 +22,7 @@
             {% for categoys in categorias %}
             <div class="filter-option">
                 <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id %}" class="filter-label">
-                {{categoys.name}}  <span class="filter-badge">{{categoys.count  }}</span>
+                {{categoys.name}}  <span class="filter-badge">{{categoys.count }}</span>
                 </a> 
             </div>
             

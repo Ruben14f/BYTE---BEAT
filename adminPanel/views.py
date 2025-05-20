@@ -11,8 +11,6 @@ import os
 from django.template.loader import render_to_string
 
 
-def index_admin(request):
-    return render(request, 'index_admin.html')
 
 #GESTION DE PRODUCTOS
 def listado_productos(request):
@@ -21,11 +19,24 @@ def listado_productos(request):
     categorias = Category.objects.all()
     product_status = ProductStatus.choices
 
+    resumen_estados_qs = (
+        productos
+        .values('status')
+        .annotate(total=Count('id'))
+    )
+
+    resumen_estadosp = {
+        dict(ProductStatus.choices)[item['status']]: item['total']
+        for item in resumen_estados_qs
+    }
+
+
     return render(request, 'gestion_productos/list_product.html',{
         'products': productos,
         'brands' : marca,
         'categories' : categorias,
-        'statusproduct' : product_status
+        'statusproduct' : product_status,
+        'resumen_estadosp' : resumen_estadosp
     })
     
 def agregar_producto(request):

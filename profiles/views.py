@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .models import UserProfile, Address
 from django.contrib.auth.decorators import login_required
@@ -25,6 +26,8 @@ def edit_profile(request):
     else:
         address_form = AddressForm()
 
+    next_url = request.GET.get('next') or request.POST.get('next')
+
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
@@ -44,16 +47,20 @@ def edit_profile(request):
             request.user.userprofile.address = address
             request.user.userprofile.save()
 
+            
             messages.success(request, "Perfil actualizado correctamente")
+
+            if next_url:
+                return redirect(next_url)
             return redirect('perfil')  
+        
 
     return render(request, 'editar_perfil.html', {
         'user_form': user_form,
         'profile_form': profile_form,
-        'address_form': address_form
+        'address_form': address_form,
+        'next': next_url
     })
-
-
 
 @login_required(login_url='login')
 def change_password(request):

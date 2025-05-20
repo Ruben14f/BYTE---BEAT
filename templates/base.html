@@ -144,6 +144,9 @@
             <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar sesion</a>
             <a class="nav-link text-light" href="{% url 'historial_orden' %}">Mis compras</a>
             {% endif %}
+            {% if request.user.is_staff or request.user.is_superuser %}
+            <a class="nav-link text-light" href="{% url 'admin_index' %}">Panel administrador</a>
+            {% endif %}
           </div>
         </div>
         <div class="d-flex gap-4 align-items-center order-2 order-lg-3" style="font-size: 32px;">
@@ -153,6 +156,7 @@
           {% else %}
           <a href="{% url 'login' %}"><i class="bi bi-person" style="color: white;"></i></a>
           {% endif %}
+         
 
         </div>
       </div>

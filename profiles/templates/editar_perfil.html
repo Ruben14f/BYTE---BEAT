@@ -98,6 +98,9 @@
     {{ address_form.as_p }}
 
     <button type="submit">Actualizar perfil</button>
+    {% if next %}
+      <input type="hidden" name="next" value="{{next}}">
+    {% endif %}
   </form>
 
   <a href="{% url 'perfil' %}">← Atrás</a>

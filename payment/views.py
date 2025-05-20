@@ -35,23 +35,16 @@ def crearTransaccion(request):
         perfil = user.userprofile
         telefono = perfil.phone_number.strip() if perfil.phone_number else ''
         if perfil.address:
-            direccion = perfil.address.full_address()  # Asegúrate que full_address() esté bien implementado
+            direccion = perfil.address.full_address() 
         else:
             direccion = ''
     except UserProfile.DoesNotExist:
         direccion = ''
         telefono = ''
-    print(f"nombre: '{nombre}', apellido: '{apellido}', direccion: '{direccion}', telefono: '{telefono}'")
-    print(user.userprofile  )
-    profile = getattr(user, 'profile', None)
-    if profile:
-        print(f"direccion DB: '{profile.direccion}'")
-        print(f"telefono DB: '{profile.telefono}'")
-    else:
-        print("No se encontró perfil asociado")
+
     if not all([nombre, apellido, direccion, telefono]):
         messages.error(request, "Debes completar nombre, apellido, dirección y teléfono antes de continuar.")
-        return redirect('edit_profile')
+        return redirect(f"{reverse('edit_profile')}?next={request.path}")
     
     if not orden:
         try:
