@@ -21,7 +21,7 @@
             {% for categoys in categorias %}
             <div class="filter-option">
                 <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id|urlsafe_base64_encode_filter %}" class="filter-label">
-                {{categoys.name}} <span class="filter-badge">{{categoys.productos_count }}</span>
+                {{categoys.name | title }} <span class="filter-badge">{{categoys.productos_count }}</span>
                 </a>
             </div>
             {% endfor %}
@@ -30,7 +30,7 @@
             {% for brand in marcas %}
             <div class="filter-option">
                 <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id|urlsafe_base64_encode_filter %}" class="filter-label">
-                {{brand.name}} <span class="filter-badge">{{brand.productos_count }}</span>
+                {{brand.name | title}} <span class="filter-badge">{{brand.productos_count }}</span>
                 </a>
             </div>
             {% endfor %}
@@ -40,9 +40,6 @@
             <a href="{% url 'view_products' %}" class="filter-label">Ver todos los productos</a>
         </div>
         
-
-            <!-- <h6>Filtro por precio</h6>
-            Min <input type="range"> Max -->
         <div class="filter-section orderby">
             <form method="get" action="{% url 'categorias_marcas_filtro' tipo uidb64 %}">
                 <div style="display: flex; justify-content: center; align-items: center;">
@@ -57,31 +54,56 @@
                 <button type="submit">Filtrar</button>
             </form>
         </div>
-            
-    
-    </div>
 
-    <div class="product-container">
-        {% for product in productos %}
-        <div class="product-card">
-            <div class="product-image">
-                {% if product.main_image %}
-                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
-                {% else %}
-                <p>No image available</p>
-                {% endif %}
-            </div>
-            <div class="product-info">
-                <div class="product-brand">{{ product.category }}</div>
-                <div class="product-brand">{{ product.brand }}</div>
-                <div class="product-name">{{ product.name }}</div>
-                <div class="product-price">{{ product.price | format_price }}</div>
-                <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-                <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
-                        producto</a></button>
+        <div class="filter-section">
+            <div class="range-slider">
+                <input type="number" class="min-price" value="1" min="1" max="{{ max_price }}" />
+                <input type="number" class="max-price" value="{{ max_price }}" min="1" max="{{ max_price }}" />
+                <div class="range">
+                    <input type="range" class="min-input" value="1" min="1" max="{{ max_price }}" />
+                    <input type="range" class="max-input" value="{{ max_price }}" min="1" max="{{ max_price }}" />
+
+                    <div class="slider">
+                        <div class="progress"></div>
+                    </div>
+                </div>
+                <div class="price-labels">
+                    <label class="min-label" for="min-input">$1</label>
+                    <label class="max-label" for="max-input">${{ max_price }}</label>
+                </div>
             </div>
         </div>
-        {% endfor %}
+    
+    </div>
+    <div style="display: flex; flex-direction: column; justify-content: space-between;">
+        <div class="product-container">
+            {% for product in productos %}
+            <div class="product-card">
+                <div class="product-image">
+                    {% if product.main_image %}
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                    {% else %}
+                    <p>No image available</p>
+                    {% endif %}
+                </div>
+                <div class="product-info">
+                    <div class="product-brand">{{ product.category | title }}</div>
+                    <div class="product-brand">{{ product.brand | title}}</div>
+                    <div class="product-name">{{ product.name | title }}</div>
+                    <div class="product-price">{{ product.price | format_price }}</div>
+                    <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                    <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
+                            producto</a></button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% include 'paginacion_products.html' %}
     </div>
 </div>
+
+
+
+
+<script src="{% static 'js/list_product.js' %}"></script>
 {% endblock %}

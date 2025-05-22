@@ -63,7 +63,7 @@ body {
 .delivery-options form {
     display: flex;
     flex: 1;
-    gap: 1rem; /* opcional, para espacio entre botones */
+    gap: 1rem;
 }
 
 .delivery-option button {

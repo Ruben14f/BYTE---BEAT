@@ -9,6 +9,7 @@ from payment.views import crearTransaccion
 from django.contrib import messages
 from orden.models import Orden, OrdenStatus
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 
 # Create your views here.
@@ -85,6 +86,7 @@ def modificar_direccion(request, orden_id):
         'address_form': order_address_form
     })
 
+@login_required(login_url='login')
 def add_new_address(request):
     if request.user.userprofile.address:
         address_form = AddressForm(instance=request.user.userprofile.address)
@@ -104,25 +106,31 @@ def add_new_address(request):
             return redirect('orden') 
 
     return render(request, 'add_newaddress.html', {'address_form': address_form})
-    
+
+@login_required(login_url='login')
 def historial_orden(request):
     user = request.user
     if user.is_authenticated:
         ordenes = Orden.objects.filter(user=request.user).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
+        paginator = Paginator(ordenes, 10)  
+        page_number = request.GET.get('page')
+        orden_list = paginator.get_page(page_number)
         return render(request, 'historial_compra/historial_compras.html', {
-            'ordenes': ordenes
+            'ordenes': orden_list
         })
+    
     else:
         messages.error(request, "Debes estar autenticado para ver tu historial de compras.")
         return redirect('login')
 
+@login_required(login_url='login')
 def detalle_compra(request, id):  
     orden = get_object_or_404(Orden, id=id) 
     return render(request, 'detalle_compra.html', {
         'orden': orden
     })
 
-
+@login_required(login_url='login')
 def cancelar_orden(request,id):
     orden = get_object_or_404(Orden, id=id)
     try:
@@ -133,7 +141,7 @@ def cancelar_orden(request,id):
 
     return redirect('historial_orden')
 
-
+@login_required(login_url='login')
 def compra_search(request):
     query = request.GET.get('searchcompraQ')
     if query:
@@ -144,6 +152,10 @@ def compra_search(request):
     else:
         orden_list = Orden.objects.filter(user=request.user).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
         print('false',orden_list)
+
+    paginator = Paginator(orden_list, 10) 
+    page_number = request.GET.get('page')
+    orden_list = paginator.get_page(page_number)
     context = {
         'ordenes' : orden_list,
         'query' : query

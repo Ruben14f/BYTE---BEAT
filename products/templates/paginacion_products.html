@@ -1,0 +1,148 @@
+<style>
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 10px;
+  align-items: center;
+}
+
+.pagination-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  background-color: transparent;
+  color: white; 
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.pagination-item a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  line-height: 40px;
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  border-radius: 50%;
+}
+
+.pagination-item a:hover {
+  background-color: rgba(0, 255, 213, 0.2);
+  text-decoration: none;
+}
+
+.pagination-item.active {
+  background-color: #00ffd5;
+  color: #1e1e2f; 
+  font-weight: 600;
+  cursor: default;
+}
+
+.pagination-item:hover {
+  background-color: rgba(0, 255, 213, 0.2);
+  text-decoration: none;
+}
+
+.pagination-arrow {
+  height: 40px;
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  color: white;
+}
+
+.pagination-arrow,
+.pagination-arrow a {
+  color: white !important;
+}
+
+.pagination-arrow svg {
+  stroke: white !important;
+}
+
+.pagination-arrow:hover {
+  background-color: rgba(0, 255, 213, 0.2);
+}
+
+.pagination-ellipsis {
+  color: #717171;
+}
+
+.results-counter {
+  color: #717171;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+</style>
+
+<div class="pagination-container">
+  <ul class="pagination">
+    
+    <!-- Flecha anterior -->
+    <li class="pagination-arrow {% if not page_obj.has_previous %}disabled{% endif %}">
+      {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.price_order %}&price_order={{ request.GET.price_order }}{% endif %}" aria-label="Página anterior">
+          <!-- SVG flecha izquierda -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"/>
+          </svg>
+        </a>
+      {% else %}
+        <!-- SVG flecha izquierda sin link -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"/>
+        </svg>
+      {% endif %}
+    </li>
+
+    <!-- Números de página -->
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+        <li class="pagination-item active">{{ num }}</li>
+      {% else %}
+        <li class="pagination-item">
+          <a href="?page={{ num }}{% if request.GET.price_order %}&price_order={{ request.GET.price_order }}{% endif %}">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    <!-- Flecha siguiente -->
+    <li class="pagination-arrow {% if not page_obj.has_next %}disabled{% endif %}">
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.price_order %}&price_order={{ request.GET.price_order }}{% endif %}" aria-label="Página siguiente">
+          <!-- SVG flecha derecha -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18l6-6-6-6"/>
+          </svg>
+        </a>
+      {% else %}
+        <!-- SVG flecha derecha sin link -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"/>
+        </svg>
+      {% endif %}
+    </li>
+
+  </ul>
+</div>

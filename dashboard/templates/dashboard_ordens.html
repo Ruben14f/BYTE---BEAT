@@ -5,20 +5,33 @@
 <link rel="stylesheet" href="{% static 'css/style.css' %}">
 Dashboard
 
-<label for="filtro">Filtrar por fecha:</label>
-<select id="filtro">
-  <option value="">Este año</option>
-  <option value="today">Hoy</option>
-  <option value="week">Esta semana</option>
-  <option value="month">Este mes</option>
-  <option value="year">Este año</option>
-</select>
-<button id="btn-filtrar">Aplicar filtro</button>
+<div class="filtro-general">
+  <label for="filtro">Filtrar por fecha:</label>
+  <select id="filtro">
+    <option value="" selected disabled>Filtrar por:</option>
+    <option value="today">Hoy</option>
+    <option value="week">Esta semana</option>
+    <option value="month">Este mes</option>
+    <option value="year">Este año</option>
+  </select>
+  <button id="btn-filtrar">Aplicar filtro</button>
+  <button id="btn-borrar-filtro">Borrar filtro</button>
+</div>
 
 
   
-<div id="chart" style="width: 600px; height: 400px;"></div>
 
+<div class="filtro-chart2">
+  <label for="filtro-chart2">Filtrar gráfico 2:</label>
+  <select id="filtro-chart2">
+    <option value="" selected>Todos</option>
+    <option value="7days">Últimos 7 días</option>
+    <option value="30days">Últimos 30 días</option>
+    <option value="year">Este año</option>
+  </select>
+  <button id="btn-filtrar-chart2">Aplicar filtro gráfico 2</button>
+  <button id="btn-borrar-filtro-chart2">Borrar filtro gráfico 2</button>
+</div>
 
 
 <div id="chart2" style="width: 600px; height: 400px;"></div>

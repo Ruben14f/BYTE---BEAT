@@ -1,107 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load precios_tag %}
 {% block content %}
 
-<style>
-  body {
-    background-color: #0f1125;
-    color: #00f7e0;
-    font-family: 'Segoe UI', sans-serif;
-  }
-
-  .search-container {
-    margin: 30px auto;
-    max-width: 700px;
-    background-color: #1d213a;
-    padding: 20px;
-    border-radius: 10px;
-  }
-
-  .order-history {
-    max-width: 900px;
-    margin: 40px auto;
-    background-color: #1d213a;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  h1 {
-    text-align: center;
-    margin-bottom: 30px;
-    color: #00f7e0;
-  }
-
-  h3 {
-    margin-top: 25px;
-    color: #a1f9ff;
-  }
-
-  ul {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 15px;
-  }
-
-  li {
-    margin-bottom: 10px;
-  }
-
-  .order-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background-color: #2a2f4a;
-    padding: 10px;
-    border-radius: 8px;
-    color: #ffffff;
-  }
-
-  .order-item img {
-    border-radius: 5px;
-  }
-
-  .order-details {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #303558;
-    border-radius: 8px;
-    color: #e5faff;
-  }
-
-  a.btn-danger {
-    margin-top: 10px;
-    background-color: #dc3545;
-    color: #fff;
-    padding: 6px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  a.btn-danger:hover {
-    background-color: #bb2d3b;
-  }
-
-  a {
-    color: #00f7e0;
-    font-weight: bold;
-    text-decoration: none;
-  }
-
- 
-
-  .total-ordenes {
-    margin-top: 20px;
-    font-weight: bold;
-    color: #00f7e0;
-    text-align: center;
-  }
-
-  p {
-    color: #e5faff;
-  }
-</style>
+<link rel="stylesheet" href="{% static 'css/historial_compras.css' %}">
 
 <div class="search-container">
   <div class="search-bar">
@@ -111,7 +13,8 @@
 
 <div class="order-history">
   <h1>Historial de pedidos</h1>
-
+  <br>
+  <p class="total-ordenes">Total de órdenes: {{ ordenes|length }}</p>
   {% if query %}
     <p>Resultado de búsqueda para: <strong>{{ query }}</strong></p>
     {% if ordenes %}
@@ -141,6 +44,8 @@
     {% else %}
       <p>No se encontró orden con ese número de orden</p>
     {% endif %}
+
+    {% include 'paginacion_products.html' with page_obj=ordenes %}
   {% else %}
     {% if ordenes %}
       <ul>
@@ -165,7 +70,7 @@
           <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
         {% endfor %}
       </ul>
-      <p class="total-ordenes">Total de órdenes: {{ ordenes|length }}</p>
+      {% include 'paginacion_products.html' with page_obj=ordenes %}
     {% else %}
       <p>No tienes compras</p>
     {% endif %}

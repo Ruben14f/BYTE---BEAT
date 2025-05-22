@@ -6,76 +6,28 @@ from django.views.decorators.cache import cache_page
 from datetime import datetime 
 from django.core.cache import cache
 from datetime import datetime, timedelta, time
-from django.utils.timezone import now, make_aware 
+from django.utils.timezone import now, make_aware
+from datetime import timezone
+
 
 def dashboard_view(request):
     return render(request, 'dashboard_ordens.html')
-
-#@cache_page(60 * 5) 
-def get_chart(request):
-    # cache_key = 'dashboard_chart_data_pie'
-    # chart_json = cache.get(cache_key)
-    # if chart_json:
-    #     return JsonResponse(chart_json)
-    
-    start_datetime, end_datetime = get_date_range(request)
-
-    ordenes = Orden.objects.prefetch_related('productos_orden__producto').filter(
-        fecha_pagada__gte=start_datetime,
-        fecha_pagada__lte=end_datetime,
-        fecha_pagada__isnull=False
-    )
-
-    print("Original:", ordenes)
-    data = []
-    for orden in ordenes:
-        for op in orden.productos_orden.all():
-            data.append({
-                'producto': op.producto.name,
-                'cantidad': op.quantity,
-                'fecha': orden.fecha_pagada.date() if orden.fecha_pagada else None,
-            })
-    df = pd.DataFrame(data)
-    if df.empty:
-        return JsonResponse({
-            'tooltip': {'trigger': 'item'},
-            'series': []
-        })
-    df_agrupado = df.groupby('producto')['cantidad'].sum().reset_index()
-    print(df_agrupado)
-
-    chart_data = []
-    for _, row in df_agrupado.iterrows():
-        chart_data.append({
-            'value': row['cantidad'],
-            'name': row['producto']
-        })
-
-    chart = {
-        'tooltip': {'trigger': 'item'},
-        'series': [{
-            'name': 'Cantidad de productos vendidos',
-            'type': 'pie',
-            'radius': ['40%', '70%'],
-            'center': ['50%', '70%'],
-            'startAngle': 180,
-            'endAngle': 360,
-            'data': chart_data
-        }],
-    }
-
-    # cache.set(cache_key, chart, 300)
-    return JsonResponse(chart)
-
-#@cache_page(60 * 5)
+#grafico de barras
 def get_chart2(request):
-    # cache_key = 'dashboard_chart_data_bars'
-    # chart_json = cache.get(cache_key)
-    # if chart_json:
-    #     return JsonResponse(chart_json)
-
     start_datetime, end_datetime = get_date_range(request)
+    filtro_individual = request.GET.get('range_chart2', None)
 
+    print(filtro_individual)
+    print('invidual antes de if',filtro_individual)
+    if filtro_individual:
+        start_datetime, end_datetime = get_date_range_individual(request)
+        rango = filtro_individual
+        print('invidual antes de if',rango)
+    else:
+        start_datetime, end_datetime = get_date_range(request)
+        rango = request.GET.get('range', None)
+
+    months_diff = (end_datetime.year - start_datetime.year) * 12 + (end_datetime.month - start_datetime.month) + 2
     ordenes = Orden.objects.prefetch_related('productos_orden__producto').filter(
         fecha_pagada__gte=start_datetime,
         fecha_pagada__lte=end_datetime,
@@ -87,7 +39,6 @@ def get_chart2(request):
         for op in orden.productos_orden.all():
             precio_unitario = float(op.producto.price) if op.producto.price else 0
             valor_venta = precio_unitario * op.quantity
-            print(f"Producto: {op.producto.name}, Precio: {precio_unitario}, Cantidad: {op.quantity}, Valor venta: {valor_venta}")
             categoria = op.producto.category.name if op.producto.category else 'Sin categoria'
             mes = orden.fecha_pagada.month if orden.fecha_pagada else None
             anio = orden.fecha_pagada.year if orden.fecha_pagada else None
@@ -102,19 +53,41 @@ def get_chart2(request):
     df = pd.DataFrame(data)
 
     if df.empty:
-        return JsonResponse({
-            'xAxis': {'data': []},
-            'series': []
-        })
+        option = {
+            'tooltip': {'trigger': 'axis'},
+            'legend': {'data': ['Sin datos']},
+            'xAxis': {
+                'type': 'category',
+                'data': ['Sin datos'],
+                'name': 'Meses'
+            },
+            'yAxis': {
+                'type': 'value',
+                'name': 'Ventas (Pesos)'
+            },
+            'series': [{
+                'name': 'Sin datos',
+                'type': 'bar',
+                'data': [0],
+            }]
+        }
+        return JsonResponse(option)
+    
+    nombres_meses_completos = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                               'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+    rango = request.GET.get('range')
+    
+    print('rango desde grafico',rango)
+    if rango == 'year':
+        meses = list(range(1, 13)) 
+    else:
+        last_month = min(start_datetime.month + months_diff - 1, 12)
+        meses = list(range(start_datetime.month, last_month + 1))
 
-    año_actual = datetime.now().year
-    df = df[df['anio'] == año_actual]
+    meses_nombre = [nombres_meses_completos[m-1] for m in meses]
 
     pivot_df = df.pivot_table(index='mes', columns='categoria', values='valor', aggfunc='sum', fill_value=0)
-
-    meses = list(range(1, 13))
     pivot_df = pivot_df.reindex(meses, fill_value=0)
-    meses_nombre = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul']
 
     series = []
     for categoria in pivot_df.columns:
@@ -130,7 +103,9 @@ def get_chart2(request):
         'legend': {'data': list(pivot_df.columns)},
         'xAxis': {
             'type': 'category',
-            'data': meses_nombre
+            'data': meses_nombre,
+            'name': 'Meses',
+            'axisLabel': {'interval': 0}
         },
         'yAxis': {
             'type': 'value',
@@ -139,19 +114,21 @@ def get_chart2(request):
         'series': series
     }
 
-    # cache.set(cache_key, option, 300)
-
     return JsonResponse(option)
 
-#@cache_page(60 * 5)
+
+
+#grafico de lineas
 def get_chart3(request):
     start_datetime, end_datetime = get_date_range(request)
+
+    months_diff = (end_datetime.year - start_datetime.year) * 12 + (end_datetime.month - start_datetime.month) + 2
 
     ordenes = Orden.objects.prefetch_related('productos_orden__producto').filter(
         fecha_pagada__gte=start_datetime,
         fecha_pagada__lte=end_datetime,
         fecha_pagada__isnull=False
-    )   
+    )
 
     data = []
     for orden in ordenes:
@@ -170,23 +147,37 @@ def get_chart3(request):
     df = pd.DataFrame(data)
 
     if df.empty:
-        # Retornar estructura vacía para evitar errores
-        return JsonResponse({
-            'legend': {'data': []},
+        meses = list(range(start_datetime.month, min(start_datetime.month + months_diff, 13)))
+        nombres_meses_completos = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                                   'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+        meses_nombre = [nombres_meses_completos[m-1] for m in meses]
+
+        option = {
+            'legend': {'data': ['Sin datos']},
             'tooltip': {'trigger': 'axis', 'showContent': True},
-            'dataset': {'source': []},
-            'xAxis': {'type': 'category'},
+            'dataset': {'source': [['category'] + meses_nombre, ['Sin datos'] + [0]*len(meses_nombre)]},
+            'xAxis': {'type': 'category', 'name': 'Meses'},
             'yAxis': {'type': 'value', 'name': 'Ventas (Pesos)'},
-            'series': []
-        })
+            'series': [{
+                'type': 'line',
+                'smooth': True,
+                'seriesLayoutBy': 'row',
+                'emphasis': {'focus': 'series'}
+            }]
+        }
+        return JsonResponse(option)
 
-    # Forzar tipo float
     df['valor'] = df['valor'].astype(float)
-
-    # Agrupar sumando valor por categoria y mes
     df_agrupado = df.groupby(['categoria', 'mes'])['valor'].sum().reset_index()
 
-    meses_nombre = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul']
+    # Calcular meses a mostrar (últimos N según rango)
+    last_month = min(start_datetime.month + months_diff - 1, 12)
+    meses = list(range(start_datetime.month, last_month + 1))
+
+    nombres_meses_completos = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                               'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+    meses_nombre = [nombres_meses_completos[m-1] for m in meses]
+
     categorias = df_agrupado['categoria'].unique()
 
     header = ['category'] + meses_nombre
@@ -194,8 +185,8 @@ def get_chart3(request):
 
     for categoria in categorias:
         fila = [categoria]
-        for i in range(1, 13):
-            filtro = df_agrupado[(df_agrupado['categoria'] == categoria) & (df_agrupado['mes'] == i)]
+        for m in meses:
+            filtro = df_agrupado[(df_agrupado['categoria'] == categoria) & (df_agrupado['mes'] == m)]
             if not filtro.empty:
                 fila.append(round(float(filtro['valor'].values[0]), 2))
             else:
@@ -208,7 +199,7 @@ def get_chart3(request):
         'legend': {'data': list(categorias)},
         'tooltip': {'trigger': 'axis', 'showContent': True},
         'dataset': {'source': dataset_source},
-        'xAxis': {'type': 'category'},
+        'xAxis': {'type': 'category', 'name': 'Meses'},
         'yAxis': {'type': 'value', 'name': 'Ventas (Pesos)'},
         'series': [
             {
@@ -222,6 +213,7 @@ def get_chart3(request):
 
     return JsonResponse(chart)
 
+#grafico de torta
 def get_chart4(request):
     start_datetime, end_datetime = get_date_range(request)
 
@@ -242,10 +234,37 @@ def get_chart4(request):
 
     df = pd.DataFrame(data)
     if df.empty:
-        return JsonResponse({
+        chart_data = [{
+            'value': 0,
+            'name': 'Sin datos'
+        }]
+        chart = {
             'tooltip': {'trigger': 'item'},
-            'series': []
-        })
+            'series': [{
+                'name': 'Cantidad de productos vendidos',
+                'type': 'pie',
+                'radius': ['40%', '70%'],
+                'avoidLabelOverlap': False,
+                'label': {
+                    'show': True,
+                    'position': 'outside',
+                    'formatter': '{b}: {d}%',
+                    'fontWeight': 'bold',
+                },
+                'labelLine': {
+                    'show': True,
+                    'length': 15,
+                    'length2': 10
+                },
+                'itemStyle': {
+                    'borderColor': '#fff',
+                    'borderWidth': 4
+                },
+                'data': chart_data,
+            }],
+        }
+        return JsonResponse(chart)
+
     df_agrupado = df.groupby('producto')['cantidad'].sum().reset_index()
 
     chart_data = []
@@ -263,19 +282,19 @@ def get_chart4(request):
             'radius': ['40%', '70%'],
             'avoidLabelOverlap': False,
             'label': {
-                'show': True,           
-                'position': 'outside',   
+                'show': True,
+                'position': 'outside',
                 'formatter': '{b}: {d}%',
                 'fontWeight': 'bold',
             },
             'labelLine': {
-                'show': True,           
+                'show': True,
                 'length': 15,
                 'length2': 10
             },
             'itemStyle': {
-            'borderColor': '#fff',
-            'borderWidth': 4       
+                'borderColor': '#fff',
+                'borderWidth': 4
             },
             'data': chart_data,
         }],
@@ -285,17 +304,23 @@ def get_chart4(request):
 
 
 
-
+#filtro para todo el dashboard
 def get_date_range(request):
     range_type = request.GET.get('range', None)
-    start_date_str = request.GET.get('start_date', None)
-    end_date_str = request.GET.get('end_date', None)
+    print('rango desde funcion get:date',range_type)
+    
     today = now().date()
 
-    # Primero definir start_date y end_date según el filtro
-    if not range_type and not (start_date_str and end_date_str):
-        start_date = today.replace(month=1, day=1)
+    if not range_type or range_type == '':
+        six_months_ago = today - timedelta(days=180)
+        if six_months_ago.year < today.year:
+            start_date = today.replace(month=1, day=1)
+        else:
+            start_date = six_months_ago.replace(day=1)
         end_date = today
+    elif range_type == 'year':
+        start_date = today.replace(month=1, day=1)
+        end_date = today.replace(month=12, day=31)
     elif range_type == 'today':
         start_date = end_date = today
     elif range_type == 'week':
@@ -304,26 +329,48 @@ def get_date_range(request):
     elif range_type == 'month':
         start_date = today.replace(day=1)
         end_date = today
-    elif range_type == 'year':
-        start_date = today.replace(month=1, day=1)
-        end_date = today
-    elif start_date_str and end_date_str:
-        try:
-            start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
-            end_date = datetime.strptime(end_date_str, '%Y-%m-%d').date()
-        except ValueError:
-            start_date = today.replace(month=1, day=1)
-            end_date = today
     else:
         start_date = today.replace(month=1, day=1)
         end_date = today
 
-    # Ahora sí, combinar fecha y hora para obtener datetime
     start_datetime = datetime.combine(start_date, time.min)
     end_datetime = datetime.combine(end_date, time.max)
-
-    # Convertir a aware para que coincida con campo con zona horaria
-    start_datetime = make_aware(start_datetime)
-    end_datetime = make_aware(end_datetime)
+    start_datetime = make_aware(start_datetime).astimezone(timezone.utc)
+    end_datetime = make_aware(end_datetime).astimezone(timezone.utc)
 
     return start_datetime, end_datetime
+
+
+def get_date_range_individual(request):
+    range_type = request.GET.get('range_chart2', None)
+    today = now().date()
+
+    if not range_type or range_type == '':
+        six_months_ago = today - timedelta(days=180)
+        if six_months_ago.year < today.year:
+            start_date = today.replace(month=1, day=1)
+        else:
+            start_date = six_months_ago.replace(day=1)
+        end_date = today
+    elif range_type == 'year':
+        start_date = today.replace(month=1, day=1)
+        end_date = today.replace(month=12, day=31)
+    elif range_type == 'today' or range_type == '7days':
+        start_date = today - timedelta(days=7)
+        end_date = today
+    elif range_type == 'week' or range_type == '30days':
+        start_date = today - timedelta(days=30)
+        end_date = today
+    elif range_type == 'month':
+        start_date = today.replace(day=1)
+        end_date = today
+    else:
+        start_date = today.replace(month=1, day=1)
+        end_date = today
+
+    start_datetime = datetime.combine(start_date, time.min)
+    end_datetime = datetime.combine(end_date, time.max)
+    start_datetime = make_aware(start_datetime).astimezone(timezone.utc)
+    end_datetime = make_aware(end_datetime).astimezone(timezone.utc)
+    return start_datetime, end_datetime
+
