@@ -354,3 +354,19 @@ select option {
 .price-labels label {
   cursor: default;
 }
+
+.rangeprice button {
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    border-radius: 1rem;
+    background-color: #0bebc8;
+    border: none;
+    padding: 0.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    width: 50%;
+    transition: background-color 0.3s;
+    margin-bottom: 5px;
+}

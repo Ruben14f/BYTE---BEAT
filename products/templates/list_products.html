@@ -61,48 +61,56 @@
                 </div>
 
                     
-                <div class="filter-section">
-                    <div class="range-slider">
-                        <input type="number" class="min-price" value="1" min="1" max="{{ max_price }}" />
-                        <input type="number" class="max-price" value="{{ max_price }}" min="1" max="{{ max_price }}" />
-                        <div class="range">
-                            <input type="range" class="min-input" value="1" min="1" max="{{ max_price }}" />
-                            <input type="range" class="max-input" value="{{ max_price }}" min="1" max="{{ max_price }}" />
-
+                <div class="filter-section rangeprice">
+                    <form method="GET">
+                        <div class="range-slider">
+                            <input type="number" name="min_price" class="min-price" value="{{ current_min_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                            <input type="number" name="max_price" class="max-price" value="{{ current_max_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                            <div class="range">
+                                <input type="range" name="min_price" class="min-input" value="{{ current_min_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                                <input type="range" name="max_price" class="max-input" value="{{ current_max_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
                             <div class="slider">
                                 <div class="progress"></div>
                             </div>
+                            </div>
+
+                            <div class="price-labels">
+                            <label class="min-label" for="min-input">${{ current_min_price}}</label>
+                            <label class="max-label" for="max-input">${{ current_max_price }}</label>
+                            </div>
                         </div>
-                    </div>
+                        <button type="submit">Filtrar</button>
+                    </form>
                 </div>
             </div>
-            <div style="display: flex; flex-direction: column; justify-content: space-between;"></div>
+            <div style="display: flex; flex-direction: column; justify-content: space-between;">
                 <div class="product-container">
                     {% for product in product_list %}
-                    <div class="product-card">
-                        <div class="product-image">
-                            {% if product.main_image %}
-                            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
-                            {% else %}
-                            <p>No image available</p>
-                            {% endif %}
+                        {% if product.main_image and product.stock > 0 %}
+                        <div class="product-card">
+                            <div class="product-image">
+                                {% if product.main_image %}
+                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                                {% else %}
+                                <p>No image available</p>
+                                {% endif %}
+                            </div>
+                            <div class="product-info">
+                                <div class="product-brand">{{ product.category | title }}</div>
+                                <div class="product-brand">{{ product.brand | title }}</div>
+                                <div class="product-name">{{ product.name | title }}</div>
+                                <div class="product-price">{{ product.price | format_price }}</div>
+                                <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                                <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
+                                        producto</a></button>
+                            </div>
                         </div>
-                        <div class="product-info">
-                            <div class="product-brand">{{ product.category | title }}</div>
-                            <div class="product-brand">{{ product.brand | title }}</div>
-                            <div class="product-name">{{ product.name | title }}</div>
-                            <div class="product-price">{{ product.price | format_price }}</div>
-                            <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-                            <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
-                                    producto</a></button>
-                        </div>
-                    </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
                 {% include 'paginacion_products.html' %}
             </div>
         </div>
-       {% include 'paginacion_products.html' %}
     {% else %}
         <h2 style="color: white; text-align: center;">No hay resultados para: {{query | title }}</h2>
         <div class="container-main" style="display: flex; flex-direction: row;">
@@ -196,47 +204,53 @@
             </form>
         </div>
 
-        <div class="filter-section">
-            <div class="range-slider">
-                <input type="number" class="min-price" value="1" min="1" max="{{ max_price }}" />
-                <input type="number" class="max-price" value="{{ max_price }}" min="1" max="{{ max_price }}" />
-                <div class="range">
-                    <input type="range" class="min-input" value="1" min="1" max="{{ max_price }}" />
-                    <input type="range" class="max-input" value="{{ max_price }}" min="1" max="{{ max_price }}" />
-
+        <div class="filter-section  rangeprice">
+            <form method="GET">
+                <div class="range-slider">
+                    <input type="number" name="min_price" class="min-price" value="{{ current_min_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                    <input type="number" name="max_price" class="max-price" value="{{ current_max_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                    <div class="range">
+                        <input type="range" name="min_price" class="min-input" value="{{ current_min_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                        <input type="range" name="max_price" class="max-input" value="{{ current_max_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
                     <div class="slider">
                         <div class="progress"></div>
                     </div>
+                    </div>
+
+                    <div class="price-labels">
+                        <label class="min-label" for="min-input">${{ current_min_price }}</label>
+                        <label class="max-label" for="max-input">${{ current_max_price }}</label>
+                    </div>
                 </div>
-                <div class="price-labels">
-                    <label class="min-label" for="min-input">$1</label>
-                    <label class="max-label" for="max-input">${{ max_price }}</label>
-                </div>
-            </div>
+
+                <button type="submit">Filtrar</button>
+            </form>
         </div>
 
     </div>
     <div style="display: flex; flex-direction: column; justify-content: space-between;">
         <div class="product-container">
             {% for product in product_list %}
-            <div class="product-card">
-                <div class="product-image">
-                    {% if product.main_image %}
-                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
-                    {% else %}
-                    <p>No image available</p>
-                    {% endif %}
+                {% if product.main_image and product.stock > 0 %}
+                <div class="product-card">
+                    <div class="product-image">
+                        {% if product.main_image %}
+                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                        {% else %}
+                        <p>No image available</p>
+                        {% endif %}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-brand">{{ product.category | title}}</div>
+                        <div class="product-brand">{{ product.brand | title }}</div>
+                        <div class="product-name">{{ product.name | title }}</div>
+                        <div class="product-price">{{ product.price | format_price }}</div>
+                        <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                        <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
+                                producto</a></button>
+                    </div>
                 </div>
-                <div class="product-info">
-                    <div class="product-brand">{{ product.category | title}}</div>
-                    <div class="product-brand">{{ product.brand | title }}</div>
-                    <div class="product-name">{{ product.name | title }}</div>
-                    <div class="product-price">{{ product.price | format_price }}</div>
-                    <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-                    <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
-                            producto</a></button>
-                </div>
-            </div>
+                {% endif %}
             {% endfor %}
         </div>
         {% include 'paginacion_products.html' %}

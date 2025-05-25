@@ -55,23 +55,29 @@
             </form>
         </div>
 
-        <div class="filter-section">
-            <div class="range-slider">
-                <input type="number" class="min-price" value="1" min="1" max="{{ max_price }}" />
-                <input type="number" class="max-price" value="{{ max_price }}" min="1" max="{{ max_price }}" />
-                <div class="range">
-                    <input type="range" class="min-input" value="1" min="1" max="{{ max_price }}" />
-                    <input type="range" class="max-input" value="{{ max_price }}" min="1" max="{{ max_price }}" />
+        <div class="filter-section  rangeprice">
+            <form method="GET">
+                <div class="range-slider">
+                    <input type="number" name="min_price" class="min-price" value="{{ current_min_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                    <input type="number" name="max_price" class="max-price" value="{{ current_max_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+
+                    <div class="range">
+                    <input type="range" name="min_price" class="min-input" value="{{ current_min_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
+                    <input type="range" name="max_price" class="max-input" value="{{ current_max_price }}" min="{{ min_price_all }}" max="{{ max_price_all }}" />
 
                     <div class="slider">
                         <div class="progress"></div>
                     </div>
+                    </div>
+
+                    <div class="price-labels">
+                    <label class="min-label" for="min-input">${{ current_min_price }}</label>
+                    <label class="max-label" for="max-input">${{ current_max_price }}</label>
+                    </div>
                 </div>
-                <div class="price-labels">
-                    <label class="min-label" for="min-input">$1</label>
-                    <label class="max-label" for="max-input">${{ max_price }}</label>
-                </div>
-            </div>
+
+                <button type="submit">Filtrar</button>
+            </form>
         </div>
     
     </div>
