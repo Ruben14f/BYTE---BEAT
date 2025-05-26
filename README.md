@@ -28,15 +28,15 @@ password: admin123
 ```bash
 #Se muestran las variables que deben agregarse en un archivo .env para la correcta configuración del proyecto. Reemplaza los valores con los datos propios.
 
-#llave secreta del proyectos
+#llave secreta del proyecto
 SECRET_KEY = 'UagAgPiB9c12MHGEnhxRm0Qrb2ezPC'
 
 #Configuration DB
-DB_NAME = 'bdproject_ccx5'
-DB_USER = 'adminuser'
-DB_PASSWORD = 'DttRsfyFzXJa8UGI87IgmaY67bn4pJp8'
-DB_HOST = 'dpg-d0gc4gadbo4c73b8afr0-a.oregon-postgres.render.com'
-DB_PORT = '5432'
+DB_NAME = ''
+DB_USER = 'r'
+DB_PASSWORD = ''
+DB_HOST = ''
+DB_PORT = ''
 
 
 #Configuration SMTP GMAIL 
