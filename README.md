@@ -13,7 +13,7 @@ pip install -r requirements.txt
 ```
 
 
-## Usuario
+## Credenciales de acceso
 ```bash
 Credenciales necesarias:
 
@@ -26,6 +26,8 @@ password: admin123
 
 ## Variables requeridas archivo .env
 ```bash
+#Se muestran las variables que deben agregarse en un archivo .env para la correcta configuración del proyecto. Reemplaza los valores con los datos propios.
+
 #llave secreta del proyectos
 SECRET_KEY = 'UagAgPiB9c12MHGEnhxRm0Qrb2ezPC'
 
