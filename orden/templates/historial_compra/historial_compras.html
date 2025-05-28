@@ -20,24 +20,27 @@
     {% if ordenes %}
       <ul>
         {% for orden in ordenes %}
-          <h3>Orden: {{ orden.num_orden|slice:":8" }}</h3>
-          <ul>
-            {% for item in orden.productos_orden.all %}
-              <li class="order-item">
-                <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
-                {{ item.producto.name }} x {{ item.quantity }}
-              </li>
-            {% endfor %}
-            <div class="order-details">
-              Estado orden: <strong>{{ orden.get_status_display }}</strong><br>
-              Total: <strong>{{ orden.total | format_price }}</strong><br>
-              {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
-                <a class="btn btn-danger" onclick="cancelarCompra({{ orden.id }})">Cancelar</a><br>
-              {% endif %}
-              Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}
-            </div>
-          </ul>
-          <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+          {% if orden.status != 'CREATED' %}
+        
+            <h3>Orden: {{ orden.num_orden }}</h3>
+            <ul>
+              {% for item in orden.productos_orden.all %}
+                <li class="order-item">
+                  <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+                  {{ item.producto.name }} x {{ item.quantity }}
+                </li>
+              {% endfor %}
+              <div class="order-details">
+                Estado orden: <strong>{{ orden.get_status_display }}</strong><br>
+                Total: <strong>{{ orden.total | format_price }}</strong><br>
+                {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
+                  <a class="btn btn-danger" onclick="cancelarCompra({{ orden.id }})">Cancelar</a><br>
+                {% endif %}
+                Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}
+              </div>
+            </ul>
+            <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+          {% endif %}
         {% endfor %}
       </ul>
       <p class="total-ordenes">Total de órdenes: {{ ordenes|length }}</p>
@@ -50,24 +53,26 @@
     {% if ordenes %}
       <ul>
         {% for orden in ordenes %}
+          {% if orden.status != 'CREATED' %}
           <h3>Orden: {{ orden.num_orden }}</h3>
-          <ul>
-            {% for item in orden.productos_orden.all %}
-              <li class="order-item">
-                <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
-                {{ item.producto.name }} x {{ item.quantity }}
-              </li>
-            {% endfor %}
-            <div class="order-details">
-              Estado orden: <strong>{{ orden.get_status_display }}</strong><br>
-              Total: <strong>{{ orden.total | format_price}}</strong><br>
-              {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
-                <a class="btn btn-danger" onclick="cancelarCompra({{ orden.id }})">Cancelar</a><br>
-              {% endif %}
-              Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}
-            </div>
-          </ul>
-          <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+            <ul>
+              {% for item in orden.productos_orden.all %}
+                <li class="order-item">
+                  <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+                  {{ item.producto.name }} x {{ item.quantity }}
+                </li>
+              {% endfor %}
+              <div class="order-details">
+                Estado orden: <strong>{{ orden.get_status_display }}</strong><br>
+                Total: <strong>{{ orden.total | format_price}}</strong><br>
+                {% if orden.status == 'PAYED' or orden.status == 'PREPARING' or orden.status == 'READY_FOR_PICKUP' %}
+                  <a class="btn btn-danger" onclick="cancelarCompra({{ orden.id }})">Cancelar</a><br>
+                {% endif %}
+                Pagado el: {{ orden.fecha_pagada|date:"d/m/Y H:i" }}
+              </div>
+            </ul>
+            <a href="{% url 'detalle_compra' orden.id %}">Ver detalle</a>
+            {% endif %}
         {% endfor %}
       </ul>
       {% include 'paginacion_products.html' with page_obj=ordenes %}
@@ -87,7 +92,7 @@
       icon: 'question',
       showCancelButton: true,
       cancelButtonText: 'No, cancelar',
-      confirmButtonText: 'Sí, eliminar',
+      confirmButtonText: 'Sí, cancelar orden',
       reverseButtons: true,
       confirmButtonColor: '#dc3545'
     }).then(function(result){

@@ -2,32 +2,41 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from orden.models import Orden
 import pandas as pd
-from django.views.decorators.cache import cache_page
 from datetime import datetime 
-from django.core.cache import cache
 from datetime import datetime, timedelta, time
 from django.utils.timezone import now, make_aware
 from datetime import timezone
-
+import calendar
 
 def dashboard_view(request):
     return render(request, 'dashboard_ordens.html')
+
 #grafico de barras
 def get_chart2(request):
-    start_datetime, end_datetime = get_date_range(request)
+    # Obtener filtro general
+    filtro_global = request.GET.get('range', None)
+    # Obtener filtro individual para este gráfico
     filtro_individual = request.GET.get('range_chart2', None)
 
-    print(filtro_individual)
-    print('invidual antes de if',filtro_individual)
-    if filtro_individual:
-        start_datetime, end_datetime = get_date_range_individual(request)
-        rango = filtro_individual
-        print('invidual antes de if',rango)
-    else:
-        start_datetime, end_datetime = get_date_range(request)
-        rango = request.GET.get('range', None)
+    # Por defecto usar filtro global para fechas
+    start_datetime, end_datetime = get_date_range(request)
 
-    months_diff = (end_datetime.year - start_datetime.year) * 12 + (end_datetime.month - start_datetime.month) + 2
+    # Si hay filtro individual para este gráfico, usarlo para rango de fechas
+    if filtro_individual:
+        start_datetime, end_datetime = get_date_range_individual(request, 'range_chart2')
+        rango = filtro_individual
+    else:
+        rango = filtro_global
+
+    # Ajustar rango para comparación anual sin perder filtro global
+    if filtro_individual == 'comparativa_anio':
+        # Expandir rango para traer años completos anteriores y actuales según filtro global
+        start_datetime = start_datetime.replace(year=start_datetime.year - 1, month=1, day=1)
+        end_datetime = end_datetime.replace(month=12, day=31)
+    elif filtro_individual == 'comparativa_mes':
+        pass
+
+    # Consultar con rango ajustado
     ordenes = Orden.objects.prefetch_related('productos_orden__producto').filter(
         fecha_pagada__gte=start_datetime,
         fecha_pagada__lte=end_datetime,
@@ -52,6 +61,13 @@ def get_chart2(request):
 
     df = pd.DataFrame(data)
 
+    # Si filtro individual es de comparativa, usar función especial sin alterar lógica global
+    if filtro_individual == 'comparativa_anio':
+        return JsonResponse(generar_comparativa(df, tipo='anio'))
+    elif filtro_individual == 'comparativa_mes':
+        return JsonResponse(generar_comparativa(df, tipo='mes'))
+
+    # Si no hay datos
     if df.empty:
         option = {
             'tooltip': {'trigger': 'axis'},
@@ -72,19 +88,61 @@ def get_chart2(request):
             }]
         }
         return JsonResponse(option)
-    
+
     nombres_meses_completos = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
                                'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
-    rango = request.GET.get('range')
-    
-    print('rango desde grafico',rango)
+
     if rango == 'year':
-        meses = list(range(1, 13)) 
+        meses = list(range(1, 13))
     else:
+        months_diff = (end_datetime.year - start_datetime.year) * 12 + (end_datetime.month - start_datetime.month) + 2
         last_month = min(start_datetime.month + months_diff - 1, 12)
         meses = list(range(start_datetime.month, last_month + 1))
 
-    meses_nombre = [nombres_meses_completos[m-1] for m in meses]
+    meses_nombre = [nombres_meses_completos[m - 1] for m in meses]
+
+    pivot_df = df.pivot_table(index='mes', columns='categoria', values='valor', aggfunc='sum', fill_value=0)
+    pivot_df = pivot_df.reindex(meses, fill_value=0)
+
+    series = []
+    for categoria in pivot_df.columns:
+        valores = pivot_df[categoria].astype(float).tolist()
+        series.append({
+            'name': categoria,
+            'type': 'bar',
+            'data': valores,
+        })
+
+    option = {
+        'tooltip': {'trigger': 'axis'},
+        'legend': {'data': list(pivot_df.columns)},
+        'xAxis': {
+            'type': 'category',
+            'data': meses_nombre,
+            'name': 'Meses',
+            'axisLabel': {'interval': 0}
+        },
+        'yAxis': {
+            'type': 'value',
+            'name': 'Ventas (Pesos)'
+        },
+        'series': series
+    }
+
+    return JsonResponse(option)
+
+    # Mantener lógica original de filtro global para rango y meses
+    nombres_meses_completos = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                               'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']
+
+    if rango == 'year':
+        meses = list(range(1, 13))
+    else:
+        months_diff = (end_datetime.year - start_datetime.year) * 12 + (end_datetime.month - start_datetime.month) + 2
+        last_month = min(start_datetime.month + months_diff - 1, 12)
+        meses = list(range(start_datetime.month, last_month + 1))
+
+    meses_nombre = [nombres_meses_completos[m - 1] for m in meses]
 
     pivot_df = df.pivot_table(index='mes', columns='categoria', values='valor', aggfunc='sum', fill_value=0)
     pivot_df = pivot_df.reindex(meses, fill_value=0)
@@ -118,9 +176,21 @@ def get_chart2(request):
 
 
 
+
 #grafico de lineas
 def get_chart3(request):
     start_datetime, end_datetime = get_date_range(request)
+    filtro_individual = request.GET.get('range_chart3', None)
+    print(filtro_individual)
+    print('invidual antes de if',filtro_individual)
+    
+    if filtro_individual:
+        start_datetime, end_datetime = get_date_range_individual(request,'range_chart3')
+        rango = filtro_individual
+        print('invidual antes de if',rango)
+    else:
+        start_datetime, end_datetime = get_date_range(request)
+        rango = request.GET.get('range', None)
 
     months_diff = (end_datetime.year - start_datetime.year) * 12 + (end_datetime.month - start_datetime.month) + 2
 
@@ -216,7 +286,17 @@ def get_chart3(request):
 #grafico de torta
 def get_chart4(request):
     start_datetime, end_datetime = get_date_range(request)
-
+    filtro_individual = request.GET.get('range_chart4', None)
+    print(filtro_individual)
+    print('invidual antes de if',filtro_individual)
+    
+    if filtro_individual:
+        start_datetime, end_datetime = get_date_range_individual(request,'range_chart4')
+        rango = filtro_individual
+        print('invidual antes de if',rango)
+    else:
+        start_datetime, end_datetime = get_date_range(request)
+        rango = request.GET.get('range', None)
     ordenes = Orden.objects.prefetch_related('productos_orden__producto').filter(
         fecha_pagada__gte=start_datetime,
         fecha_pagada__lte=end_datetime,
@@ -341,8 +421,8 @@ def get_date_range(request):
     return start_datetime, end_datetime
 
 
-def get_date_range_individual(request):
-    range_type = request.GET.get('range_chart2', None)
+def get_date_range_individual(request, param_name):
+    range_type = request.GET.get(param_name, None)
     today = now().date()
 
     if not range_type or range_type == '':
@@ -355,14 +435,11 @@ def get_date_range_individual(request):
     elif range_type == 'year':
         start_date = today.replace(month=1, day=1)
         end_date = today.replace(month=12, day=31)
-    elif range_type == 'today' or range_type == '7days':
+    elif range_type == '7days':
         start_date = today - timedelta(days=7)
         end_date = today
-    elif range_type == 'week' or range_type == '30days':
+    elif range_type == '30days':
         start_date = today - timedelta(days=30)
-        end_date = today
-    elif range_type == 'month':
-        start_date = today.replace(day=1)
         end_date = today
     else:
         start_date = today.replace(month=1, day=1)
@@ -374,3 +451,94 @@ def get_date_range_individual(request):
     end_datetime = make_aware(end_datetime).astimezone(timezone.utc)
     return start_datetime, end_datetime
 
+
+def generar_comparativa(df, tipo='anio'):
+    if df.empty or 'anio' not in df.columns or 'mes' not in df.columns:
+        return {
+            'tooltip': {'trigger': 'axis'},
+            'legend': {'data': ['Sin datos']},
+            'xAxis': {'type': 'category', 'data': ['Sin datos'], 'name': 'Meses'},
+            'yAxis': {'type': 'value', 'name': 'Ventas (Pesos)'},
+            'series': [{'name': 'Sin datos', 'type': 'bar', 'data': [0]}]
+        }
+
+    if tipo == 'anio':
+        # Agrupar por categoría y año
+        pivot = df.pivot_table(index='categoria', columns='anio', values='valor', aggfunc='sum', fill_value=0)
+        pivot = pivot.sort_index()
+
+        # Construir dimensions (primera columna es "Producto")
+        dimensiones = ['Producto'] + [str(col) for col in pivot.columns]
+
+        # Construir source como lista de diccionarios
+        source = []
+        for categoria, fila in pivot.iterrows():
+            fila_dict = {'Producto': categoria}
+            for anio, valor in fila.items():
+                fila_dict[str(anio)] = float(valor)
+            source.append(fila_dict)
+
+        option = {
+            'legend': {},
+            'tooltip': {},
+            'dataset': {
+                'dimensions': dimensiones,
+                'source': source
+            },
+            'xAxis': { 'type': 'category' },
+            'yAxis': {},
+            'series': [ { 'type': 'bar' } for _ in dimensiones[1:] ]
+        }
+
+        return option
+
+    elif tipo == 'mes':
+        agrupado = df.groupby(['anio', 'mes', 'categoria'])['valor'].sum().reset_index()
+
+        meses_ordenados = agrupado[['anio', 'mes']].drop_duplicates().sort_values(['anio', 'mes'], ascending=False)
+        meses_comparar = meses_ordenados.head(2).values.tolist()
+        if len(meses_comparar) < 2:
+            return {
+                'tooltip': {'trigger': 'axis'},
+                'legend': {'data': ['Sin datos']},
+                'xAxis': {'type': 'category', 'data': ['Sin datos'], 'name': 'Meses'},
+                'yAxis': {'type': 'value', 'name': 'Ventas (Pesos)'},
+                'series': [{'name': 'Sin datos', 'type': 'bar', 'data': [0]}]
+            }
+
+        agrupado['label'] = agrupado.apply(lambda r: f'{calendar.month_abbr[r["mes"]]} {r["anio"]}', axis=1)
+        pivot = agrupado[
+            agrupado[['anio', 'mes']].apply(tuple, axis=1).isin(meses_comparar)
+        ].pivot_table(index='categoria', columns='label', values='valor', aggfunc='sum', fill_value=0)
+        pivot = pivot.sort_index()
+
+        dimensiones = ['Producto'] + [str(c) for c in pivot.columns]
+
+        source = []
+        for categoria, fila in pivot.iterrows():
+            fila_dict = {'Producto': categoria}
+            for etiqueta, valor in fila.items():
+                fila_dict[str(etiqueta)] = float(valor)
+            source.append(fila_dict)
+
+        option = {
+            'legend': {},
+            'tooltip': {},
+            'dataset': {
+                'dimensions': dimensiones,
+                'source': source
+            },
+            'xAxis': { 'type': 'category' },
+            'yAxis': {},
+            'series': [ { 'type': 'bar' } for _ in dimensiones[1:] ]
+        }
+
+        return option
+
+    return {
+        'tooltip': {'trigger': 'axis'},
+        'legend': {'data': ['Sin datos']},
+        'xAxis': {'type': 'category', 'data': ['Sin datos'], 'name': 'Meses'},
+        'yAxis': {'type': 'value', 'name': 'Ventas (Pesos)'},
+        'series': [{'name': 'Sin datos', 'type': 'bar', 'data': [0]}]
+    }

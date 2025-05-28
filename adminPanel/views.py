@@ -206,17 +206,19 @@ def listado_ordenes(request):
         'resumen_estados' : resumen_estados
     })
 
-def detail_orden(request,id):
-    orden = get_object_or_404(Orden, id=id) 
-    user = User.objects.get(id=orden.user.id)
-    profile = UserProfile.objects.get(id=orden.user.id)
+def detail_orden(request, id):
+    orden = get_object_or_404(Orden, id=id)
+    user = orden.user
 
-    print('usuario de la orden',user)
-    print('usuario de la orden',profile)
+    try:
+        profile = UserProfile.objects.get(user=user)
+    except UserProfile.DoesNotExist:
+        profile = None 
+
     context = {
-        'orden' : orden,
-        'user' : user,
-        'profiledatos' : profile,
+        'orden': orden,
+        'user': user,
+        'profiledatos': profile,
     }
     return render(request, 'gestion_pedidos/detail_orden.html', context)
 

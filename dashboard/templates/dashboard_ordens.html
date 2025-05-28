@@ -6,7 +6,7 @@
 Dashboard
 
 <div class="filtro-general">
-  <label for="filtro">Filtrar por fecha:</label>
+  <label for="filtro">Filtrar todos los graficos por fecha:</label>
   <select id="filtro">
     <option value="" selected disabled>Filtrar por:</option>
     <option value="today">Hoy</option>
@@ -22,24 +22,46 @@ Dashboard
   
 
 <div class="filtro-chart2">
-  <label for="filtro-chart2">Filtrar gráfico 2:</label>
+  <label for="filtro-chart2">Filtrar gráfico 1:</label>
   <select id="filtro-chart2">
     <option value="" selected>Todos</option>
     <option value="7days">Últimos 7 días</option>
     <option value="30days">Últimos 30 días</option>
     <option value="year">Este año</option>
+    <option value="comparativa_mes">Comparar con mes anterior</option> <!-- nuevo -->
+    <option value="comparativa_anio">Comparar con año anterior</option>
   </select>
   <button id="btn-filtrar-chart2">Aplicar filtro gráfico 2</button>
   <button id="btn-borrar-filtro-chart2">Borrar filtro gráfico 2</button>
 </div>
-
-
 <div id="chart2" style="width: 600px; height: 400px;"></div>
 
 
+<div class="filtro-chart3">
+  <label for="filtro-chart3">Filtrar gráfico 2:</label>
+  <select id="filtro-chart3">
+    <option value="" selected>Todos</option>
+    <option value="7days">Últimos 7 días</option>
+    <option value="30days">Últimos 30 días</option>
+    <option value="year">Este año</option>
+  </select>
+  <button id="btn-filtrar-chart3">Aplicar filtro gráfico 2</button>
+  <button id="btn-borrar-filtro-chart3">Borrar filtro gráfico 2</button>
+</div>
 <div id="chart3" style="width: 600px; height: 400px;"></div>
 
 
+<div class="filtro-chart4">
+  <label for="filtro-chart4">Filtrar gráfico 3:</label>
+  <select id="filtro-chart4">
+    <option value="" selected>Todos</option>
+    <option value="7days">Últimos 7 días</option>
+    <option value="30days">Últimos 30 días</option>
+    <option value="year">Este año</option>
+  </select>
+  <button id="btn-filtrar-chart4">Aplicar filtro gráfico 2</button>
+  <button id="btn-borrar-filtro-chart4">Borrar filtro gráfico 2</button>
+</div>
 <div id="chart4" style="width: 600px; height: 400px;"></div>
 
 
