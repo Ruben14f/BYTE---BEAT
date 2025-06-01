@@ -2,13 +2,11 @@ from django.http.response import JsonResponse
 from django.shortcuts import render
 from orden.models import Orden
 import pandas as pd
-from datetime import datetime, timedelta, time,timezone
+from datetime import datetime, timedelta, time,timezone, date
 from django.utils.timezone import now, make_aware
 import calendar
-import locale
+from babel.dates import format_date
 
-#Mes, Dias en español de importacion calendar
-locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
 def dashboard_view(request):
     return render(request, 'dashboard_ordens.html')
@@ -727,11 +725,11 @@ def generar_comparativa_barras(df, tipo='anio'):
 
         # Crear etiquetas (labels) para los meses esperados, en orden
         etiquetas_esperadas = [
-            f'{calendar.month_abbr[mes_anterior]} {anio_anterior}',
-            f'{calendar.month_abbr[mes_actual]} {anio_actual}'
+            f'{format_date(date(anio_anterior, mes_anterior, 1), "MMM", locale="es_ES").capitalize()} {anio_anterior}',
+            f'{format_date(date(anio_actual, mes_actual, 1), "MMM", locale="es_ES").capitalize()} {anio_actual}'
         ]
 
-        agrupado['label'] = agrupado.apply(lambda r: f'{calendar.month_abbr[r["mes"]]} {r["anio"]}', axis=1)
+        agrupado['label'] = agrupado.apply(lambda r: f'{format_date(date(r["anio"], r["mes"], 1), "MMM", locale="es_ES").capitalize()} {r["anio"]}', axis=1)
 
         pivot = agrupado[
             agrupado[['anio', 'mes']].apply(tuple, axis=1).isin(meses_comparar)
@@ -862,8 +860,8 @@ def generar_comparativa_lineas(df, tipo='anio'):
             prev_year = current_year
 
         meses_nombre = [
-            f'{prev_year}-{calendar.month_name[prev_month].capitalize()}',
-            f'{current_year}-{calendar.month_name[current_month].capitalize()}'
+            f'{prev_year}-{format_date(date(prev_year, prev_month, 1), "MMM", locale="es_ES").capitalize()}',
+            f'{current_year}-{format_date(date(current_year, current_month, 1), "MMM", locale="es_ES").capitalize()}'
         ]
 
         df['anio_mes'] = list(zip(df['anio'], df['mes']))
@@ -882,7 +880,7 @@ def generar_comparativa_lineas(df, tipo='anio'):
         pivot = pivot[meses_comparar].sort_index()
 
         categorias = list(pivot.index)
-        columnas = [f'{k[0]}-{calendar.month_name[k[1]].capitalize()}' for k in meses_comparar]
+        columnas = meses_nombre
 
         dataset_source = [['category'] + columnas]
         for cat in categorias:
