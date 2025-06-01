@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
       btnFiltrarIndId: "btn-filtrar-chart4",
       btnBorrarIndId: "btn-borrar-filtro-chart4",
     },
-    // Agrega más configuraciones según sea necesario
   ];
 
   // Instanciar gráficos y guardar referencias
@@ -62,15 +61,24 @@ document.addEventListener("DOMContentLoaded", () => {
         params.append(config.filtroGlobalParam, filtroGlobal);
       }
 
+      if (id === "chart4") {
+      const topFilterSelect = document.getElementById("top_filter_chart4");
+      if (topFilterSelect && topFilterSelect.value) {
+        params.append("top_filter_chart4", topFilterSelect.value);
+        }
+      }
+
       if ([...params].length > 0) url += "?" + params.toString();
 
       const response = await fetch(url);
       const data = await response.json();
 
       chart.hideLoading();
-      if (!data.series || data.series.length === 0) chart.clear();
-      else {
-        chart.setOption(data);
+      if (!data.series || data.series.length === 0) {
+        chart.clear();
+      }else {
+        chart.clear();
+        chart.setOption(data,true);
         chart.resize();
       }
     } catch (error) {
@@ -102,13 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
     cargarTodosGraficos(filtro);
     btnBorrarFiltro.style.display = filtro ? "inline-block" : "none";
 
-    // Ocultar filtros individuales cuando hay filtro global (opcional)
-    graficosConfig.forEach(({ btnBorrarIndId }) => {
-      if (btnBorrarIndId) {
-        const btnInd = document.getElementById(btnBorrarIndId);
-        if (btnInd) btnInd.style.display = "none";
-      }
-    });
+    
   });
 
   btnBorrarFiltro.addEventListener("click", () => {
