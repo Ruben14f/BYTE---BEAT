@@ -8,7 +8,7 @@ import calendar
 import locale
 
 #Mes, Dias en español de importacion calendar
-locale.setlocale(locale.LC_TIME, 'Spanish_Spain')
+locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
 
 def dashboard_view(request):
     return render(request, 'dashboard_ordens.html')
@@ -129,7 +129,7 @@ def get_chart2(request):
             },
             'xAxis': {
                 'type': 'category',
-                'data': meses_nombre,
+                'data': nombres_dias,
                 'name': 'Meses',
                 'axisLabel': {'interval': 0}
             },
@@ -198,7 +198,7 @@ def get_chart2(request):
             },
             'xAxis': {
                 'type': 'category',
-                'data': meses_nombre,
+                'data': nombres_semanas,
                 'name': 'Meses',
                 'axisLabel': {'interval': 0}
             },
