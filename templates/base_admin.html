@@ -9,10 +9,66 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
     <title>{% block title %}Gestor administrativo{% endblock %}</title>
 </head>
 <body>
-    <div>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="logo">Byte & Beat Admin</div>
+            <nav>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="" class="nav-link">
+                            <span class="nav-icon">🏠</span>
+                            Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'dashboard_admin' %}" class="nav-link">
+                            <span class="nav-icon">📊</span>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'list_ordenes_admin' %}" class="nav-link">
+                            <span class="nav-icon">📦</span>
+                            Gestión de Órdenes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'list_product_admin' %}" class="nav-link">
+                            <span class="nav-icon">🛍️</span>
+                            Gestión de Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'orden_list_report' %}" class="nav-link">
+                            <span class="nav-icon">📈</span>
+                            Reporte de Ventas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#settings" class="nav-link">
+                            <span class="nav-icon">⚙️</span>
+                            Configuración
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'logout' %}" class="nav-link">
+                            <span class="nav-icon">🚪</span>
+                            Cerrar Sesión
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="user-card-header">
+                <div class="user-avatar">{{initial | title}}</div>
+                <div class="user-name">{{profile.user.first_name | title }} {{profile.user.last_name | title }}</div>
+            </div>
+          
+        </aside>
+
         {% block content_admin %}
 
         {% endblock %}

@@ -3,126 +3,115 @@
 
 
 {% block content_admin %}
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 0;
-    }
+<link rel="stylesheet" href="{% static 'css/index_admin.css' %}">
 
-    body {
-      background-color: #f5f6fa;
-      padding: 20px;
-    }
+  <main class="main-content">
+    <!-- Header -->
+    <header class="header">
+        <div class="welcome-text">
+            <h1>Bienvenido al Panel de Control</h1>
+            <p>Administra tu tienda</p>
+        </div>
+        <div class="user-profile">
+            <div class="profile-avatar">{{initial | title}}</div>
+            <div class="profile-info">
+                <h3>{{profile.user.first_name | title }} {{profile.user.last_name | title }}</h3>
+                <span>{{profile.user.email}}</span>
+            </div>
+        </div>
+    </header>
 
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 30px;
-    }
+    <div class="dashboard-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon">📦</div>
+            </div>
+            <div class="stat-number">24</div>
+            <div class="stat-label">Órdenes Pendientes</div>
+            <div class="stat-change">+15% vs mes anterior</div>
+        </div>
 
-    header h1 {
-      font-size: 28px;
-      color: #333;
-    }
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon">🛍️</div>
+            </div>
+            <div class="stat-number">156</div>
+            <div class="stat-label">Productos Activos</div>
+            <div class="stat-change">+8 nuevos esta semana</div>
+        </div>
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon">💰</div>
+            </div>
+            <div class="stat-number">$12,450</div>
+            <div class="stat-label">Ventas del Mes</div>
+            <div class="stat-change">+22% vs mes anterior</div>
+        </div>
 
-    .card {
-      background-color: #fff;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-    }
-
-    .card h2 {
-      font-size: 20px;
-      margin-bottom: 10px;
-    }
-
-    .card p {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 15px;
-    }
-
-    .card .btn {
-      background-color: #4a69bd;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .card .btn:hover {
-      background-color: #1e3799;
-    }
-
-    .card-icon {
-      font-size: 40px;
-      margin-bottom: 10px;
-    }
-
-    /* Colores personalizados por sección */
-    .pedidos .card-icon { color: #f39c12; }
-    .productos .card-icon { color: #27ae60; }
-    .reportes .card-icon { color: #8e44ad; }
-  </style>
-</head>
-<body>
-
-  <header>
-    <h1>Panel de Administración</h1>
-    <br>
-    <a href="{% url 'index' %}" class="btn btn-primary">Ir a inicio sitio web</a>
-    <span>Hola, Rubén</span>
-  </header>
-
-  <section class="cards">
-    <div class="card pedidos">
-      <div class="card-icon">📦</div>
-      <h2>Gestión de Ordenes</h2>
-      <p>Administra pedidos pendientes, en proceso y finalizados.</p>
-      <a href="{% url 'list_ordenes_admin' %}" class="btn btn-primary">Ir a pedidos</a>
+        <div class="stat-card">
+            <div class="stat-header">
+                <div class="stat-icon">👥</div>
+            </div>
+            <div class="stat-number">89</div>
+            <div class="stat-label">Clientes Nuevos</div>
+            <div class="stat-change">+5% esta semana</div>
+        </div>
     </div>
 
-    <div class="card productos">
-      <div class="card-icon">🛒</div>
-      <h2>Gestión de Productos</h2>
-      <p>Añade, edita o elimina productos del catálogo.</p>
-      <a href="{% url 'list_product_admin' %}" class="btn btn-primary">Ir a productos</a>
+    <!-- Quick Actions -->
+    <div class="content-section">
+        <h2 class="section-title">
+            <span>⚡</span>
+            Acciones Rápidas
+        </h2>
+        <div class="quick-actions">
+            <a href="#new-product" class="action-btn">➕ Agregar Producto</a>
+            <a href="#process-orders" class="action-btn">📋 Procesar Órdenes</a>
+            <a href="#inventory" class="action-btn">📊 Ver Inventario</a>
+            <a href="#analytics" class="action-btn">📈 Ver Análisis</a>
+        </div>
     </div>
 
-    <div class="card reportes">
-      <div class="card-icon">📊</div>
-      <h2>Reporte de Ventas</h2>
-      <p>Visualiza reportes de ventas diarios, semanales y mensuales.</p>
-      <a href="{% url 'orden_list_report' %}" class="btn btn-primary">Ir a reporte de ventas</a>
+    <!-- Recent Activity -->
+    <div class="content-section">
+        <h2 class="section-title">
+            <span>🕒</span>
+            Actividad Reciente
+        </h2>
+        <ul class="recent-activity">
+            <li class="activity-item">
+                <div class="activity-icon">🛒</div>
+                <div class="activity-details">
+                    <h4>Nueva orden #1234</h4>
+                    <span>Cliente: Juan Pérez - Hace 15 minutos</span>
+                </div>
+            </li>
+            <li class="activity-item">
+                <div class="activity-icon">📦</div>
+                <div class="activity-details">
+                    <h4>Producto "Teclado MIDI" actualizado</h4>
+                    <span>Stock: 25 unidades - Hace 1 hora</span>
+                </div>
+            </li>
+            <li class="activity-item">
+                <div class="activity-icon">💰</div>
+                <div class="activity-details">
+                    <h4>Pago confirmado orden #1230</h4>
+                    <span>$299.99 - Hace 2 horas</span>
+                </div>
+            </li>
+            <li class="activity-item">
+                <div class="activity-icon">👤</div>
+                <div class="activity-details">
+                    <h4>Nuevo cliente registrado</h4>
+                    <span>María González - Hace 3 horas</span>
+                </div>
+            </li>
+        </ul>
     </div>
+  </main>
 
-
-    
-    <div class="card reportes">
-      <div class="card-icon">📊</div>
-      <h2>Dashboard</h2>
-      <p>Visualiza dashboard de ventas.</p>
-      <a href="{% url 'dashboard_admin' %}" class="btn btn-primary">Ir a dashboard de ventas</a>
-    </div>
-
-  </section>
 
 
 {% endblock %}

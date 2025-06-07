@@ -2,6 +2,8 @@ from django.shortcuts import render
 from products.models import Category
 from orden.models import OrdenProducto
 from django.db.models import Count
+from profiles.models import UserProfile
+
 # Create your views here.
 def index(request):
     category = Category.objects.annotate(product_count=Count('product')).filter(product_count__gt=0)
@@ -15,5 +17,9 @@ def index(request):
     })
 
 def index_admin(request):
-    return render(request, 'index_admin.html')
+    profile = UserProfile.objects.get(user=request.user)
+
+    return render(request, 'index_admin.html', {
+        'profile' : profile
+    })
 

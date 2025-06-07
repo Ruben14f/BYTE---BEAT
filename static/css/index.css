@@ -1,17 +1,96 @@
-s.banner-container{
+/* Banner */
+.hero {
+    margin-top: 80px;
+    height: 60vh;
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.85)),
+        url('https://res.cloudinary.com/dg4dhdyzj/image/upload/v1748832912/elegir-este_11zon_l9bowy.webp') no-repeat center center;
+    background-size: cover;
     display: flex;
-    justify-content: center;
-}
-.banner{
-    display: flex;
-    flex-direction: column;
-    background: #17F0D2;
-    border-radius: 20px;
     align-items: center;
-    padding: 20px 65px;
-    margin-top: 6%;
-    margin-bottom: 2%;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+
+    filter: none;
 }
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(45deg, rgba(0, 255, 255, 0.07), rgba(255, 0, 255, 0.07));
+    animation: pulse 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.6; }
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glow 2s ease-in-out infinite alternate;
+    text-shadow:
+        0 0 8px rgba(0, 255, 255, 0.8),
+        0 0 12px rgba(255, 0, 255, 0.8),
+        2px 2px 4px rgba(0, 0, 0, 0.9);
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 20px rgba(0, 255, 255, 0.5); }
+    to { text-shadow: 0 0 30px rgba(255, 0, 255, 0.8); }
+}
+
+.hero-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+.cta-button {
+    background: linear-gradient(45deg, #00ffff, #ff00ff);
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 50px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
+}
+
+.floating {
+    animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+
+
+/*Contenido*/
 .card{
     border-radius: 50px;
     background: #2C2F47;

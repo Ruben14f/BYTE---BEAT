@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'adminPanel',
     'report',
     'dashboard',
+    'chatbot_web'
     
 ]
 

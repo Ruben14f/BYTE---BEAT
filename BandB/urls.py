@@ -32,7 +32,10 @@ urlpatterns = [
     path('admin-view/', include('adminPanel.urls')),
     path('admin-report/', include('report.urls')),
     path('admin-dashboard/', include('dashboard.urls')),
+    path('chatbot/', include('chatbot_web.urls')),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+
+    
