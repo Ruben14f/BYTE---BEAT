@@ -20,7 +20,7 @@ def consultar_estado_pedido(num_orden: str) -> str:
         orden = Orden.objects.get(num_orden=num_orden)
         # Si se encuentra la orden, devuelve el estado
         return mark_safe(f"El estado de la orden {num_orden} es {orden.get_status_display()}.")
-    except Product.DoesNotExist:
+    except Orden.DoesNotExist:
         # Si no se encuentra la orden, muestra un mensaje
         return mark_safe("La orden no se encuentra en el sistema")
     
