@@ -1,0 +1,130 @@
+{% extends 'base_admin.html' %}
+{% load precios_tag %}
+
+{% block content_admin %}
+TOTAL ORDENES: {{ordens | length}}
+
+total pedidos : {{total_ordenes | format_miles}}
+ordenes completadas : {{total_completadas | format_miles}}
+
+total ingresos : {{total_ingresos | format_price}}
+
+<!-- Orden de estado de ordenes por cantidad -->
+{% for estado, cantidad in resumen_estados.items %}
+    {{ estado }}: ({{ cantidad }})
+{% endfor %}
+
+{% if query %}
+<table class="table">
+    <thead>
+        {% for estado, cantidad in resumen_estados.items %}
+            {{ estado }}: ({{ cantidad }})
+        {% endfor %}
+        <tr>
+            <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
+            <th></th>
+            <th><select>
+                {% for value, label in statusorden %}
+                    <option value="{{value}}">{{label}}</option>
+                {% endfor %}
+                
+            </select></th>
+            <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
+            <th>filtro por fecha</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th>Numero orden</th>x
+            <th>Valor pedido</th>x
+            <th>Estado pedido</th>x
+            <th>Fecha pedido</th>x
+            <th>Ver detalle orden</th>
+            <th>Accion</th>
+        </tr>
+    </thead>
+    {% for ordenes in ordens %}
+        {% if not ordenes.status == 'CREATED' %}
+            <tbody>
+                <tr>
+                    <td>#{{ordenes.num_orden}}</td>
+                    <td>{{ordenes.total | format_price }}</td>
+                    <td>{{ordenes.get_status_display}}</td>
+                    <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}" class="btn btn-primary">Ir al detalle</a></td>
+                    <td>{% include 'gestion_pedidos/update_status.html' %}</td>
+                </tr>
+            </tbody>
+        {% endif %}
+    {% endfor %}
+</table>
+{% else %}
+
+<table class="table">
+    <thead>
+        <div style="margin-top: 10px;">
+            {% for estado, cantidad in resumen_estados.items %}
+            {{ estado }}: ({{ cantidad }})
+            {% endfor %}
+        </div>
+        
+        <tr>
+            <th>{% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}</th>
+            <th></th>
+            <th>{% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}</th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <thead>
+        <tr>
+            <th>Numero orden</th>
+            <th>Valor pedido</th>
+            <th>Estado pedido</th>
+            <th>Fecha pedido</th>
+            <th>Ver detalle orden</th>
+            <th>Accion</th>
+
+        </tr>
+    </thead>
+    {% for ordenes in ordens %}
+        {% if not ordenes.status == 'CREATED' %}
+            <tbody>
+                <tr>
+                    <td>#{{ordenes.num_orden}}</td>
+                    <td>{{ordenes.total | format_price }}</td>
+                    <td>{{ordenes.get_status_display}}</td>
+                    <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                    <td><a href="{% url 'detail_orden_admin' ordenes.id %}" class="btn btn-primary">Ir al detalle </a></td>
+                    <td>{% include 'gestion_pedidos/update_status.html' %}</td>
+                </tr>
+            </tbody>
+        {% endif %}
+    {% endfor %}
+</table>
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function updateEstadoOrden(id,form){
+        event.preventDefault();
+        Swal.fire({
+            title: '¿Estás seguro que deseas actualizar estado?',
+            text: 'Se le enviara correo al cliente con la actualizacion de estado', 
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'No, cancelar',
+            confirmButtonText: 'Sí, actualizar',
+            reverseButtons: true,
+            confirmButtonColor: '#dc3545'
+        }).then(function(result){
+            if (result.isConfirmed) {
+                form.submit(); 
+            }
+        });
+    }
+</script>
+{% endblock %}

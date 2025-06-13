@@ -6,9 +6,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="{% static 'css/base_admin.css' %}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -44,31 +41,31 @@
             </div>
             
             <nav class="mt-8">
-    <a href="{% url 'admin_index' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-        <i class="fas fa-home h-6 w-6 text-gray-300 mr-2"></i>
-        Inicio
-    </a>
+                <a href="{% url 'admin_index' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-home h-6 w-6 text-gray-300 mr-2"></i>
+                    Inicio
+                </a>
 
-    <a href="{% url 'list_ordenes_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-        <i class="fas fa-box h-6 w-6 text-gray-300 mr-2"></i>
-        Gestión de Pedidos
-    </a>
+                <a href="{% url 'list_ordenes_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-box h-6 w-6 text-gray-300 mr-2"></i>
+                    Gestión de Pedidos
+                </a>
 
-    <a href="{% url 'list_product_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-        <i class="fas fa-cogs h-6 w-6 text-gray-300 mr-2"></i>
-        Gestión de Productos
-    </a>
+                <a href="{% url 'list_product_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-cogs h-6 w-6 text-gray-300 mr-2"></i>
+                    Gestión de Productos
+                </a>
 
-    <a href="{% url 'orden_list_report' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-        <i class="fas fa-chart-line h-6 w-6 text-gray-300 mr-2"></i>
-        Reportes de Ventas
-    </a>
+                <a href="{% url 'orden_list_report' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chart-line h-6 w-6 text-gray-300 mr-2"></i>
+                    Reportes de Ventas
+                </a>
 
-    <a href="{% url 'dashboard_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-        <i class="fas fa-tachometer-alt h-6 w-6 text-gray-300 mr-2"></i>
-        Dashboard
-    </a>
-</nav>
+                <a href="{% url 'dashboard_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-tachometer-alt h-6 w-6 text-gray-300 mr-2"></i>
+                    Dashboard
+                </a>
+            </nav>
 
         </div>
         {% block content_admin %}
@@ -78,7 +75,5 @@
         
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
 </html>

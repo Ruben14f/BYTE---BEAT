@@ -9,8 +9,7 @@ from users.models import User
 from django.core.mail import send_mail
 import os
 from django.template.loader import render_to_string
-
-
+from .utils import *
 
 #GESTION DE PRODUCTOS
 def listado_productos(request):
@@ -30,13 +29,28 @@ def listado_productos(request):
         for item in resumen_estados_qs
     }
 
+    #Total de productos
+    t_productos = total_productos()
+
+    #Total productos activos
+    t_productos_activos = total_productos_activos()
+
+    #Total de productos con stock bajo
+    t_stock_bajo = productos_stock_bajo()
+
+    #Total de productos sin stock
+    t_sin_stock = productos_sin_stock()
 
     return render(request, 'gestion_productos/list_product.html',{
         'products': productos,
         'brands' : marca,
         'categories' : categorias,
         'statusproduct' : product_status,
-        'resumen_estadosp' : resumen_estadosp
+        'resumen_estadosp' : resumen_estadosp,
+        'total_productos' : t_productos,
+        'total_productos_activos' : t_productos_activos,  
+        'total_stock_bajo' : t_stock_bajo,
+        'total_sin_stock' : t_sin_stock
     })
     
 def agregar_producto(request):
@@ -85,6 +99,7 @@ def detail_product(request, id):
     return render(request, 'gestion_productos/detail_product.html', {
         'product' : product
     })
+
 #Filtros productos
 def sku_search(request):
     query = request.GET.get('searchSku')
@@ -183,6 +198,7 @@ def estado_product_search(request):
 
     return render(request, 'gestion_productos/list_product.html', context)
     
+
 #GESTION DE PEDIDOS
 def listado_ordenes(request):
     ordenes = Orden.objects.all().order_by('-fecha_pagada')
@@ -200,10 +216,23 @@ def listado_ordenes(request):
         for item in resumen_estados_qs
     }
     
+    #Total de pedidos
+    total_ordenes = total_pedidos_ingresados()
+
+    #Total de ordenes completadas
+    total_completadas = total_pedidos_completados()
+
+    #Total ingresos por ordenes
+    total_ingresos = ingresos_totales()
+
+
     return render(request, 'gestion_pedidos/list_ordenes.html',{
         'ordens' : ordenes,
         'statusorden' : orden_status,
-        'resumen_estados' : resumen_estados
+        'resumen_estados' : resumen_estados,
+        'total_ordenes' : total_ordenes,
+        'total_completadas' : total_completadas,
+        'total_ingresos' : total_ingresos
     })
 
 def detail_orden(request, id):

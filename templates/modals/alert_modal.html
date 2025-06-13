@@ -1,88 +1,101 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" />
 
-<!-- MODAL DE ERROR -->
-<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="display: flex; justify-content: center; align-items: center">
-        <div class="modal-content text-white" style="background-color: #1e1f36; width: 350px; border: none">
-            <div class="modal-header border-0">
-                <h5 class="modal-title" id="errorModalLabel">Error</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert m-0 alert-danger d-flex align-items-center" role="alert" style="background-color: #dc3545; border: none; color: white">
-                            <i class="bi bi-x-circle-fill text-white me-2"></i>
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
+<!-- Error Modal -->
+<div id="errorModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-[#1e1f36] text-white w-[350px] rounded shadow-lg p-4 relative">
+    <div class="flex justify-between items-center border-b border-transparent mb-4">
+      <h5 class="text-lg font-semibold">Error</h5>
+      <button onclick="closeModal('errorModal')" class="text-white text-xl">&times;</button>
     </div>
+    <div class="text-center">
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.tags == 'error' %}
+          <div class="bg-red-600 text-white px-3 py-2 rounded flex items-center justify-center gap-2">
+            <i class="bi bi-x-circle-fill"></i>
+            <span>{{ message }}</span>
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
 </div>
 
-<!-- MODAL DE ÉXITO -->
-<div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="display: flex; justify-content: center; align-items: center; border: none;">
-        <div class="modal-content text-white" style="background-color: #1e1f36; width: 350px;">
-            <div class="modal-header border-0">
-                <h5 class="modal-title" id="successModalLabel">Éxito</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert m-0 alert-success d-flex align-items-center" role="alert" style="background-color: #198754; border: none; color: white;">
-                            <i class="bi bi-check-circle-fill text-white me-2"></i>
-                            <div>{{ message }} <i class="bi bi-emoji-smile"></i></div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
+<!-- Success Modal -->
+<div id="successModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-[#1e1f36] text-white w-[350px] rounded shadow-lg p-4 relative">
+    <div class="flex justify-between items-center border-b border-transparent mb-4">
+      <h5 class="text-lg font-semibold">Éxito</h5>
+      <button onclick="closeModal('successModal')" class="text-white text-xl">&times;</button>
     </div>
+    <div class="text-center">
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.tags == 'success' %}
+          <div class="bg-green-600 text-white px-3 py-2 rounded flex items-center justify-center gap-2">
+            <i class="bi bi-check-circle-fill"></i>
+            <span>{{ message }} <i class="bi bi-emoji-smile"></i></span>
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
 </div>
 
-<!-- MODAL DE INFORMACIÓN -->
-<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="display: flex; justify-content: center; align-items: center; border: none;">
-        <div class="modal-content text-white" style="background-color: #1e1f36; width: 350px;">
-            <div class="modal-header border-0">
-                <h5 class="modal-title" id="infoModalLabel">Información</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-            </div>
-            <div class="modal-body text-center">
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert m-0 alert-info d-flex align-items-center" role="alert" style="background-color: #17a2b8; border: none; color: white;">
-                            <i class="bi bi-info-circle-fill text-white me-2"></i>
-                            <div>{{ message }} <i class="bi bi-emoji-smile"></i></div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
+<!-- Info Modal -->
+<div id="infoModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black bg-opacity-50">
+  <div class="bg-[#1e1f36] text-white w-[350px] rounded shadow-lg p-4 relative">
+    <div class="flex justify-between items-center border-b border-transparent mb-4">
+      <h5 class="text-lg font-semibold">Información</h5>
+      <button onclick="closeModal('infoModal')" class="text-white text-xl">&times;</button>
     </div>
+    <div class="text-center">
+      {% if messages %}
+        {% for message in messages %}
+          {% if message.tags == 'info' %}
+          <div class="bg-cyan-600 text-white px-3 py-2 rounded flex items-center justify-center gap-2">
+            <i class="bi bi-info-circle-fill"></i>
+            <span>{{ message }} <i class="bi bi-emoji-smile"></i></span>
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
 </div>
 
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        {% if messages %}
-            {% for message in messages %}
-                {% if message.tags == 'success' %}
-                    const successModal = new bootstrap.Modal(document.getElementById('successModal'));
-                    successModal.show();
-                {% elif message.tags == 'error' %}
-                    const errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
-                    errorModal.show();
-                {% elif message.tags == 'info' %}
-                    const infoModal = new bootstrap.Modal(document.getElementById('infoModal'));
-                    infoModal.show();  
-                {% endif %}
-            {% endfor %}
+  document.addEventListener('DOMContentLoaded', function () {
+    {% if messages %}
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          openModal('successModal');
+        {% elif message.tags == 'error' %}
+          openModal('errorModal');
+        {% elif message.tags == 'info' %}
+          openModal('infoModal');
         {% endif %}
-    });
+      {% endfor %}
+    {% endif %}
+  });
+
+  function openModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  }
+
+  function closeModal(id) {
+    const modal = document.getElementById(id);
+    if (modal) {
+      modal.classList.remove('flex');
+      modal.classList.add('hidden');
+    }
+  }
 </script>
 

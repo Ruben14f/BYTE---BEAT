@@ -9,7 +9,11 @@ from orden.models import Orden
 from django.db.models import Sum
 from products.models import Product
 from django.db.models.functions import TruncMonth
+from adminPanel.utils import ingresos_totales
 
+
+def tests(request):
+    return render(request, 'testdesign.html')
 # Create your views here.
 def index(request):
     category = Category.objects.annotate(product_count=Count('product')).filter(product_count__gt=0)
@@ -24,11 +28,15 @@ def index(request):
 
 def index_admin(request):
     profile = UserProfile.objects.get(user=request.user)
+    
     hora_actual = localtime(now()).date() 
     dia_de_la_semana = formats.date_format(hora_actual, "l")
-    # Obtener el total de precios de todas las órdenes
-    total_precio_ordenes = Orden.objects.all().aggregate(Sum('total'))['total__sum']
-    total_precio_ordenes = total_precio_ordenes if total_precio_ordenes else 0
+
+
+    # Obtener el total de precios de todas las ordenes
+    total_precio_ordenes = ingresos_totales()
+
+
     # Obtener el total de órdenes vendidas
     ordenes_totales_vendido = Orden.objects.all().count()
 
@@ -40,6 +48,7 @@ def index_admin(request):
     
     # Obtener ventas mensuales
     ventas = ventas_mensuales()
+
     return render(request, 'index_admin.html', {
         'profile' : profile,
         'fecha_formateada': hora_actual,

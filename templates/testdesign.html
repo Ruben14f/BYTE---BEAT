@@ -1,73 +1,75 @@
-{% extends 'base_admin.html' %}
-{% load precios_tag %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos - Byte & Beat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .sidebar-nav a {
+            transition: all 0.2s ease;
+        }
+        .sidebar-nav a:hover {
+            background-color: rgba(55, 65, 81, 0.8);
+        }
+        .sidebar-nav a.active {
+            background-color: #2563eb;
+        }
+        
+        .table-hover:hover {
+            background-color: #f9fafb;
+        }
+        
+        .modal-overlay {
+            backdrop-filter: blur(4px);
+        }
+        
+        .status-badge {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .stat-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
 
-{% block content_admin %}
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
 
+        .action-button {
+            transition: all 0.2s ease;
+        }
 
+        .action-button:hover {
+            transform: scale(1.1);
+        }
 
-<style>
-    .sidebar-nav a {
-        transition: all 0.2s ease;
-    }
-    .sidebar-nav a:hover {
-        background-color: rgba(55, 65, 81, 0.8);
-    }
-    .sidebar-nav a.active {
-        background-color: #2563eb;
-    }
-    
-    .table-hover:hover {
-        background-color: #f9fafb;
-    }
-    
-    .modal-overlay {
-        backdrop-filter: blur(4px);
-    }
-    
-    .status-badge {
-        font-size: 0.75rem;
-        font-weight: 500;
-    }
-    
-    .stat-card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    
-    .stat-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    }
+        .stock-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
 
-    .product-image {
-        width: 50px;
-        height: 50px;
-        object-fit: cover;
-        border-radius: 8px;
-    }
-
-    .action-button {
-        transition: all 0.2s ease;
-    }
-
-    .action-button:hover {
-        transform: scale(1.1);
-    }
-
-    .stock-indicator {
-        display: inline-block;
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        margin-right: 4px;
-    }
-
-    .stock-high { background-color: #10b981; }
-    .stock-medium { background-color: #f59e0b; }
-    .stock-low { background-color: #ef4444; }
-    .stock-out { background-color: #6b7280; }
-</style>
+        .stock-high { background-color: #10b981; }
+        .stock-medium { background-color: #f59e0b; }
+        .stock-low { background-color: #ef4444; }
+        .stock-out { background-color: #6b7280; }
+    </style>
 </head>
-    <div class="flex-1 p-6 overflow-y-auto">
+<body class="bg-gray-50">
+    <!-- Main Content -->
+    <div class="ml-48 p-6">
         <!-- Header -->
         <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6">
             <h1 class="text-2xl font-bold mb-2">Gestión de Productos</h1>
@@ -269,24 +271,7 @@
     </div>
 
     <script>
-        function eliminarProducto(id){
-        const baseUrl = "{% url 'eliminar_product_admin' 0 %}".replace("0", id);
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: 'Esta acción no se puede deshacer',
-            icon: 'question',
-            showCancelButton: true,
-            cancelButtonText: 'No, cancelar',
-            confirmButtonText: 'Sí, eliminar',
-            reverseButtons: true,
-            confirmButtonColor: '#dc3545'
-        }).then(function(result){
-            if(result.isConfirmed){
-                window.location.href = baseUrl;
-            }
-        });
-    }
-    
+
         const statusColors = {
             'Activo': 'text-green-600 bg-green-100',
             'Inactivo': 'text-red-600 bg-red-100'
@@ -304,5 +289,4 @@
         });
        
     </script>
-{% endblock %}
-
+</body>
