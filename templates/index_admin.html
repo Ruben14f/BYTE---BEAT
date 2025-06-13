@@ -1,117 +1,194 @@
-{% extends "base_admin.html" %}
-{% load static %}
-
+{% extends 'base_admin.html' %}
+{% load precios_tag %}
+<title>{% block title %}Gestor administrativo{% endblock %}</title>
 
 {% block content_admin %}
-<link rel="stylesheet" href="{% static 'css/index_admin.css' %}">
-
-  <main class="main-content">
-    <!-- Header -->
-    <header class="header">
-        <div class="welcome-text">
-            <h1>Bienvenido al Panel de Control</h1>
-            <p>Administra tu tienda</p>
-        </div>
-        <div class="user-profile">
-            <div class="profile-avatar">{{initial | title}}</div>
-            <div class="profile-info">
-                <h3>{{profile.user.first_name | title }} {{profile.user.last_name | title }}</h3>
-                <span>{{profile.user.email}}</span>
+    <!-- Contenido -->
+    <div class="flex-1 p-6">
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6 relative overflow-hidden">
+            <div class="absolute inset-0 pointer-events-none">
+                <div class="bubble bubble-1"></div>
+                <div class="bubble bubble-2"></div>
+                <div class="bubble bubble-3"></div>
+                <div class="bubble bubble-4"></div>
+                <div class="bubble bubble-5"></div>
+                <div class="bubble bubble-6"></div>
+                <div class="bubble bubble-7"></div>
+                <div class="bubble bubble-8"></div>
+            </div>
+            
+            <!-- Contenido de bienvenida -->
+            <div class="relative z-10">
+                <h1 class="text-2xl font-bold">¡Bienvenido, {{profile.user.first_name | title}}!</h1>
+                <p class="text-blue-100">Resumen general de tu negocio</p>
+                <p class="text-blue-200 text-sm mt-1" id="current-date">Hoy es {{dia_de_la_semana}}, {{fecha_formateada}}</p>
             </div>
         </div>
-    </header>
-
-    <div class="dashboard-grid">
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon">📦</div>
+        
+        <!-- Cards de resumen -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+            <!-- Total Pedidos -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Total Pedidos</p>
+                        <p class="text-2xl font-bold text-gray-900" id="total-pedidos"
+                        data-value="{% if total_ventas_cantidad is None %}0{% else %}{{ total_ventas_cantidad }}{% endif %}">
+                            {% if total_ventas_cantidad is None %}
+                                $0
+                            {% else %}
+                                {{ total_ventas_cantidad |format_miles}}
+                            {% endif %}
+                            
+                        <p class="text-green-600 text-sm">+15% desde el mes pasado</p>
+                    </div>
+                    <div class="bg-blue-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4z"></path>
+                        </svg>
+                    </div>
+                </div>
             </div>
-            <div class="stat-number">24</div>
-            <div class="stat-label">Órdenes Pendientes</div>
-            <div class="stat-change">+15% vs mes anterior</div>
+
+            <!-- Ingresos Totales -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Ingresos Totales</p>
+                        
+                        <!-- Pasar el valor numérico a data-value y mostrar el valor formateado -->
+                        <p class="text-2xl font-bold text-gray-900" id="ingresos-totales" 
+                        data-value="{% if total_ventas_pesos is None %}0{% else %}{{ total_ventas_pesos }}{% endif %}">
+                            {% if total_ventas_pesos is None %}
+                                $0
+                            {% else %}
+                                {{ total_ventas_pesos|format_price }}
+                            {% endif %}
+                        </p>
+
+                        <p class="text-green-600 text-sm">+26% desde el mes pasado</p>
+                    </div>
+                    <div class="bg-green-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z"></path>
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos Activos -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm">Productos Activos</p>
+                        <p class="text-2xl font-bold text-gray-900" id="productos-activos"
+                        data-value="{% if productos_activos is None %}0{% else %}{{ productos_activos }}{% endif %}">
+                            {% if productos_activos is None %}
+                                0
+                            {% else %}
+                                {{productos_activos|format_miles}}
+                            {% endif %}
+                            
+                        <p class="text-green-600 text-sm">+8% desde el mes pasado</p>
+                    </div>
+                    <div class="bg-purple-100 p-3 rounded-full">
+                        <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 2L3 7v11a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V7l-7-5z" clip-rule="evenodd"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon">🛍️</div>
+        <!-- Mini resumen visual -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Monthly Sales Chart -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Ventas Mensuales</h3>
+                <div class="space-y-4">
+                    {% for venta_mensual in ventas_mensuales %}
+                    <div class="flex items-center justify-between">
+                        <span class="text-sm text-gray-600">{{ venta_mensual.mes|date:"M" }}</span>
+                        <div class="flex-1 mx-4">
+                            <div class="bg-gray-200 rounded-full h-2">
+                                <div class="bg-blue-600 h-2 rounded-full" style="width: {{ venta.total_ventas|floatformat:2 }}%"></div>
+                            </div>
+                        </div>
+                        <span class="text-sm font-medium">{{ venta_mensual.total_ventas|format_price }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="stat-number">156</div>
-            <div class="stat-label">Productos Activos</div>
-            <div class="stat-change">+8 nuevos esta semana</div>
-        </div>
 
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon">💰</div>
+            <!-- Top Products -->
+            <div class="bg-white rounded-lg shadow-sm border p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Productos Más Vendidos</h3>
+                <div class="space-y-4">
+                    {% for product_destacado in mas_vendido %}
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div>
+                            <p class="font-medium text-gray-900">{{product_destacado.name}}</p>
+                            <p class="text-sm text-gray-500">{{product_destacado.total_vendido }}</p>
+                        </div>
+                        <span class="text-green-600 font-semibold">{{product_destacado.total_vendido_precio|format_price}}</span>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="stat-number">$12,450</div>
-            <div class="stat-label">Ventas del Mes</div>
-            <div class="stat-change">+22% vs mes anterior</div>
-        </div>
-
-        <div class="stat-card">
-            <div class="stat-header">
-                <div class="stat-icon">👥</div>
-            </div>
-            <div class="stat-number">89</div>
-            <div class="stat-label">Clientes Nuevos</div>
-            <div class="stat-change">+5% esta semana</div>
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div class="content-section">
-        <h2 class="section-title">
-            <span>⚡</span>
-            Acciones Rápidas
-        </h2>
-        <div class="quick-actions">
-            <a href="#new-product" class="action-btn">➕ Agregar Producto</a>
-            <a href="#process-orders" class="action-btn">📋 Procesar Órdenes</a>
-            <a href="#inventory" class="action-btn">📊 Ver Inventario</a>
-            <a href="#analytics" class="action-btn">📈 Ver Análisis</a>
-        </div>
-    </div>
+<script>
+    // Animación de números
+    function animateNumber(element, targetValue, duration = 2000) {
+        const startValue = 0;
+        const increment = targetValue / (duration / 16);
+        let currentValue = startValue;
+        
+        const timer = setInterval(() => {
+            currentValue += increment;
+            if (currentValue >= targetValue) {
+                currentValue = targetValue;
+                clearInterval(timer);
+            }
+            
+            if (element.id === 'ingresos-totales') {
+                element.textContent = `$${Math.floor(currentValue).toLocaleString()}`;
+            } else {
+                element.textContent = Math.floor(currentValue).toLocaleString();
+            }
+        }, 16);
+    }
 
-    <!-- Recent Activity -->
-    <div class="content-section">
-        <h2 class="section-title">
-            <span>🕒</span>
-            Actividad Reciente
-        </h2>
-        <ul class="recent-activity">
-            <li class="activity-item">
-                <div class="activity-icon">🛒</div>
-                <div class="activity-details">
-                    <h4>Nueva orden #1234</h4>
-                    <span>Cliente: Juan Pérez - Hace 15 minutos</span>
-                </div>
-            </li>
-            <li class="activity-item">
-                <div class="activity-icon">📦</div>
-                <div class="activity-details">
-                    <h4>Producto "Teclado MIDI" actualizado</h4>
-                    <span>Stock: 25 unidades - Hace 1 hora</span>
-                </div>
-            </li>
-            <li class="activity-item">
-                <div class="activity-icon">💰</div>
-                <div class="activity-details">
-                    <h4>Pago confirmado orden #1230</h4>
-                    <span>$299.99 - Hace 2 horas</span>
-                </div>
-            </li>
-            <li class="activity-item">
-                <div class="activity-icon">👤</div>
-                <div class="activity-details">
-                    <h4>Nuevo cliente registrado</h4>
-                    <span>María González - Hace 3 horas</span>
-                </div>
-            </li>
-        </ul>
-    </div>
-  </main>
+    // Inicializar animaciones cuando la página carga
+    document.addEventListener('DOMContentLoaded', function() {
+        // Obtener el valor desde el atributo 'data-value' del elemento HTML
+        const ingresosTotales = parseFloat(document.getElementById('ingresos-totales').getAttribute('data-value'));
+        const totalOrdenes = document.getElementById('total-pedidos').getAttribute('data-value');
+        const totalProductosActivos = document.getElementById('productos-activos').getAttribute('data-value');
 
 
+        // Ejecutar la animación con el valor obtenido
+        animateNumber(document.getElementById('ingresos-totales'), ingresosTotales);
+        animateNumber(document.getElementById('total-pedidos'), totalOrdenes);
+        animateNumber(document.getElementById('productos-activos'), totalProductosActivos);
 
+    });
+
+
+    // Efectos hover para las tarjetas
+    document.querySelectorAll('.bg-white').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.transition = 'transform 0.2s ease-in-out';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
+</script>
 {% endblock %}

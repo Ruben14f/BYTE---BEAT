@@ -1,5 +1,5 @@
 from django.db import models 
-from django.db.models import  Max, Sum
+from django.db.models import  Max, Sum,F
 from users.models import User
 from cart.models import Cart
 from products.models import Product
@@ -62,10 +62,11 @@ class OrdenProducto(models.Model):
     quantity = models.IntegerField(default=1)
     
     @classmethod
-    def total_product_vendido(cls,limite=5):
+    def total_productos_mas_vendido(cls,limite=5):
         return (
             Product.objects
-            .annotate(total_vendido=Sum('ordenproducto__quantity'))
+            .annotate(total_vendido=Sum('ordenproducto__quantity'),
+                      total_vendido_precio=Sum(F('ordenproducto__quantity') * F('price')))
             .filter(total_vendido__gt=0)
             .order_by('-total_vendido')[:limite]
         )
@@ -74,7 +75,7 @@ class OrdenProducto(models.Model):
     def product_recomendate(cls):
         return (
             Product.objects
-            .annotate(total_vendido=Coalesce(Sum('ordenproducto__quantity'), 0))  
+            .annotate(total_vendido=Coalesce(Sum('ordenproducto__quantity'), 0))
             .order_by('-total_vendido') 
         )
     
