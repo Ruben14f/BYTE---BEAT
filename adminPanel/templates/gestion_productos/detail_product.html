@@ -1,41 +1,163 @@
 {% extends 'base_admin.html' %}
 {% load precios_tag %}
 {% block content_admin %}
-<div style="background: white; max-width: 700px; margin: 20px auto; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); font-family: Arial, sans-serif; color: #333;">
-  
-  <h1 style="color: #2c3e50; margin-bottom: 20px;">Detalle del producto</h1>
+<div class="flex-1 p-6 overflow-y-auto">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6 relative overflow-hidden">
+        <h1 class="text-2xl font-bold">Detalle de Producto</h1>
+        <p class="text-blue-100">Información completa del producto</p>
+    </div>
 
-  <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
-    {% if product.main_image.url %}
-      <img src="{{ product.main_image.url }}" alt="{{ product.name }}" width="100" height="100" style="object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
-    {% else %}
-      <div style="width: 100px; height: 100px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid #ddd; color: #999; font-size: 14px;">
-        Sin imagen
-      </div>
-    {% endif %}
+    <!-- Back Button -->
+    <a href="javascript:history.back()" class="flex items-center text-current hover:text-primary-dark font-medium">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Volver Atrás
+    </a>
 
-    {% if product.secondary_image.url %}
-      <img src="{{ product.secondary_image.url }}" alt="{{ product.name }}" width="100" height="100" style="object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
-    {% endif %}
-  </div>
+    <!-- Product Detail Card -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mt-6">
+        <div class="p-6 md:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Product Image -->
+   <div class="lg:col-span-1">
+        <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
+            <!-- Imagen Principal -->
+            <div style="width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd; overflow: hidden;">
+                <img id="main-image" src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; object-fit: cover; border-radius: 8px; cursor: pointer; transition: opacity 0.5s ease;">
+            </div>
 
-  <h3 style="margin-top: 0; margin-bottom: 10px; color: #34495e;">SKU: <span style="font-weight: normal;">{{ product.sku }}</span></h3>
+            <!-- Imagen Secundaria -->
+            {% if product.secondary_image.url %}
+            <img id="secondary-image" src="{{ product.secondary_image.url }}" alt="{{ product.name }}" class="secondary-image" width="100" height="100" style="object-fit: cover; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.3s ease; border: 2px solid transparent;" onclick="switchImages()">
+            {% endif %}
+        </div>
+    </div>
+                <!-- Product Information -->
+                <div class="lg:col-span-2 space-y-6">
+                    <!-- Title and SKU -->
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{{ product.name }}</h2>
+                        <p class="text-gray-600 font-medium">SKU: {{ product.sku }}</p>
+                    </div>
 
-  <p><strong>Estado:</strong> {{ product.get_status_display }}</p>
-  <p><strong>Precio:</strong> ${{ product.price | format_price }}</p>
-  <p><strong>Nombre:</strong> {{ product.name }}</p>
-  <p><strong>Stock:</strong> {{ product.stock }}</p>
+                    <!-- Info Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Estado -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Estado:</label>
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                {{ product.get_status_display }}
+                            </span>
+                        </div>
 
-  <p><strong>Descripción:</strong></p>
-  <p style="background: #f9f9f9; padding: 10px; border-radius: 6px; border: 1px solid #ddd; white-space: pre-wrap;">{{ product.description }}</p>
+                        <!-- Precio -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Precio:</label>
+                            <p class="text-2xl font-bold text-green-600">{{ product.price | format_price }}</p>
+                        </div>
 
-  <p><strong>Fecha de creación:</strong> {{ product.created_at|date:"d/m/Y H:i" }}</p>
-  <p><strong>Categoría:</strong> {{ product.category }}</p>
-  <p><strong>Marca:</strong> {{ product.brand }}</p>
+                        <!-- Nombre -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre:</label>
+                            <p class="text-gray-900 font-medium">{{ product.name }}</p>
+                        </div>
 
-  <a href="{% url 'list_product_admin' %}" style="display: inline-block; margin-top: 25px; background-color: #2980b9; color: white; padding: 10px 18px; border-radius: 6px; text-decoration: none; font-weight: bold;">
-    ← Volver
-  </a>
+                        <!-- Stock -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Stock:</label>
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                                <span class="text-gray-900 font-semibold">{{ product.stock }}</span>
+                            </div>
+                        </div>
 
+                        <!-- Categoría -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Categoría:</label>
+                            <p class="text-gray-900">{{ product.category }}</p>
+                        </div>
+
+                        <!-- Marca -->
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Marca:</label>
+                            <p class="text-gray-900">{{ product.brand }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción:</label>
+                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                            <p class="text-gray-700">{{ product.description }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Fecha de creación -->
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha de creación:</label>
+                        <p class="text-gray-600 font-mono text-sm">{{ product.created_at|date:"d/m/Y H:i" }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<script>
+    let isMainImage = true;  // Variable para controlar la imagen principal
+
+    // Función para alternar entre las imágenes
+    function switchImages() {
+        const mainImage = document.getElementById("main-image");
+        const secondaryImage = document.getElementById("secondary-image");
+
+        // Cambiar la imagen principal y secundaria
+        if (isMainImage) {
+            // Hacer la transición y cambiar las imágenes
+            mainImage.style.opacity = 0;
+            setTimeout(() => {
+                mainImage.src = secondaryImage.src;
+                mainImage.style.opacity = 1; // Restaurar opacidad
+                secondaryImage.src = "{{ product.main_image.url }}"; // Cambiar imagen secundaria
+            }, 500); // Tiempo de animación
+            isMainImage = false;
+        } else {
+            // Restaurar la imagen principal original
+            mainImage.style.opacity = 0;
+            setTimeout(() => {
+                mainImage.src = "{{ product.main_image.url }}";
+                mainImage.style.opacity = 1; // Restaurar opacidad
+                secondaryImage.src = "{{ product.secondary_image.url }}"; // Cambiar imagen secundaria
+            }, 500); // Tiempo de animación
+            isMainImage = true;
+        }
+    }
+
+    // Función para resaltar la imagen secundaria al pasar el mouse
+    function highlightImage(img) {
+        img.style.transform = "scale(1.1)";  // Aumentar tamaño
+        img.style.border = "2px solid #4CAF50";  // Borde verde
+        img.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";  // Sombra suave
+    }
+
+    // Función para quitar el resaltado de la imagen secundaria
+    function removeHighlight(img) {
+        img.style.transform = "scale(1)";  // Restablecer tamaño
+        img.style.border = "2px solid transparent";  // Quitar el borde
+        img.style.boxShadow = "none";  // Quitar la sombra
+    }
+</script>
+<style>
+    /* Hover effect on the secondary image */
+    .secondary-image:hover {
+        transform: scale(1.1);
+        border: 2px solid #4CAF50;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);  /* Sombra suave para resaltar */
+        cursor: pointer;  /* Cambio del cursor para indicar que es clickeable */
+    }
+</style>
 {% endblock %}
