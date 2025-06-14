@@ -4,7 +4,7 @@ from django.contrib import messages
 from products.models import Product, Brand, Category,ProductStatus
 from orden.models import Orden, OrdenStatus
 from profiles.models import UserProfile
-from django.db.models import Q, Count
+from django.db.models import Q, Count,F, Sum
 from users.models import User
 from django.core.mail import send_mail
 import os
@@ -239,6 +239,10 @@ def detail_orden(request, id):
     orden = get_object_or_404(Orden, id=id)
     user = orden.user
 
+    subtotal = orden.productos_orden.aggregate(
+        total=Sum(F('quantity') * F('producto__price'))
+    )['total'] or 0
+
     try:
         profile = UserProfile.objects.get(user=user)
     except UserProfile.DoesNotExist:
@@ -248,6 +252,7 @@ def detail_orden(request, id):
         'orden': orden,
         'user': user,
         'profiledatos': profile,
+        'subtotal': subtotal,
     }
     return render(request, 'gestion_pedidos/detail_orden.html', context)
 

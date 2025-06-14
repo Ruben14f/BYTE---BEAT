@@ -1,116 +1,163 @@
 {% extends 'base_admin.html' %}
+
 {% load precios_tag %}
 
 {% block content_admin %}
-  <title>Detalle de Compra</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f6f9;
-      padding: 30px;
-    }
+    
 
-    .container {
-      max-width: 800px;
-      margin: auto;
-      background-color: #fff;
-      border-radius: 12px;
-      padding: 25px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 25px;
-      color: #333;
-    }
-
-    .detalle {
-      margin-bottom: 20px;
-    }
-
-    .detalle h3 {
-      color: #555;
-      margin-bottom: 10px;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 5px;
-    }
-
-    .detalle p {
-      margin: 5px 0;
-      color: #333;
-    }
-
-    .productos {
-      background-color: #fafafa;
-      padding: 10px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-
-    .producto {
-      border-bottom: 1px solid #ddd;
-      padding: 8px 0;
-    }
-
-    .producto:last-child {
-      border-bottom: none;
-    }
-
-    .btn-atras {
-      display: inline-block;
-      margin-top: 20px;
-      padding: 10px 15px;
-      background-color: #3498db;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      text-decoration: none;
-      transition: background-color 0.3s ease;
-    }
-
-    .btn-atras:hover {
-      background-color: #2980b9;
-    }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <h1>Detalle de Compra</h1>
-
-    <div class="detalle">
-      <h3>Información General</h3>
-      <p><strong>N° Orden:</strong> #{{ orden.num_orden }}</p>
-      <p><strong>Estado:</strong> {{ orden.get_status_display }}</p>
-      <p><strong>Total:</strong> {{ orden.total | format_price }}</p>
-      <p><strong>Fecha de Pago:</strong> {{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
+<div class="flex-1 p-6 overflow-y-auto">
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6 relative overflow-hidden">
+        <h1 class="text-2xl font-bold">Detalle de Compra</h1>
+        <p class="text-blue-100">Información completa del pedido</p>
     </div>
+    
+    <!-- Botón Volver -->
+    <a href="javascript:history.back()" class="flex items-center text-current hover:text-primary-dark font-medium">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Volver Atrás
+    </a>
 
-    <div class="detalle">
-      <h3>Cliente</h3>
-      <p><strong>Nombre:</strong> {{orden.user.first_name | title }} {{orden.user.last_name | title}}</p>
-      <p><strong>Dirección:</strong> {{profiledatos.address.calle | title}} {{ profiledatos.address.num_direccion }}, {{ profiledatos.address.comuna.name | title }}, {{ profiledatos.address.ciudad }}</p>
-      <p><strong>Teléfono:</strong> +56 {{profiledatos.phone_number}}</p>
-      <p><strong>Correo:</strong> {{orden.user.email}}</p>
-    </div>
-
-    <div class="detalle">
-      <h3>Productos</h3>
-      {% for item in orden.productos_orden.all %}
-      <div class="productos">
-        <div class="producto">
-            <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
-          <p><strong>Producto:</strong> {{ item.producto.name }}</p>
-          <p><strong>Cantidad:</strong> {{ item.quantity }}</p>
-          <p><strong>Precio:</strong> {{ item.producto.price | format_price}} c/u</p>
+    <!-- Información General -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mt-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            Información General
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">N° Orden:</label>
+                <p class="text-lg font-semibold text-gray-800">#{{ orden.num_orden }}</p>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">Estado:</label>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                    {{ orden.get_status_display }}
+                </span>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">Total:</label>
+                <p class="text-lg font-bold text-green-600">{{ orden.total | format_price }}</p>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">Fecha de Pago:</label>
+                <p class="text-lg font-semibold text-gray-800">{{ orden.fecha_pagada|date:"d/m/Y H:i" }}</p>
+            </div>
         </div>
-      </div>
-      {% endfor %}
     </div>
 
-    <a href="javascript:history.back()" class="btn-atras">← Volver Atrás</a>
-  </div>
+    <!-- Cliente -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mt-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+            </div>
+            Cliente
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">Nombre:</label>
+                <p class="text-lg font-semibold text-gray-800">{{orden.user.first_name | title }} {{orden.user.last_name | title}}</p>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">Dirección:</label>
+                <p class="text-lg text-gray-700">{{profiledatos.address.calle | title}} {{ profiledatos.address.num_direccion }}, {{ profiledatos.address.comuna.name | title }}, {{ profiledatos.address.ciudad }}</p>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">Teléfono:</label>
+                <p class="text-lg text-gray-700">+56 {{profiledatos.phone_number}}</p>
+            </div>
+            <div>
+                <label class="text-sm font-medium text-gray-500 block mb-1">Correo:</label>
+                <p class="text-lg text-gray-700">{{orden.user.email}}</p>
+            </div>
+        </div>
+    </div>
 
+    <!-- Productos -->
+    <div class="bg-white rounded-lg shadow-sm border p-6 mt-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4 flex items-center">
+            <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+            </div>
+            Productos
+        </h2>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-200">
+                        <th class="text-left py-3 px-4 font-medium text-gray-500">Producto</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-500">Cantidad</th>
+                        <th class="text-left py-3 px-4 font-medium text-gray-500">Precio Unitario</th>
+                        <th class="text-right py-3 px-4 font-medium text-gray-500">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in orden.productos_orden.all %}
+                    <tr class="border-b border-gray-100 hover:bg-gray-50">
+                        <td class="py-4 px-4">
+                            <div class="flex items-center">
+                                <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center mr-3">
+                                    <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" class="w-8 h-8 object-cover rounded-lg" />
+                                </div>
+                                <div>
+                                    <p class="font-semibold text-gray-800">{{ item.producto.name }}</p>
+                                    <p class="text-sm text-gray-500">{{ item.producto.sku }}</p>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                                {{ item.quantity }}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <p class="font-semibold text-gray-800">{{ item.producto.price | format_price}}</p>
+                            <p class="text-sm text-gray-500">c/u</p>
+                        </td>
+                        <td class="py-4 px-4 text-right">
+                            <p class="font-bold text-lg text-green-600">{{subtotal | format_price}}</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Total -->
+        <div class="mt-6 pt-4 border-t border-gray-200">
+            <div class="flex justify-between items-center">
+                <div class="text-lg font-medium text-gray-700">Total del Pedido:</div>
+                <div class="text-2xl font-bold text-green-600">{{ orden.total | format_price }}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.bg-white').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.transition = 'transform 0.2s ease-in-out';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+</script>
 
 {% endblock %}

@@ -3,8 +3,6 @@
 
 {% block content_admin %}
 
-
-
 <style>
     .sidebar-nav a {
         transition: all 0.2s ease;
@@ -47,10 +45,74 @@
 
     .action-button {
         transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        padding: 0.375rem 0.75rem;
+        margin: 0 0.25rem;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-decoration: none;
+        cursor: pointer;
+        border: none;
     }
 
     .action-button:hover {
-        transform: scale(1.1);
+        transform: scale(1.05);
+    }
+
+    .btn-primary {
+        background-color: #3b82f6;
+        color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #2563eb;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6b7280;
+        color: white;
+    }
+
+    .btn-secondary:hover {
+        background-color: #4b5563;
+        color: white;
+    }
+
+    .btn-danger {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background-color: #dc2626;
+        color: white;
+    }
+
+    .status-active {
+        background-color: #10b981;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-align: center;
+        display: inline-block;
+        min-width: 80px;
+    }
+
+    .status-inactive {
+        background-color: #ef4444;
+        color: white;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        text-align: center;
+        display: inline-block;
+        min-width: 80px;
     }
 
     .stock-indicator {
@@ -65,211 +127,206 @@
     .stock-medium { background-color: #f59e0b; }
     .stock-low { background-color: #ef4444; }
     .stock-out { background-color: #6b7280; }
+
+    .actions-container {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        flex-wrap: wrap;
+    }
 </style>
-</head>
-    <div class="flex-1 p-6 overflow-y-auto">
-        <!-- Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6">
-            <h1 class="text-2xl font-bold mb-2">Gestión de Productos</h1>
-            <p class="opacity-90">Administra y supervisa todo tu inventario de productos</p>
-            <p class="text-sm opacity-75 mt-2">Hoy es viernes, 13 de junio de 2025</p>
-        </div>
 
-        <!-- Stats Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-            <div class="bg-white rounded-lg p-6 shadow-sm border stat-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600 mb-1">Total Productos</p>
-                        <h3 class="text-2xl font-bold text-gray-900" id="total-products">{{total_productos}}</h3>
-                        <p class="text-sm text-green-600 mt-1">+12% desde el mes pasado</p>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                        </svg>
-                    </div>
+<div class="flex-1 p-6 overflow-y-auto">
+    <!-- titulo -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6">
+        <h1 class="text-2xl font-bold mb-2">Gestión de Productos</h1>
+        <p class="opacity-90">Administra y supervisa todo tu inventario de productos</p>
+        <p class="text-sm opacity-75 mt-2">Hoy es viernes, 13 de junio de 2025</p>
+    </div>
+
+    <!-- Cards resumen -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+        <div class="bg-white rounded-lg p-6 shadow-sm border stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Total Productos</p>
+                    <h3 class="text-2xl font-bold text-gray-900" id="total-products">{{total_productos}}</h3>
+                    <p class="text-sm text-green-600 mt-1">+12% desde el mes pasado</p>
                 </div>
-            </div>
-
-            <div class="bg-white rounded-lg p-6 shadow-sm border stat-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600 mb-1">Productos Activos</p>
-                        <h3 class="text-2xl font-bold text-gray-900" id="active-products">{{total_productos_activos|format_miles}}</h3>
-                        <p class="text-sm text-green-600 mt-1">+8% desde el mes pasado</p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white rounded-lg p-6 shadow-sm border stat-card">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-600 mb-1">Stock Bajo</p>
-                        <h3 class="text-2xl font-bold text-gray-900" id="low-stock">{{total_stock_bajo|format_miles}}</h3>
-                        <p class="text-sm text-red-600 mt-1">Requiere atención</p>
-                    </div>
-                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
-                        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                        </svg>
-                    </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
                 </div>
             </div>
         </div>
 
-        <!-- Filters and Search -->
-        <div class="bg-white rounded-lg p-6 shadow-sm border mb-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div class="relative">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                    <input
-                        type="text"
-                        id="search-sku"
-                        placeholder="Buscar por SKU..."
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    />
+        <div class="bg-white rounded-lg p-6 shadow-sm border stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Productos Activos</p>
+                    <h3 class="text-2xl font-bold text-gray-900" id="active-products">{{total_productos_activos|format_miles}}</h3>
+                    <p class="text-sm text-green-600 mt-1">+8% desde el mes pasado</p>
                 </div>
-                
-                <div class="relative">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                    </svg>
-                    <!-- <select
-                        id="filter-brand"
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-                    >
-                        <option value="todas">Todas las marcas</option>
-                        <option value="Apple">Apple</option>
-                        <option value="Samsung">Samsung</option>
-                        <option value="Sony">Sony</option>
-                        <option value="Nike">Nike</option>
-                        <option value="Adidas">Adidas</option>
-                    </select> -->
-                </div>
-
-                <div class="relative">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                    </svg>
-                    <!-- <select
-                        id="filter-category"
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-                    >
-                        <option value="todas">Todas las categorías</option>
-                        <option value="Electrónicos">Electrónicos</option>
-                        <option value="Ropa">Ropa</option>
-                        <option value="Deportes">Deportes</option>
-                        <option value="Hogar">Hogar</option>
-                    </select> -->
-                </div>
-
-                <div class="relative">
-                    <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <!-- <select
-                        id="filter-status"
-                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
-                    >
-                        <option value="todos">Todos los estados</option>
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                    </select> -->
                 </div>
-            </div>
-
-            <div class="mt-4 flex justify-between items-center">
-                <!-- <button 
-                    id="clear-filters"
-                    class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                    Limpiar Filtros
-                </button>
-                <button 
-                    id="add-product"
-                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2"
-                >
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    <span>Agregar Producto</span>
-                </button> -->
             </div>
         </div>
 
-        <!-- Products Table -->
-        <div class="bg-white rounded-lg shadow-sm border">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-gray-200 bg-gray-50">
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Marca</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
-                            <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="products-table-body" class="divide-y divide-gray-200">
-
-                        <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="flex items-center">
-                            <img class="product-image mr-3" src="${product.imagen}" alt="${product.nombre}">
-                            <div class="text-sm text-gray-900">${product.nombre}</div>
-                        </div>
-                    </td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{product.sku}}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                {% if product.main_image.url %}
-                                <img class="product-image mr-3" src="{{product.main_image.url}}" alt="{product.nombre}" width="50px" height="50px"></td>
-                                {% else %}
-                                <p>No hay imagen disponible</p>
-                                {% endif %}
-                                <div class="text-sm text-gray-900">${product.nombre}</div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{product.price | format_price }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{product.brand}}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{product.category}}</td>
-                        <td class="px-6 py-4 whitespace-nowrap">{{product.stock}}</td>
-                        <td>
-                            {% if product.status == 'ACTIVE' %} <p style="color: greenyellow; background-color: green; width: 30%;">{{product.get_status_display}}</p> 
-                            {% elif product.status == 'INACTIVE' %} <p style="color: red; background-color: rgb(100, 2, 2); width: 30%;">{{product.get_status_display}}</p> 
-                            {% endif %}
-                        </td>
-                        <td>
-                            <a class="btn btn-primary" href="{% url 'editar_product_admin' product.id %}">Modificar</a>
-                            &ndash;
-                            <a class="btn btn-danger" onclick="eliminarProducto({{product.id}})">Eliminar</a>
-                        </td>
-                        <td><a href="{% url 'detail_product_admin' product.id %}" class="btn btn-primary">Ir a producto</a></td>
-                    </tbody>
-                </table>
+        <div class="bg-white rounded-lg p-6 shadow-sm border stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Stock Bajo</p>
+                    <h3 class="text-2xl font-bold text-gray-900" id="low-stock">{{total_stock_bajo|format_miles}}</h3>
+                    <p class="text-sm text-red-600 mt-1">Requiere atención</p>
+                </div>
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                </div>
             </div>
-            
-            <div id="no-products" class="text-center py-12 hidden">
-                <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                </svg>
-                <p class="text-gray-500">No se encontraron productos que coincidan con los filtros.</p>
+        </div>
+        <div class="bg-white rounded-lg p-6 shadow-sm border stat-card">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Sin Stock</p>
+                    <h3 class="text-2xl font-bold text-gray-900" id="low-stock">{{total_sin_stock|format_miles}}</h3>
+                    <p class="text-sm text-red-600 mt-1">Requiere atención</p>
+                </div>
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.664-.833-2.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Filtros -->
+    <div class="bg-white rounded-lg p-6 shadow-sm border mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="col-span-1">
+                {% include 'gestion_productos/filtros/filtro_sku.html' %}
+            </div>
+            <div class="col-span-1">
+                {% include 'gestion_productos/filtros/filtro_marca.html' %}
+            </div>
+            <div class="col-span-1">
+                {% include 'gestion_productos/filtros/filtro_categoria.html' %}
+            </div>
+            <div class="col-span-1">
+                {% include 'gestion_productos/filtros/filtro_marca.html' %}
             </div>
         </div>
     </div>
 
-    <script>
-        function eliminarProducto(id){
+    <!-- Productos -->
+    <div class="bg-white rounded-lg shadow-sm border">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-200 bg-gray-50">
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">SKU</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Producto</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Precio</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Marca</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Categoría</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Stock</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="products-table-body" class="divide-y divide-gray-200">
+                    {% for product in products %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{product.sku}}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            {% if product.main_image.url %}
+                                <img class="product-image mr-3" src="{{product.main_image.url}}" alt="{{product.nombre}}">
+                            {% else %}
+                                <p>sin imagen</p>
+                            {% endif %}
+                            <div class="text-sm text-gray-900">{{product.name}}</div>
+                        </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm font-medium text-gray-900">{{product.price|format_price}}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{product.brand}}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="text-sm text-gray-900">{{product.category}}</div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center space-x-2">
+                                <!-- Indicador de stock -->
+                                <span id="stock-indicator-{{ product.id }}" class="w-2.5 h-2.5 rounded-full"></span>
+
+                                <!-- Valor del stock -->
+                                <div class="text-sm font-medium text-gray-900">{{ product.stock }}</div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            {% if product.status == 'ACTIVE' %}
+                                <span class="status-active">{{product.get_status_display}}</span>
+                            {% elif product.status == 'INACTIVE' %}
+                                <span class="status-inactive">{{product.get_status_display}}</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="actions-container">
+                                <!-- Botón Ver -->
+                                <a href="{% url 'detail_product_admin' product.id %}" class="action-button btn-primary">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    Ver
+                                </a>
+
+                                <!-- Botón Editar -->
+                                <a href="{% url 'editar_product_admin' product.id %}" class="action-button btn-secondary">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                    </svg>
+                                    Editar
+                                </a>
+
+                                <!-- Botón Eliminar -->
+                                <button class="action-button btn-danger" onclick="eliminarProducto({{product.id}})">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                    Eliminar
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="no-products" class="text-center py-12 hidden">
+            <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+            <p class="text-gray-500">No se encontraron productos que coincidan con los filtros.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    function eliminarProducto(id){
         const baseUrl = "{% url 'eliminar_product_admin' 0 %}".replace("0", id);
         Swal.fire({
             title: '¿Estás seguro?',
@@ -286,23 +343,48 @@
             }
         });
     }
-    
-        const statusColors = {
-            'Activo': 'text-green-600 bg-green-100',
-            'Inactivo': 'text-red-600 bg-red-100'
-        };
-        // Efectos hover para las tarjetas
-        document.querySelectorAll('.bg-white').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-2px)';
-                this.style.transition = 'transform 0.2s ease-in-out';
-            });
-            
-            card.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0)';
-            });
-        });
-       
-    </script>
-{% endblock %}
 
+    const statusColors = {
+        'Activo': 'text-green-600 bg-green-100',
+        'Inactivo': 'text-red-600 bg-red-100'
+    };
+
+    // Función para actualizar el indicador de stock con JavaScript y Tailwind
+    function updateStockIndicator(stock, productId) {
+        const indicator = document.getElementById('stock-indicator-' + productId);
+
+        // Limpiar las clases anteriores
+        indicator.classList.remove('bg-red-500', 'bg-yellow-500', 'bg-green-400', 'bg-green-600');
+
+        // Asignar color según el valor del stock
+        if (stock === 0) {
+            indicator.classList.add('bg-red-500');  // Sin stock: rojo
+        } else if (stock <= 5) {
+            indicator.classList.add('bg-yellow-500');  // Bajo stock: amarillo
+        } else if (stock <= 15) {
+            indicator.classList.add('bg-green-400');  // Stock medio: verde claro
+        } else {
+            indicator.classList.add('bg-green-600');  // Alto stock: verde oscuro
+        }
+    }
+
+    // Asegurarse de que la función se ejecute por cada producto
+    {% for product in products %}
+        updateStockIndicator({{ product.stock }}, {{ product.id }});
+    {% endfor %}
+
+
+    // Efectos hover para las tarjetas
+    document.querySelectorAll('.bg-white').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.transition = 'transform 0.2s ease-in-out';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+</script>
+
+{% endblock %}
