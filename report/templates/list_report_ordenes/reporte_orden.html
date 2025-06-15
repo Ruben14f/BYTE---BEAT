@@ -2,54 +2,150 @@
 
 {% load precios_tag %}
 {% block content_admin %}
-TOTAL ORDENES: {{ordens | length}}
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-            <a href="{% url 'descargar_ordenes' %}?descargar=true&searchEstadoreporte={{ queryestadoreport }}
-            {% if fecha_inicio %}
-                &fecha_inicio={{ fecha_inicio }}
-            {% endif %}
-            {% if fecha_fin %}
-                &fecha_fin={{ fecha_fin }}
-            {% endif %}" class="btn btn-primary">Descargar Reporte Excel</a>
-            </th>
-            <th></th>
-            <th></th>
-            <th>{% include 'list_report_ordenes/filtros/filtro_estado_report.html' %}</th>
-            <th>{% include 'list_report_ordenes/filtros/filtro_fecha_report.html' %}</th>
-        </tr>
-    </thead>
-    <thead>
-        <tr>
-            <th>Numero orden</th>
-            <th>Cliente</th>
-            <th>Valor pedido</th>
-            <th>Estado pedido</th>
-            <th>Fecha pedido</th>
+<div class="flex-1 p-6 overflow-y-auto">
+    <!-- Cabezera -->
+    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6 relative overflow-hidden">
+        <h1 class="text-2xl font-bold">Reporte de Pedidos</h1>
+        <p class="text-blue-100">Administra y supervisa todos los pedidos de tu negocio</p>
+        <p class="text-blue-200 text-sm mt-1">Hoy es {{dia_de_la_semana}}, {{fecha_formateada}}</p>
+    </div>
 
-        </tr>
-    </thead>
-    {% for ordenes in ordens %}
-        <tbody>
-            <tr>
-                <td>#{{ordenes.num_orden}}</td>
-                <td>{{ordenes.user.first_name | title}} {{ordenes.user.last_name | title}}</td>
-                <td>{{ordenes.total | format_price}}</td>
-                <td>{{ordenes.get_status_display}}</td>
-                {% if ordenes.status == 'CREATED' %}
-                    <td>{{ordenes.create_at |date:"d/m/Y"}}</td>
-                {% else %}
-                    <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
-                {% endif %}
-            </tr>
-        </tbody>
+    <!-- Cards de resumen -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Total Ordenes</p>
+                    <h3 class="text-2xl font-bold text-gray-900" id="total-orders">{{total_ordenes | format_miles}}</h3>
+                    <p class="text-sm text-green-600 mt-1">+15% desde el mes pasado</p>
+                </div>
+                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Ingresos Totales</p>
+                    <h3 class="text-2xl font-bold text-gray-900" id="total-revenue">{{total_ingresos | format_price}}</h3>
+                    <p class="text-sm text-green-600 mt-1">+26% desde el mes pasado</p>
+                </div>
+                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-sm border p-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600 mb-1">Pedidos Completados</p>
+                    <h3 class="text-2xl font-bold text-gray-900" id="completed-orders">{{total_completadas | format_miles}}</h3>
+                    <p class="text-sm text-green-600 mt-1">+8% desde el mes pasado</p>
+                </div>
+                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+<div class="bg-white rounded-lg p-6 shadow-sm border mb-6">
+    <div class="flex flex-col md:flex-row gap-4 items-center w-full">
+        <!-- Filtro por estado (ocupa el 1/3 del espacio) -->
+        <div class="w-full md:w-1/3">
+            {% include 'list_report_ordenes/filtros/filtro_estado_report.html' %}
+        </div>
+
+        <!-- Filtro de fechas (ocupa 1/3 del espacio) -->
+        <div class="flex gap-2 w-full md:w-1/3 justify-center items-center">
+             {% include 'list_report_ordenes/filtros/filtro_fecha_report.html' %}
+        </div>
+
+        <!-- Botón de descargar (ocupa el 1/3 del espacio) -->
+        <div class="w-full md:w-1/3 flex justify-center">
+            <a href="{% url 'descargar_ordenes_filtradas' %}?descargar=true
+            {% if fecha_inicio and fecha_fin %}
+                &fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}
+            {% else %}
+                &searchEstadoreporte={{ queryestadoreport|default:'' }}
+            {% endif %}" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out w-full md:w-auto text-center">
+                Descargar Reporte Excel
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+
+    <!-- Ordenes -->
+    <div class="bg-white rounded-lg shadow-sm border">
+        <div class="overflow-x-auto max-h-[500px]">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b border-gray-200 bg-gray-50">
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Número Orden</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Cliente</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Valor Pedido</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                {% for ordenes in ordens %}
+                    <tbody>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap" >#{{ordenes.num_orden}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ ordenes.user.first_name.split|first | title}}
+                                {{ ordenes.user.last_name.split|first | title}}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.total | format_price }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.get_status_display}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                            {% if ordenes.status == 'CREATED' %}
+                                <td>{{ordenes.create_at |date:"d/m/Y"}}</td>
+                            {% else %}
+                                <td>{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         
-    {% endfor %}
-</table>
+        <div id="no-orders" class="text-center py-12 hidden">
+            <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+            <p class="text-gray-500">No se encontraron pedidos que coincidan con los filtros.</p>
+        </div>
+    </div>
+</div>
 
-
-
-
+<script>
+    document.querySelectorAll('.bg-white').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.transition = 'transform 0.2s ease-in-out';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+</script>
 {% endblock %}

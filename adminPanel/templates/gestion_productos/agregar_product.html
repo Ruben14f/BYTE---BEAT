@@ -1,29 +1,378 @@
 {% extends 'base_admin.html' %}
+{% load precios_tag %}
 
+{% block title %}Agregar Producto - Byte & Beat{% endblock %}
 {% block content_admin %}
 
-<div style="background: lightblue;">
-    <div class="row">
-        <div class="col-12 col-md-6 offset-md-3">
-            <div class="card">
-                <h2>Nuevo producto</h2>
-                <hr>
-                <div class="card-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{productform}}
-                       
-                        <div class="d-flex justify-content-end mt-5">
-                            <a class="btn btn-secondary me-2" href="{% url 'list_product_admin' %}">Atras</a>
-                            &nbsp; <!--Espacio entre botones-->
-                            <input class="btn btn-primary" type="submit" value="Guardar"></input>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-shadow {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .input-focus:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
+    }
+    
+    .btn-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+    }
+    
+    .file-upload-area {
+        background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+        border: 2px dashed #cbd5e1;
+        transition: all 0.3s ease;
+    }
+    
+    .file-upload-area:hover {
+        border-color: #667eea;
+        background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+    }
+    
+    /* Override Django form classes with Tailwind styles */
+    .form-control, .form-select {
+        @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
+    }
+    
+    textarea.form-control {
+        resize: none;
+    }
+    
+    input[type="file"].form-control {
+        display: none;
+    }
+</style>
+
+<div class="flex-1 p-3 overflow-y-auto">
+    <div class="p-8">
+        <div class="max-w-4xl mx-auto">
+            <a href="{% url 'list_product_admin' %}" class="mb-6 inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors btn-hover px-4 py-2 rounded-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Atrás
+            </a>
+
+            <!-- Formulario -->
+            <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                <form method="POST" enctype="multipart/form-data" class="p-8" id="productForm">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Left Column -->
+                        <div class="space-y-6">
+                            <!-- SKU -->
+                            <div>
+                                <label for="{{ productform.sku.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productform.sku.label }}
+                                </label>
+                                {{ productform.sku }}
+                                {% if productform.sku.errors %}
+                                    <div class="error-message">
+                                        {{ productform.sku.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Nombre -->
+                            <div>
+                                <label for="{{ productform.name.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productform.name.label }}
+                                </label>
+                                {{ productform.name }}
+                                {% if productform.name.errors %}
+                                    <div class="error-message">
+                                        {{ productform.name.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Precio -->
+                            <div>
+                                <label for="{{ productform.price.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productform.price.label }}
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                                    <input type="number" name="price" value="{{ productform.price.value|floatformat:0 }}" 
+                                        class="form-control w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus">
+                                </div>
+                                {% if productform.price.errors %}
+                                    <div class="error-message">
+                                        {{ productform.price.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <!-- Marca -->
+                            <div>
+                                <label for="{{ productform.brand.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productform.brand.label }}
+                                </label>
+                                {{ productform.brand }}
+                                {% if productform.brand.errors %}
+                                    <div class="error-message">
+                                        {{ productform.brand.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Categoría -->
+                            <div>
+                                <label for="{{ productform.category.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productform.category.label }}
+                                </label>
+                                {{ productform.category }}
+                                {% if productform.category.errors %}
+                                    <div class="error-message">
+                                        {{ productform.category.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Cantidad -->
+                            <div>
+                                <label for="{{ productform.stock.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productform.stock.label | format_miles}}
+                                </label>
+                                {{ productform.stock | format_miles}}
+                                {% if productform.stock.errors %}
+                                    <div class="error-message">
+                                        {{ productform.stock.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Descripción -->
+                            <div>
+                                <label for="{{ productform.description.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productform.description.label }}
+                                </label>
+                                {{ productform.description }}
+                                {% if productform.description.errors %}
+                                    <div class="error-message">
+                                        {{ productform.description.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
 
-                    </form>
+                        <!-- Right Column -->
+                        <div class="space-y-6">
+                            <!-- Imagen Principal -->
+                            <div>
+                                <label for="{{ productform.main_image.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2 flex justify-center">
+                                    {{ productform.main_image.label }}
+                                </label>
 
+                                <div class="file-upload-area rounded-xl p-3 text-center cursor-pointer mt-3" onclick="document.getElementById('{{ productform.main_image.id_for_label }}').click()">
+                                    <div class="mb-4">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-semibold text-blue-600">Haz clic para cargar</span> o arrastra y suelta
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
+                                </div>
+                                {{ productform.main_image }}
+                                <div id="mainImagePreview" class="mt-3"></div>
+                                {% if productform.main_image.errors %}
+                                    <div class="error-message">
+                                        {{ productform.main_image.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Imagen Secundaria -->
+                            <div>
+                                <label for="{{ productform.secondary_image.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2 flex justify-center">
+                                    {{ productform.secondary_image.label }}
+                                </label>
+
+                                <div class="file-upload-area rounded-xl p-3 text-center cursor-pointer mt-3" onclick="document.getElementById('{{ productform.secondary_image.id_for_label }}').click()">
+                                    <div class="mb-4">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-semibold text-blue-600">Haz clic para cargar</span> o arrastra y suelta
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
+                                </div>
+                                {{ productform.secondary_image }}
+                                <div id="secondaryImagePreview" class="mt-3"></div>
+                                {% if productform.secondary_image.errors %}
+                                    <div class="error-message">
+                                        {{ productform.secondary_image.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-end">
+                                <a href="{% url 'list_product_admin' %}" 
+                                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all btn-hover font-medium text-center">
+                                    Cancelar
+                                </a>
+                                <button type="submit" 
+                                        class="px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all btn-hover font-medium shadow-lg">
+                                    Guardar Producto
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if it's a form for adding a product (not readonly for SKU)
+        const skuField = document.querySelector('input[name="sku"]');
+        if (skuField) {
+            // SKU is editable when adding a product
+            skuField.removeAttribute('readonly');
+            skuField.classList.remove('cursor-not-allowed');
+        }
+
+        // Add min=0 to price and stock fields
+        const priceField = document.querySelector('input[name="price"]');
+        const stockField = document.querySelector('input[name="stock"]');
+        
+        if (priceField) {
+            priceField.setAttribute('min', '0');
+            priceField.setAttribute('step', '0.01');
+        }
+        
+        if (stockField) {
+            stockField.setAttribute('min', '0');
+        }
+
+        // File upload preview functionality
+        function setupFilePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            
+            if (input && preview) {
+                input.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.innerHTML = `
+                                <img src="${e.target.result}" 
+                                    class="max-w-full max-h-48 object-contain rounded-lg border-2 border-gray-200">
+                            `;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+        }
+
+        // Setup file previews
+        setupFilePreview('{{ productform.main_image.id_for_label }}', 'mainImagePreview');
+        setupFilePreview('{{ productform.secondary_image.id_for_label }}', 'secondaryImagePreview');
+
+        // Drag and drop functionality
+        document.querySelectorAll('.file-upload-area').forEach(uploadArea => {
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#667eea';
+                uploadArea.style.background = 'linear-gradient(145deg, #eff6ff, #dbeafe)';
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.style.borderColor = '#cbd5e1';
+                uploadArea.style.background = 'linear-gradient(145deg, #f8fafc, #e2e8f0)';
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.style.borderColor = '#cbd5e1';
+                uploadArea.style.background = 'linear-gradient(145deg, #f8fafc, #e2e8f0)';
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const input = uploadArea.nextElementSibling;
+                    if (input && input.type === 'file') {
+                        input.files = files;
+                        input.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+        });
+
+        // Form validation
+        const form = document.getElementById('productForm');
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            
+            // Clear previous error styles
+            document.querySelectorAll('.field-error').forEach(el => {
+                el.classList.remove('field-error');
+            });
+
+            // Validate price
+            if (priceField && parseFloat(priceField.value) < 0) {
+                priceField.classList.add('field-error');
+                isValid = false;
+            }
+
+            // Validate stock
+            if (stockField && parseInt(stockField.value) < 0) {
+                stockField.classList.add('field-error');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+                alert('Por favor corrige los errores en el formulario. El precio y la cantidad no pueden ser negativos.');
+            }
+        });
+
+        // Real-time validation
+        if (priceField) {
+            priceField.addEventListener('input', function() {
+                if (parseFloat(this.value) < 0) {
+                    this.classList.add('field-error');
+                } else {
+                    this.classList.remove('field-error');
+                }
+            });
+        }
+
+        if (stockField) {
+            stockField.addEventListener('input', function() {
+                if (parseInt(this.value) < 0) {
+                    this.classList.add('field-error');
+                } else {
+                    this.classList.remove('field-error');
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}
+
+

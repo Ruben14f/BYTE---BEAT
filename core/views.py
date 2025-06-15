@@ -10,6 +10,7 @@ from django.db.models import Sum
 from products.models import Product
 from django.db.models.functions import TruncMonth
 from adminPanel.utils import ingresos_totales
+from adminPanel.utils import *
 
 
 def tests(request):
@@ -38,7 +39,7 @@ def index_admin(request):
 
 
     # Obtener el total de órdenes vendidas
-    ordenes_totales_vendido = Orden.objects.all().count()
+    ordenes_totales_vendido = total_ordenes()
 
     #Obtener productos activos
     productos_activos = Product.objects.all().count()
@@ -67,6 +68,7 @@ def ventas_mensuales():
         .annotate(mes=TruncMonth('fecha_pagada'))  
         .values('mes')
         .annotate(total_ventas=Sum('total'))  
-        .order_by('mes')  
+        .filter(status='DELIVERED')
+        .order_by('mes') 
     )
     return ventas

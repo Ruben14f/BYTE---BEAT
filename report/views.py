@@ -6,13 +6,29 @@ from django.contrib import messages
 from django.db.models import Q
 import pandas as pd
 from pandas import ExcelWriter
-
+from adminPanel.utils import *
+from django.utils.timezone import now, localtime
+from django.utils import formats
 
 # Create your views here.
 
 def orden_list_report(request):
     ordenes = Orden.objects.select_related('user').prefetch_related('productos_orden__producto').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
+
+    #Total de ordenes completadas
+    total_completadas = total_pedidos_completados()
+
+    #Total ordenes aun no completadas
+    total_ordenes_activas = total_ordenes()
+
+    #Total ingresos por ordenes
+    total_ingresos = ingresos_totales()
+
+    hora_actual = localtime(now()).date() 
+    dia_de_la_semana = formats.date_format(hora_actual, "l")
+
+    
     
     if 'descargar' in request.GET:
         return generar_reporte_excel(ordenes)
@@ -20,11 +36,28 @@ def orden_list_report(request):
     return render(request, 'list_report_ordenes/reporte_orden.html', {
         'ordens': ordenes,
         'statusorden': orden_status,
+        'total_ordenes' : total_ordenes_activas,
+        'total_ingresos' : total_ingresos,
+        'total_completadas' : total_completadas,
+        'fecha_formateada': hora_actual,
+        'dia_de_la_semana': dia_de_la_semana,
     })
 
 def orden_list_filter(request):
     ordenes = Orden.objects.select_related('user').prefetch_related('productos_orden__producto').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
+    #Total de ordenes completadas
+    total_completadas = total_pedidos_completados()
+
+    #Total ordenes aun no completadas
+    total_ordenes_activas = total_ordenes()
+
+    #Total ingresos por ordenes
+    total_ingresos = ingresos_totales()
+
+    hora_actual = localtime(now()).date() 
+    dia_de_la_semana = formats.date_format(hora_actual, "l")
+
     query_estado = request.GET.get('searchEstadoreporte')
     fecha_inicio = request.GET.get('fecha_inicio')
     fecha_fin = request.GET.get('fecha_fin')
@@ -87,6 +120,11 @@ def orden_list_filter(request):
         'queryestadoreport': query_estado,
         'fecha_inicio': fecha_inicio,
         'fecha_fin': fecha_fin,
+        'total_ordenes' : total_ordenes_activas,
+        'total_ingresos' : total_ingresos,
+        'total_completadas' : total_completadas,
+        'fecha_formateada': hora_actual,
+        'dia_de_la_semana': dia_de_la_semana,
     })
     
 def estado_report_filter(request, ordenes, query_estado):

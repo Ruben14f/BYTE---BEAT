@@ -31,8 +31,7 @@ class ProductForm(forms.ModelForm):
 
         widgets = {
             'sku': forms.TextInput(attrs={
-                'class': 'form-control w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed',
-                'readonly': True
+                'class': 'form-control w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-500',
             }),
             'name': forms.TextInput(attrs={
                 'class': 'form-control w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus',
@@ -41,7 +40,7 @@ class ProductForm(forms.ModelForm):
             'price': forms.NumberInput(attrs={
                 'class': 'form-control w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus',
                 'min': '0',
-                'step': '1'
+                'step': '1',  
             }),
             'brand': forms.Select(attrs={
                 'class': 'form-select w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus'
@@ -70,19 +69,15 @@ class ProductForm(forms.ModelForm):
         }
     
     def __init__(self, *args, **kwargs):
+        # Verifica si el objeto está siendo editado
+        edit_mode = kwargs.get('instance', None)
         super().__init__(*args, **kwargs)
         
-        # Hacer que el SKU sea readonly siempre
-        self.fields['sku'].widget.attrs['readonly'] = True
-        
-        # Validaciones adicionales
-        self.fields['price'].widget.attrs.update({
-            'min': '0',
-            'step': '0.01'
-        })
-        self.fields['stock'].widget.attrs.update({
-            'min': '0'
-        })
+        # Si es un formulario de edición, hacer el SKU no editable
+        if edit_mode:
+            self.fields['sku'].widget.attrs['readonly'] = True
+            self.fields['sku'].widget.attrs['class'] = 'form-control w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus'
+    
     
     def clean_price(self):
         price = self.cleaned_data.get('price')

@@ -19,3 +19,5 @@ urlpatterns = [
     path('update-status-orden/<int:id>', update_status_orden, name='actualizar_estado_orden'),
     
 ]
+
+    

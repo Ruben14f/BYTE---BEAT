@@ -50,7 +50,7 @@
         <div class="bg-white rounded-lg shadow-sm border p-6">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm text-gray-600 mb-1">Total Pedidos</p>
+                    <p class="text-sm text-gray-600 mb-1">Ventas hoy</p>
                     <h3 class="text-2xl font-bold text-gray-900" id="total-orders">{{total_ordenes | format_miles}}</h3>
                     <p class="text-sm text-green-600 mt-1">+15% desde el mes pasado</p>
                 </div>
@@ -119,7 +119,7 @@
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Valor Pedido</th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Estado</th>
                         <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Fecha</th>
-                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Productos</th>
+                        <th class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -133,8 +133,8 @@
                                     {{ ordenes.user.last_name.split|first | title}}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.total | format_price }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.get_status_display}}</td>
+                                <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
                                 <td class="px-6 py-4 whitespace-nowrap flex items-center gap-3">
                                     {% include 'gestion_pedidos/update_status.html' %}
                                     <a href="{% url 'detail_orden_admin' ordenes.id %}"

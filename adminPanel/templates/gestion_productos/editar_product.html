@@ -1,325 +1,272 @@
+{% extends 'base_admin.html' %}
 {% load precios_tag %}
 
 
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Producto - Byte & Beat</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .card-shadow {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-        
-        .input-focus:focus {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
-        }
-        
-        .btn-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
-        }
-        
-        .file-upload-area {
-            background: linear-gradient(145deg, #f8fafc, #e2e8f0);
-            border: 2px dashed #cbd5e1;
-            transition: all 0.3s ease;
-        }
-        
-        .file-upload-area:hover {
-            border-color: #667eea;
-            background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
-        }
-        
-        /* Override Django form classes with Tailwind styles */
-        .form-control, .form-select {
-            @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            transform: translateY(-1px);
-            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
-        }
-        
-        textarea.form-control {
-            resize: none;
-        }
-        
-        input[type="file"].form-control {
-            display: none;
-        }
-        
-        /* Readonly styles */
-        input[readonly] {
-            @apply bg-gray-50 text-gray-500 cursor-not-allowed;
-        }
-        
-        /* Error styles */
-        .field-error {
-            @apply border-red-500;
-        }
-        
-        .error-message {
-            @apply text-red-500 text-sm mt-1;
-        }
-    </style>
-</head>
-<body class="min-h-screen bg-gray-50">
-    <!-- Sidebar -->
-    <div class="fixed left-0 top-0 h-full w-64 bg-gray-800 text-white z-10">
-        <div class="p-6">
-            <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-sm font-bold">
-                    SG
-                </div>
-                <span class="text-lg font-semibold">Byte & Beat</span>
-            </div>
-        </div>
-        
-        <nav class="mt-8">
-            <ul class="space-y-2 px-4">
-                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
-                    <span>🏠</span>
-                    <span class="ml-3">Inicio</span>
-                </a></li>
-                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
-                    <span>📦</span>
-                    <span class="ml-3">Gestión de Pedidos</span>
-                </a></li>
-                <li><a href="#" class="flex items-center px-4 py-3 bg-gray-700 text-white rounded-lg">
-                    <span>🛍️</span>
-                    <span class="ml-3">Gestión de Productos</span>
-                </a></li>
-                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
-                    <span>📊</span>
-                    <span class="ml-3">Reportes de Ventas</span>
-                </a></li>
-                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
-                    <span>📈</span>
-                    <span class="ml-3">Dashboard</span>
-                </a></li>
-            </ul>
-        </nav>
-    </div>
+{% block title %}Editar Producto - Byte & Beat{% endblock %}
 
-    <!-- Main Content -->
-    <div class="ml-64 min-h-screen">
-        <!-- Header -->
-        <div class="gradient-bg p-8 text-white">
-            <h1 class="text-3xl font-bold">Modificar Producto</h1>
-            <p class="text-blue-100 mt-2">Edita la información del producto seleccionado</p>
-            <p class="text-blue-200 text-sm mt-1">Hoy es viernes, 13 de junio de 2025</p>
-        </div>
+{% block content_admin %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    .gradient-bg {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-shadow {
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+    
+    .input-focus:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
+    }
+    
+    .btn-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+    }
+    
+    .file-upload-area {
+        background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+        border: 2px dashed #cbd5e1;
+        transition: all 0.3s ease;
+    }
+    
+    .file-upload-area:hover {
+        border-color: #667eea;
+        background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+    }
+    
+    /* Override Django form classes with Tailwind styles */
+    .form-control, .form-select {
+        @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all;
+    }
+    
+    .form-control:focus, .form-select:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
+    }
+    
+    textarea.form-control {
+        resize: none;
+    }
+    
+    input[type="file"].form-control {
+        display: none;
+    }
+    
+</style>
 
-        <!-- Form Container -->
-        <div class="p-8">
-            <div class="max-w-4xl mx-auto">
-                <!-- Back Button -->
-                <a href="{% url 'list_product_admin' %}" class="mb-6 inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors btn-hover px-4 py-2 rounded-lg">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                    Atrás
-                </a>
+<div class="flex-1 p-3 overflow-y-auto">
+    <div class="p-8">
+        <div class="max-w-4xl mx-auto">
+            <a href="{% url 'list_product_admin' %}" class="mb-6 inline-flex items-center text-gray-600 hover:text-blue-600 transition-colors btn-hover px-4 py-2 rounded-lg">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+                Atrás
+            </a>
 
-                <!-- Form Card -->
-                <div class="bg-white rounded-2xl card-shadow overflow-hidden">
-                    <form method="post" enctype="multipart/form-data" class="p-8" id="productForm">
-                        {% csrf_token %}
-                        
-                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                            <!-- Left Column -->
-                            <div class="space-y-6">
-                                <!-- SKU -->
-                                <div>
-                                    <label for="{{ productForm.sku.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.sku.label }}
-                                    </label>
-                                    {{ productForm.sku }}
-                                    {% if productForm.sku.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.sku.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                    <p class="text-xs text-gray-500 mt-1">El SKU no puede ser modificado</p>
-                                </div>
-
-                                <!-- Nombre -->
-                                <div>
-                                    <label for="{{ productForm.name.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.name.label }}
-                                    </label>
-                                    {{ productForm.name }}
-                                    {% if productForm.name.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.name.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Precio -->
-                                <div>
-                                    <label for="{{ productForm.price.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.price.label }}
-                                    </label>
-                                    <div class="relative">
-                                        <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
-                                        
-                                        <!-- Campo editable de solo números con formato visual (sin decimales y con separadores de miles) -->
-                                        <input type="number" 
-                                            id="{{ productForm.price.id_for_label }}" 
-                                            name="{{ productForm.price.name }}" 
-                                            value="{{ productForm.price.value|format_miles }}" 
-                                            class="form-control w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus" 
-                                            oninput="formatPriceInput(this)" 
-                                            min="0"
-                                            step="1" />
+            <!-- Formulario -->
+            <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                <form method="POST" enctype="multipart/form-data" class="p-8" id="productForm">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Left Column -->
+                        <div class="space-y-6">
+                            <!-- SKU -->
+                            <div>
+                                <label for="{{ productForm.sku.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productForm.sku.label }}
+                                </label>
+                                {{ productForm.sku }}
+                                {% if productForm.sku.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.sku.errors.0 }}
                                     </div>
-                                    
-                                    {% if productForm.price.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.price.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Marca -->
-                                <div>
-                                    <label for="{{ productForm.brand.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.brand.label }}
-                                    </label>
-                                    {{ productForm.brand }}
-                                    {% if productForm.brand.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.brand.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Categoría -->
-                                <div>
-                                    <label for="{{ productForm.category.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.category.label }}
-                                    </label>
-                                    {{ productForm.category }}
-                                    {% if productForm.category.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.category.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Cantidad -->
-                                <div>
-                                    <label for="{{ productForm.stock.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.stock.label | format_miles}}
-                                    </label>
-                                    {{ productForm.stock | format_miles}}
-                                    {% if productForm.stock.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.stock.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
+                                {% endif %}
+                                <p class="text-xs text-gray-500 mt-1">El SKU no puede ser modificado</p>
                             </div>
 
-                            <!-- Right Column -->
-                            <div class="space-y-6">
-                                <!-- Descripción -->
-                                <div>
-                                    <label for="{{ productForm.description.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.description.label }}
-                                    </label>
-                                    {{ productForm.description }}
-                                    {% if productForm.description.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.description.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Imagen Principal -->
-                                <div>
-                                    <label for="{{ productForm.main_image.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.main_image.label }}
-                                    </label>
-                                    <div class="file-upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('{{ productForm.main_image.id_for_label }}').click()">
-                                        <div class="mb-4">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </div>
-                                        <p class="text-sm text-gray-600">
-                                            <span class="font-semibold text-blue-600">Haz clic para subir</span> o arrastra y suelta
-                                        </p>
-                                        <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
+                            <!-- Nombre -->
+                            <div>
+                                <label for="{{ productForm.name.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productForm.name.label }}
+                                </label>
+                                {{ productForm.name }}
+                                {% if productForm.name.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.name.errors.0 }}
                                     </div>
-                                    {{ productForm.main_image }}
-                                    <div id="mainImagePreview" class="mt-3"></div>
-                                    {% if productForm.main_image.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.main_image.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <!-- Imagen Secundaria -->
-                                <div>
-                                    <label for="{{ productForm.secondary_image.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
-                                        {{ productForm.secondary_image.label }}
-                                    </label>
-                                    <div class="file-upload-area rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('{{ productForm.secondary_image.id_for_label }}').click()">
-                                        <div class="mb-4">
-                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                            </svg>
-                                        </div>
-                                        <p class="text-sm text-gray-600">
-                                            <span class="font-semibold text-blue-600">Haz clic para subir</span> o arrastra y suelta
-                                        </p>
-                                        <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
-                                    </div>
-                                    {{ productForm.secondary_image }}
-                                    <div id="secondaryImagePreview" class="mt-3"></div>
-                                    {% if productForm.secondary_image.errors %}
-                                        <div class="error-message">
-                                            {{ productForm.secondary_image.errors.0 }}
-                                        </div>
-                                    {% endif %}
-                                </div>
+                                {% endif %}
                             </div>
+
+                            <!-- Precio -->
+                            <div>
+                                <label for="{{ productForm.price.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productForm.price.label }}
+                                </label>
+                                <div class="relative">
+                                    <!-- Contenedor para el símbolo $ y el campo de entrada -->
+                                    <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                                    <input type="number" name="price" value="{{ productForm.price.value|floatformat:0 }}" 
+                                        class="form-control w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus">
+                                </div>
+                                {% if productForm.price.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.price.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <!-- Marca -->
+                            <div>
+                                <label for="{{ productForm.brand.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productForm.brand.label }}
+                                </label>
+                                {{ productForm.brand }}
+                                {% if productForm.brand.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.brand.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Categoría -->
+                            <div>
+                                <label for="{{ productForm.category.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productForm.category.label }}
+                                </label>
+                                {{ productForm.category }}
+                                {% if productForm.category.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.category.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Cantidad -->
+                            <div>
+                                <label for="{{ productForm.stock.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productForm.stock.label | format_miles}}
+                                </label>
+                                {{ productForm.stock | format_miles}}
+                                {% if productForm.stock.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.stock.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div>
+                                <label for="{{ productForm.description.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2">
+                                    {{ productForm.description.label }}
+                                </label>
+                                {{ productForm.description }}
+                                {% if productForm.description.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.description.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
                         </div>
 
-                        <!-- Action Buttons -->
-                        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-end">
-                            <a href="{% url 'list_product_admin' %}" 
-                               class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all btn-hover font-medium text-center">
-                                Cancelar
-                            </a>
-                            <button type="submit" 
-                                    class="px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all btn-hover font-medium shadow-lg">
-                                Guardar Cambios
-                            </button>
-                        </div>
-                    </form>
+
+                        <!-- Right Column -->
+                        <div class="space-y-6">
+                            <!-- Imagen Principal -->
+                            <div>
+                                <label for="{{ productForm.main_image.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2 flex justify-center">
+                                    {{ productForm.main_image.label }}
+                                </label>
+
+                                <!-- Mostrar imagen actual si existe -->
+                                {% if producto.main_image %}
+                                    <div class="mt-3 flex justify-center">
+
+                                        <img src="{{ producto.main_image.url }}" alt="Imagen principal actual" class="max-w-full max-h-32 object-contain rounded-lg border-2 border-gray-200">
+                                    </div>
+                                {% else %}
+                                    <p class="text-sm text-gray-500 mt-2">No hay imagen cargada</p>
+                                {% endif %}
+
+                                <div class="file-upload-area rounded-xl p-3 text-center cursor-pointer mt-3" onclick="document.getElementById('{{ productForm.main_image.id_for_label }}').click()">
+                                    <div class="mb-4">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-semibold text-blue-600">Haz clic para modificar</span> o arrastra y suelta
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
+                                </div>
+                                {{ productForm.main_image }}
+                                <div id="mainImagePreview" class="mt-3"></div>
+                                {% if productForm.main_image.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.main_image.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Imagen Secundaria -->
+                            <div>
+                                <label for="{{ productForm.secondary_image.id_for_label }}" class="block text-sm font-semibold text-gray-700 mb-2 flex justify-center">
+                                    {{ productForm.secondary_image.label }}
+                                </label>
+
+                                <!-- Mostrar imagen secundaria actual si existe -->
+                                {% if producto.secondary_image %}
+                                    <div class="mt-3 flex justify-center">
+        
+                                        <img src="{{ producto.secondary_image.url }}" alt="Imagen secundaria actual" class="max-w-full max-h-32 object-contain rounded-lg border-2 border-gray-200">
+                                    </div>
+                                {% else %}
+                                    <p class="text-sm text-gray-500 mt-2">No hay imagen secundaria cargada</p>
+                                {% endif %}
+
+                                <div class="file-upload-area rounded-xl p-3 text-center cursor-pointer mt-3" onclick="document.getElementById('{{ productForm.secondary_image.id_for_label }}').click()">
+                                    <div class="mb-4">
+                                        <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                            <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                        </svg>
+                                    </div>
+                                    <p class="text-sm text-gray-600">
+                                        <span class="font-semibold text-blue-600">Haz clic para modificar</span> o arrastra y suelta
+                                    </p>
+                                    <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
+                                </div>
+                                {{ productForm.secondary_image }}
+                                <div id="secondaryImagePreview" class="mt-3"></div>
+                                {% if productForm.secondary_image.errors %}
+                                    <div class="error-message">
+                                        {{ productForm.secondary_image.errors.0 }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-end">
+                                <a href="{% url 'list_product_admin' %}" 
+                                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all btn-hover font-medium text-center">
+                                    Cancelar
+                                </a>
+                                <button type="submit" 
+                                        class="px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all btn-hover font-medium shadow-lg">
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Make SKU field readonly
@@ -446,5 +393,4 @@
             }
         });
     </script>
-</body>
-</html>
+{% endblock %}

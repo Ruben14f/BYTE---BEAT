@@ -67,7 +67,8 @@ class OrdenProducto(models.Model):
             Product.objects
             .annotate(total_vendido=Sum('ordenproducto__quantity'),
                       total_vendido_precio=Sum(F('ordenproducto__quantity') * F('price')))
-            .filter(total_vendido__gt=0)
+            .filter(total_vendido__gt=0,
+                    ordenproducto__orden__status='DELIVERED')
             .order_by('-total_vendido')[:limite]
         )
     

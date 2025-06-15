@@ -72,20 +72,23 @@ def agregar_producto(request):
 
 def modificar_producto(request, id):
     producto = get_object_or_404(Product, id=id)
-
     form = ProductForm(instance=producto)
 
     if request.method == 'POST':
         formulario = ProductForm(data=request.POST, instance=producto, files=request.FILES)
+        
         if formulario.is_valid():
-            formulario.save()
-            messages.success(request, 'Producto editado correctamente')
-            return redirect('list_product_admin')
-        formulario
+            if formulario.has_changed():  
+                formulario.save()
+                messages.success(request, 'Producto editado correctamente')
+                return redirect('list_product_admin')
+            else:
+                messages.info(request, 'No se han realizado cambios en el producto.')
+                return redirect('editar_product_admin', id=id) 
 
-
-    return render(request, 'gestion_productos/editar_product.html',{
-        'productForm' : form
+    return render(request, 'gestion_productos/editar_product.html', {
+        'productForm': form,
+        'producto': producto
     })
 
 def eliminar_producto(request, id):
@@ -217,7 +220,7 @@ def listado_ordenes(request):
     }
     
     #Total de pedidos
-    total_ordenes = total_pedidos_ingresados()
+    total_ordenes_hoy = total_pedidos_hoy()
 
     #Total de ordenes completadas
     total_completadas = total_pedidos_completados()
@@ -230,7 +233,7 @@ def listado_ordenes(request):
         'ordens' : ordenes,
         'statusorden' : orden_status,
         'resumen_estados' : resumen_estados,
-        'total_ordenes' : total_ordenes,
+        'total_ordenes' : total_ordenes_hoy,
         'total_completadas' : total_completadas,
         'total_ingresos' : total_ingresos
     })

@@ -1,11 +1,14 @@
 from orden.models import Orden
 from products.models import Product
 from django.db.models import Sum
+from django.utils import timezone
 
 
 #Ordenes completadas y entregadas
-def total_pedidos_ingresados():
-    ordenes_totales = Orden.objects.exclude(status='CREATED').count()
+def total_pedidos_hoy():
+    hoy = timezone.localtime(timezone.now()).date() 
+    print(hoy)
+    ordenes_totales = Orden.objects.exclude(status='CREATED').filter(fecha_pagada__date=hoy).count() 
     print(ordenes_totales)
     return ordenes_totales
 
@@ -20,6 +23,9 @@ def ingresos_totales():
     total_precio_ordenes = total_precio_ordenes if total_precio_ordenes else 0
     return total_precio_ordenes
 
+def total_ordenes():
+    ordenes_totales = Orden.objects.exclude(status='CREATED').count()
+    return ordenes_totales
 
 """
 Funciones:

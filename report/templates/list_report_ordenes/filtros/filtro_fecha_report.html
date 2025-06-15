@@ -1,14 +1,30 @@
-<form action="{% url 'orden_list_filter' %}" method="GET">
-    <label for="fecha_inicio">Desde:</label>
-    <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}">
+<form action="{% url 'orden_list_filter' %}" method="GET" class="flex flex-col md:flex-row gap-4 items-center w-full">
+    <!-- Filtro por fecha de inicio -->
+    <div class="flex flex-col md:flex-row gap-2 items-center w-full md:w-1/3 mr-4">
+        <label for="fecha_inicio" class="text-sm font-semibold">Desde:</label>
+        <input type="date" name="fecha_inicio" id="fecha_inicio" value="{{ fecha_inicio }}" class="border border-gray-300 rounded-lg p-2 w-full md:w-auto">
+    </div>
 
-    <label for="fecha_fin">Hasta:</label>
-    <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}">
+    <!-- Filtro por fecha de fin -->
+    <div class="flex flex-col md:flex-row gap-2 items-center w-full md:w-1/3">
+        <label for="fecha_fin" class="text-sm font-semibold">Hasta:</label>
+        <input type="date" name="fecha_fin" id="fecha_fin" value="{{ fecha_fin }}" class="border border-gray-300 rounded-lg p-2 w-full md:w-auto">
+    </div>
 
-    <button type="submit" id="submitform">Filtrar</button>
+    <!-- Botón Filtrar -->
+    <div class="w-full md:w-1/3 flex justify-center md:justify-start mt-4 md:mt-0">
+        <button type="submit" id="submitform" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out w-full md:w-auto">
+            Filtrar
+        </button>
+    </div>
 
-     {% if fecha_inicio or fecha_fin %}
-        <button type="submit" name="borrarFiltro" value="true" id="borrarfiltro">Borrar filtro</button>
+    <!-- Botón Borrar filtro -->
+    {% if fecha_inicio or fecha_fin %}
+        <div class="w-full md:w-1/3 flex justify-center md:justify-start mt-4 md:mt-0">
+            <button type="submit" name="borrarFiltro" value="true" id="borrarfiltro" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out w-full md:w-auto">
+                Borrar filtro
+            </button>
+        </div>
     {% endif %}
 </form>
 
@@ -24,7 +40,6 @@
             fechafin.value = '';
         });
     }
-
 
     function compararFechas() {
         const fecha1 = fechainicio.value;
