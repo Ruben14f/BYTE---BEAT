@@ -3,197 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalle de Producto - Gestión de Productos</title>
+    <title>Editar Producto - Byte & Beat</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
         .gradient-bg {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .input-focus:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 25px -5px rgba(102, 126, 234, 0.25);
+        }
+        
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+        }
+        
+        .file-upload {
+            background: linear-gradient(145deg, #f8fafc, #e2e8f0);
+            border: 2px dashed #cbd5e1;
+            transition: all 0.3s ease;
+        }
+        
+        .file-upload:hover {
+            border-color: #667eea;
+            background: linear-gradient(145deg, #f1f5f9, #e2e8f0);
+        }
+        
+        .file-upload.dragover {
+            border-color: #667eea;
+            background: linear-gradient(145deg, #eff6ff, #dbeafe);
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="max-w-7xl mx-auto p-4 md:p-6">
+<body class="min-h-screen bg-gray-50">
+    <!-- Sidebar -->
+    <div class="fixed left-0 top-0 h-full w-64 bg-gray-800 text-white z-10">
+        <div class="p-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-sm font-bold">
+                    SG
+                </div>
+                <span class="text-lg font-semibold">Byte & Beat</span>
+            </div>
+        </div>
+        
+        <nav class="mt-8">
+            <ul class="space-y-2 px-4">
+                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+                    <span>🏠</span>
+                    <span class="ml-3">Inicio</span>
+                </a></li>
+                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+                    <span>📦</span>
+                    <span class="ml-3">Gestión de Pedidos</span>
+                </a></li>
+                <li><a href="#" class="flex items-center px-4 py-3 bg-gray-700 text-white rounded-lg">
+                    <span>🛍️</span>
+                    <span class="ml-3">Gestión de Productos</span>
+                </a></li>
+                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+                    <span>📊</span>
+                    <span class="ml-3">Reportes de Ventas</span>
+                </a></li>
+                <li><a href="#" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors">
+                    <span>📈</span>
+                    <span class="ml-3">Dashboard</span>
+                </a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="ml-64 min-h-screen">
         <!-- Header -->
-        <div class="gradient-bg rounded-2xl p-6 mb-6 text-white">
-            <h1 class="text-2xl md:text-3xl font-bold mb-2">Gestión de Productos</h1>
-            <p class="text-white/90 mb-3">Administra y supervisa todo tu inventario de productos</p>
-            <p class="text-white/80 text-sm">Hoy es viernes, 13 de junio de 2025</p>
+        <div class="gradient-bg p-8 text-white">
+            <h1 class="text-3xl font-bold">Modificar Producto</h1>
+            <p class="text-blue-100 mt-2">Edita la información del producto seleccionado</p>
+            <p class="text-blue-200 text-sm mt-1">Hoy es viernes, 13 de junio de 2025</p>
         </div>
 
-        <!-- Back Button -->
-        <a href="javascript:history.back()" class="flex items-center text-current hover:text-primary-dark font-medium">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-            Volver Atrás
-        </a>
+        <!-- Form Container -->
+        <div class="p-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Back Button -->
+                <button onclick="goBack()" class="mb-6 flex items-center text-gray-600 hover:text-blue-600 transition-colors btn-hover px-4 py-2 rounded-lg">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Atrás
+                </button>
 
-        <!-- Product Detail Card -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100">
-            <div class="p-6 md:p-8">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <!-- Product Image -->
-                    <div class="lg:col-span-1">
-                        <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center;">
-                            {% if product.main_image.url %}
-                            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" width="100" height="100" style="object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
-                            {% else %}
-                            <div style="width: 100px; height: 100px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px; border: 1px solid #ddd; color: #999; font-size: 14px;">
-                                Sin imagen
-                            </div>
-                            {% endif %}
+                <!-- Form Card -->
+                <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+                    <form id="editProductForm" class="p-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Left Column -->
+                            <div class="space-y-6">
+                                <!-- SKU (Read-only) -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">SKU</label>
+                                    <input type="text" value="213123" readonly 
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 text-gray-500 cursor-not-allowed">
+                                    <p class="text-xs text-gray-500 mt-1">El SKU no puede ser modificado</p>
+                                </div>
 
-                            {% if product.secondary_image.url %}
-                            <img src="{{ product.secondary_image.url }}" alt="{{ product.name }}" width="100" height="100" style="object-fit: cover; border-radius: 8px; border: 1px solid #ddd;">
-                            {% endif %}
-                        </div>
-                    </div>
+                                <!-- Nombre -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre del Producto</label>
+                                    <input type="text" value="Producto Ejemplo" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus">
+                                </div>
 
-                    <!-- Product Information -->
-                    <div class="lg:col-span-2 space-y-6">
-                        <!-- Title and SKU -->
-                        <div>
-                            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{{ product.name }}</h2>
-                            <p class="text-gray-600 font-medium">SKU: {{ product.sku }}</p>
-                        </div>
+                                <!-- Precio -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Precio</label>
+                                    <div class="relative">
+                                        <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">$</span>
+                                        <input type="number" value="213.213" step="0.01" min="0" required
+                                               class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus">
+                                    </div>
+                                </div>
 
-                        <!-- Info Grid -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Estado -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Estado:</label>
-                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                                    {{ product.get_status_display }}
-                                </span>
-                            </div>
+                                <!-- Marca -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Marca</label>
+                                    <select class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus">
+                                        <option value="marca1" selected>marca1</option>
+                                        <option value="marca2">marca2</option>
+                                        <option value="marca3">marca3</option>
+                                    </select>
+                                </div>
 
-                            <!-- Precio -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Precio:</label>
-                                <p class="text-2xl font-bold text-green-600">{{ product.price | format_price }}</p>
-                            </div>
+                                <!-- Categoría -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Categoría</label>
+                                    <select class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus">
+                                        <option value="categoria1" selected>categoria1</option>
+                                        <option value="categoria2">categoria2</option>
+                                        <option value="categoria3">categoria3</option>
+                                    </select>
+                                </div>
 
-                            <!-- Nombre -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre:</label>
-                                <p class="text-gray-900 font-medium">{{ product.name }}</p>
-                            </div>
-
-                            <!-- Stock -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Stock:</label>
-                                <div class="flex items-center">
-                                    <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                                    <span class="text-gray-900 font-semibold">{{ product.stock }}</span>
+                                <!-- Cantidad -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Cantidad en Stock</label>
+                                    <input type="number" value="100" min="0" required
+                                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus">
                                 </div>
                             </div>
 
-                            <!-- Categoría -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Categoría:</label>
-                                <p class="text-gray-900">{{ product.category }}</p>
-                            </div>
+                            <!-- Right Column -->
+                            <div class="space-y-6">
+                                <!-- Descripción -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción</label>
+                                    <textarea rows="4" placeholder="Describe las características del producto..."
+                                              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all input-focus resize-none">Descripción del producto ejemplo con todas sus características principales y beneficios.</textarea>
+                                </div>
 
-                            <!-- Marca -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-700 mb-2">Marca:</label>
-                                <p class="text-gray-900">{{ product.brand }}</p>
+                                <!-- Imagen Principal -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Imagen Principal</label>
+                                    <div class="file-upload rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('mainImage').click()">
+                                        <div class="mb-4">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm text-gray-600">
+                                            <span class="font-semibold text-blue-600">Haz clic para subir</span> o arrastra y suelta
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
+                                        <input id="mainImage" type="file" class="hidden" accept="image/*" onchange="handleFileUpload(this, 'mainPreview')">
+                                    </div>
+                                    <div id="mainPreview" class="mt-3 hidden">
+                                        <img class="w-full h-32 object-cover rounded-lg border-2 border-gray-200">
+                                    </div>
+                                </div>
+
+                                <!-- Imagen Secundaria -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-700 mb-2">Imagen Secundaria</label>
+                                    <div class="file-upload rounded-xl p-6 text-center cursor-pointer" onclick="document.getElementById('secondaryImage').click()">
+                                        <div class="mb-4">
+                                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                            </svg>
+                                        </div>
+                                        <p class="text-sm text-gray-600">
+                                            <span class="font-semibold text-blue-600">Haz clic para subir</span> o arrastra y suelta
+                                        </p>
+                                        <p class="text-xs text-gray-500 mt-1">PNG, JPG, JPEG hasta 10MB</p>
+                                        <input id="secondaryImage" type="file" class="hidden" accept="image/*" onchange="handleFileUpload(this, 'secondaryPreview')">
+                                    </div>
+                                    <div id="secondaryPreview" class="mt-3 hidden">
+                                        <img class="w-full h-32 object-cover rounded-lg border-2 border-gray-200">
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Descripción -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción:</label>
-                            <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                                <p class="text-gray-700">{{ product.description }}</p>
-                            </div>
+                        <!-- Action Buttons -->
+                        <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-end">
+                            <button type="button" onclick="goBack()" 
+                                    class="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-all btn-hover font-medium">
+                                Cancelar
+                            </button>
+                            <button type="submit" 
+                                    class="px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all btn-hover font-medium shadow-lg">
+                                Guardar Cambios
+                            </button>
                         </div>
-
-                        <!-- Fecha de creación -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha de creación:</label>
-                            <p class="text-gray-600 font-mono text-sm">{{ product.created_at|date:"d/m/Y H:i" }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Action Buttons (similar to original design) -->
-            <div class="border-t border-gray-100 px-6 md:px-8 py-4">
-                <div class="flex flex-wrap gap-3">
-                    <button class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                        </svg>
-                        Ver
-                    </button>
-                    <button class="flex items-center gap-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                        </svg>
-                        Editar
-                    </button>
-                    <button class="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                        </svg>
-                        Eliminar
-                    </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Función para cambiar la imagen principal
-        function changeMainImage(newImageSrc) {
-            const mainImage = document.getElementById('mainImage');
-            mainImage.src = newImageSrc;
-            
-            // Añadir efecto de transición suave
-            mainImage.style.opacity = '0.7';
-            setTimeout(() => {
-                mainImage.style.opacity = '1';
-            }, 150);
-        }
-
         function goBack() {
-            window.history.back();
+            alert('Regresando a la gestión de productos...');
         }
 
-        // Función para cargar datos dinámicos del producto
-        function loadProductData(productId) {
-            console.log('Cargando datos del producto:', productId);
-        }
-
-        // Función para actualizar la imagen del producto
-        function updateProductImage(imageUrl) {
-            const imageContainer = document.querySelector('.aspect-square');
-            if (imageUrl) {
-                imageContainer.innerHTML = `<img src="${imageUrl}" alt="Imagen del producto" class="w-full h-full object-cover rounded-xl">`;
+        function handleFileUpload(input, previewId) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById(previewId);
+                    const img = preview.querySelector('img');
+                    img.src = e.target.result;
+                    preview.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // Funciones para los botones de acción
-        function viewProduct() {
-            console.log('Ver producto');
-        }
+        // Drag and drop functionality
+        document.querySelectorAll('.file-upload').forEach(upload => {
+            upload.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                upload.classList.add('dragover');
+            });
 
-        function editProduct() {
-            console.log('Editar producto');
-        }
+            upload.addEventListener('dragleave', () => {
+                upload.classList.remove('dragover');
+            });
 
-        function deleteProduct() {
-            if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
-                console.log('Eliminar producto');
+            upload.addEventListener('drop', (e) => {
+                e.preventDefault();
+                upload.classList.remove('dragover');
+                
+                const files = e.dataTransfer.files;
+                if (files.length > 0) {
+                    const input = upload.querySelector('input[type="file"]');
+                    input.files = files;
+                    
+                    const previewId = input.id === 'mainImage' ? 'mainPreview' : 'secondaryPreview';
+                    handleFileUpload(input, previewId);
+                }
+            });
+        });
+
+        // Form submission
+        document.getElementById('editProductForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate price and quantity
+            const price = parseFloat(document.querySelector('input[type="number"][step="0.01"]').value);
+            const quantity = parseInt(document.querySelector('input[type="number"][min="0"]:not([step])').value);
+            
+            if (price < 0) {
+                alert('El precio no puede ser menor a 0');
+                return;
             }
-        }
+            
+            if (quantity < 0) {
+                alert('La cantidad no puede ser menor a 0');
+                return;
+            }
+            
+            // Simulate form processing
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Guardando...';
+            submitBtn.classList.add('opacity-75');
+            
+            setTimeout(() => {
+                alert('¡Producto actualizado exitosamente!');
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                submitBtn.classList.remove('opacity-75');
+            }, 2000);
+        });
 
-        document.addEventListener('DOMContentLoaded', function() {
-            // Aquí podrías obtener el ID del producto de la URL y cargar sus datos
-            // loadProductData(getProductIdFromUrl());
+        // Add real-time validation for price and quantity
+        document.querySelector('input[type="number"][step="0.01"]').addEventListener('input', function() {
+            const value = parseFloat(this.value);
+            if (value < 0) {
+                this.setCustomValidity('El precio no puede ser menor a 0');
+                this.classList.add('border-red-500');
+                this.classList.remove('border-gray-300');
+            } else {
+                this.setCustomValidity('');
+                this.classList.remove('border-red-500');
+                this.classList.add('border-gray-300');
+            }
+        });
+
+        document.querySelector('input[type="number"][min="0"]:not([step])').addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (value < 0) {
+                this.setCustomValidity('La cantidad no puede ser menor a 0');
+                this.classList.add('border-red-500');
+                this.classList.remove('border-gray-300');
+            } else {
+                this.setCustomValidity('');
+                this.classList.remove('border-red-500');
+                this.classList.add('border-gray-300');
+            }
+        });
+
+        // Add some interactivity to inputs
+        document.querySelectorAll('input, select, textarea').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('ring-2', 'ring-blue-200');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('ring-2', 'ring-blue-200');
+            });
         });
     </script>
 </body>

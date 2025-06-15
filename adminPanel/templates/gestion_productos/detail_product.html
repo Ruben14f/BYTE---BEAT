@@ -2,109 +2,112 @@
 {% load precios_tag %}
 {% block content_admin %}
 <div class="flex-1 p-6 overflow-y-auto">
-    <!-- Header -->
-    <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6 relative overflow-hidden">
-        <h1 class="text-2xl font-bold">Detalle de Producto</h1>
-        <p class="text-blue-100">Información completa del producto</p>
-    </div>
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6 relative overflow-hidden">
+      <h1 class="text-2xl font-bold">Detalle de Producto</h1>
+      <p class="text-blue-100">Información completa del producto</p>
+  </div>
 
-    <!-- Back Button -->
-    <a href="javascript:history.back()" class="flex items-center text-current hover:text-primary-dark font-medium">
-        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        Volver Atrás
-    </a>
+  <!-- Boton para volver -->
+  <a href="javascript:history.back()" class="flex items-center text-current hover:text-primary-dark font-medium">
+    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+    </svg>
+    Volver Atrás
+  </a>
 
-    <!-- Product Detail Card -->
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mt-6">
-        <div class="p-6 md:p-8">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Product Image -->
-   <div class="lg:col-span-1">
-        <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
-            <!-- Imagen Principal -->
+  <!-- Detalle de producto -->
+  <div class="bg-white rounded-2xl shadow-sm border border-gray-100 mt-6">
+    <div class="p-6 md:p-8">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="lg:col-span-1">
+          <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
             <div style="width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd; overflow: hidden;">
-                <img id="main-image" src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; object-fit: cover; border-radius: 8px; cursor: pointer; transition: opacity 0.5s ease;">
+              {% if product.secondary_image.url %}  
+              <img id="main-image" src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; object-fit: cover; border-radius: 8px; cursor: pointer; transition: opacity 0.5s ease;">
+              {% else %}
+                <p>Sin imagen</p>
+              {% endif %}
             </div>
 
-            <!-- Imagen Secundaria -->
             {% if product.secondary_image.url %}
             <img id="secondary-image" src="{{ product.secondary_image.url }}" alt="{{ product.name }}" class="secondary-image" width="100" height="100" style="object-fit: cover; border-radius: 8px; border: 1px solid #ddd; cursor: pointer; transition: transform 0.3s ease; border: 2px solid transparent;" onclick="switchImages()">
+            {% else %}
+            <p>Sin imagen</p>
             {% endif %}
+          </div>
         </div>
-    </div>
-                <!-- Product Information -->
-                <div class="lg:col-span-2 space-y-6">
-                    <!-- Title and SKU -->
-                    <div>
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{{ product.name }}</h2>
-                        <p class="text-gray-600 font-medium">SKU: {{ product.sku }}</p>
-                    </div>
+        <!-- Informacion producto -->
+        <div class="lg:col-span-2 space-y-6">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{{ product.name }}</h2>
+                <p class="text-gray-600 font-medium">SKU: {{ product.sku }}</p>
+            </div>
 
-                    <!-- Info Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Estado -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Estado:</label>
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                                {{ product.get_status_display }}
-                            </span>
-                        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Estado:</label>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        {% if product.status == 'ACTIVE' %}
+                                <span class="status-active">{{product.get_status_display}}</span>
+                            {% elif product.status == 'INACTIVE' %}
+                                <span class="status-inactive">{{product.get_status_display}}</span>
+                            {% endif %}
+                    </span>
+                </div>
 
-                        <!-- Precio -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Precio:</label>
-                            <p class="text-2xl font-bold text-green-600">{{ product.price | format_price }}</p>
-                        </div>
+                <!-- Precio -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Precio:</label>
+                    <p class="text-2xl font-bold text-green-600">{{ product.price | format_price }}</p>
+                </div>
 
-                        <!-- Nombre -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre:</label>
-                            <p class="text-gray-900 font-medium">{{ product.name }}</p>
-                        </div>
+                <!-- Nombre -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre:</label>
+                    <p class="text-gray-900 font-medium">{{ product.name }}</p>
+                </div>
 
-                        <!-- Stock -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Stock:</label>
-                            <div class="flex items-center">
-                                <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                                <span class="text-gray-900 font-semibold">{{ product.stock }}</span>
-                            </div>
-                        </div>
-
-                        <!-- Categoría -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Categoría:</label>
-                            <p class="text-gray-900">{{ product.category }}</p>
-                        </div>
-
-                        <!-- Marca -->
-                        <div>
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Marca:</label>
-                            <p class="text-gray-900">{{ product.brand }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Descripción -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción:</label>
-                        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
-                            <p class="text-gray-700">{{ product.description }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Fecha de creación -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha de creación:</label>
-                        <p class="text-gray-600 font-mono text-sm">{{ product.created_at|date:"d/m/Y H:i" }}</p>
+                <!-- Stock -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Stock:</label>
+                    <div class="flex items-center">
+                        <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
+                        <span class="text-gray-900 font-semibold">{{ product.stock }}</span>
                     </div>
                 </div>
-            </div>
-        </div>
 
+                <!-- Categoría -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Categoría:</label>
+                    <p class="text-gray-900">{{ product.category }}</p>
+                </div>
+
+                <!-- Marca -->
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Marca:</label>
+                    <p class="text-gray-900">{{ product.brand }}</p>
+                </div>
+            </div>
+
+            <!-- Descripción -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción:</label>
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <p class="text-gray-700">{{ product.description }}</p>
+                </div>
+            </div>
+
+            <!-- Fecha de creación -->
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Fecha de creación:</label>
+                <p class="text-gray-600 font-mono text-sm">{{ product.created_at|date:"d/m/Y H:i" }}</p>
+            </div>
+          </div>
+        </div>
     </div>
+  </div>
 </div>
 
 <script>
