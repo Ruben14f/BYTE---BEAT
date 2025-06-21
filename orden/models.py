@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.db import models 
 from django.db.models import  Max, Sum,F
 from users.models import User
@@ -8,6 +9,7 @@ from django.db.models.signals import pre_save
 import uuid
 from django.db.models.functions import Coalesce
 from django.utils.timezone import localdate
+
 
 
 class OrdenStatus(models.TextChoices):
@@ -74,12 +76,14 @@ class OrdenProducto(models.Model):
     
     @classmethod
     def total_productos_mas_vendido(cls,limite=5):
+        current_year = datetime.now().year
         return (
             Product.objects
             .annotate(total_vendido=Sum('ordenproducto__quantity'),
                       total_vendido_precio=Sum(F('ordenproducto__quantity') * F('price')))
             .filter(total_vendido__gt=0,
-                    ordenproducto__orden__status='DELIVERED')
+                    ordenproducto__orden__status='DELIVERED',
+                    ordenproducto__orden__fecha_pagada__year=current_year)
             .order_by('-total_vendido')[:limite]
         )
     

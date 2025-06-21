@@ -3,44 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paginación con Tailwind</title>
+    <title>Byte & Beat - Confirmación de Compra</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-50 p-8">
-    <div class="max-w-6xl mx-auto space-y-8">
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
         
-        <!-- Paginación Opción 1: Completa con info -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">Paginación Completa</h3>
+        @keyframes pulse-glow {
+            0% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+            50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+        }
+        
+        @keyframes checkmark {
+            0% { stroke-dasharray: 0 50; }
+            100% { stroke-dasharray: 50 0; }
+        }
+        
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delay-2 { animation: float 6s ease-in-out infinite 2s; }
+        .animate-float-delay-4 { animation: float 6s ease-in-out infinite 4s; }
+        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
+        .animate-checkmark { animation: checkmark 0.6s ease-in-out 0.9s both; }
+        
+        .bg-gradient-main {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        }
+        
+        .text-gradient-blue-purple {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .text-gradient-green-blue {
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .bg-gradient-blue-purple {
+            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+        }
+        
+        .bg-gradient-green-blue {
+            background: linear-gradient(45deg, #00ff88, #00d4ff);
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .header-glass {
+            background: rgba(26, 26, 46, 0.8);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gradient-main min-h-screen text-white overflow-x-hidden">
+    
+    <!-- Elementos de fondo flotantes -->
+    <div class="fixed inset-0 opacity-10 pointer-events-none">
+        <div class="absolute w-48 h-48 border-2 border-cyan-400 rounded-full top-[10%] left-[15%] animate-float"></div>
+        <div class="absolute w-36 h-36 border-2 border-cyan-400 rounded-full top-[60%] right-[20%] animate-float-delay-2"></div>
+        <div class="absolute w-24 h-24 border-2 border-cyan-400 rounded-full bottom-[20%] left-[70%] animate-float-delay-4"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="header-glass relative z-10">
+        <div class="flex flex-col md:flex-row justify-between items-center px-8 md:px-12 py-5 gap-5 md:gap-0">
+            <div class="text-2xl md:text-3xl font-bold text-gradient-blue-purple">
+                Byte & Beat
+            </div>
+            <nav>
+                <ul class="flex gap-6 md:gap-8 text-sm md:text-base">
+                    <li><a href="#inicio" class="font-medium hover:text-cyan-400 transition-colors duration-300">Inicio</a></li>
+                    <li><a href="#productos" class="font-medium hover:text-cyan-400 transition-colors duration-300">Productos</a></li>
+                    <li><a href="#mis-compras" class="font-medium hover:text-cyan-400 transition-colors duration-300">Mis compras</a></li>
+                    <li><a href="#panel" class="font-medium hover:text-cyan-400 transition-colors duration-300">Panel administrador</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="relative z-5 max-w-4xl mx-auto px-6 md:px-8 py-12 md:py-20 text-center">
+        
+        <!-- Ícono de éxito -->
+        <div class="w-28 h-28 md:w-32 md:h-32 mx-auto mb-8 md:mb-10 bg-gradient-blue-purple rounded-full flex items-center justify-center animate-pulse-glow opacity-0 animate-fade-in">
+            <svg class="w-14 h-14 md:w-16 md:h-16 text-white animate-checkmark" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="3">
+                <path d="M14,27 L22,35 L38,19" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+
+        <!-- Título -->
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-gradient-blue-purple animate-slide-up">
+            ¡Compra Confirmada!
+        </h1>
+        <p class="text-lg md:text-xl text-gray-300 mb-10 md:mb-12 animate-slide-up">
+            Tu transacción ha sido procesada exitosamente
+        </p>
+
+        <!-- Tarjeta de detalles -->
+        <div class="glass-effect rounded-2xl p-6 md:p-10 mb-10 md:mb-12 text-left shadow-2xl animate-slide-up">
             
-            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <!-- Info de resultados -->
-                <div class="text-sm text-gray-600">
-                    Mostrando <span class="font-medium text-gray-900">1-10</span> de <span class="font-medium text-gray-900">147</span> resultados
-                </div>
-                
-                <!-- Controles de paginación -->
-                <div class="flex items-center gap-2">
-                    <!-- Botón Anterior -->
-                    <button disabled class="px-3 py-2 text-sm text-gray-400 bg-white border border-gray-300 rounded-md cursor-not-allowed">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                        </svg>
-                    </button>
-                    
-                    <!-- Números de página -->
-                    <button class="px-3 py-2 text-sm font-medium text-white bg-blue-500 border border-blue-500 rounded-md">1</button>
-                    <button class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">2</button>
-                    <button class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">3</button>
-                    <span class="px-3 py-2 text-sm text-gray-500">...</span>
-                    <button class="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">15</button>
-                    
-                    <!-- Botón Siguiente -->
-                    <button class="px-3 py-2 text-sm text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                        </svg>
-                    </button>
-                </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300">Número de Orden:</span>
+                <span class="font-bold text-white">#14</span>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300">Nombre del cliente:</span>
+                <span class="font-bold text-white">#14</span>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300"> Email de contacto:</span>
+                <span class="font-bold text-white">#14</span>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300"> "Envío" o "Retiro":</span>
+                <span class="font-bold text-white">#14</span>
+            </div>
+              <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300"> "Costo de envío":</span>
+                <span class="font-bold text-white">#14</span>
+            </div>
+             <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300"> " dirección completa":</span>
+                <span class="font-bold text-white">#14</span>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300">Fecha de creación:</span>
+                <span class="font-bold text-white">27-20.220</span>
+            </div>
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
+                <span class="font-semibold text-gray-300">Monto Total:</span>
+                <span class="font-bold text-2xl md:text-3xl text-gradient-blue-purple">$430,416</span>
             </div>
         </div>
+
+        <!-- Botones de acción -->
+        <div class="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center animate-slide-up">
+            <a href="#" class="w-full md:w-auto bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold py-4 px-8 rounded-full hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300">
+                Ver Detalles de Compra
+            </a>
+            <a href="#" class="w-full md:w-auto bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold py-4 px-8 rounded-full hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300">
+                Continuar Comprando
+            </a>
+        </div>
+    </main>
+
+    <script>
+        // Configuración de animaciones personalizadas
+        const style = document.createElement('style');
+        style.textContent = `
+            .animate-fade-in {
+                animation: fadeIn 0.8s ease-out forwards;
+            }
+            
+            .animate-slide-up {
+                animation: slideUp 0.8s ease-out forwards;
+            }
+            
+            @keyframes fadeIn {
+                from { opacity: 0; }
+                to { opacity: 1; }
+            }
+            
+            @keyframes slideUp {
+                from { transform: translateY(30px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Animación del checkmark
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkmark = document.querySelector('svg path');
+            if (checkmark) {
+                const pathLength = checkmark.getTotalLength();
+                
+                checkmark.style.strokeDasharray = pathLength;
+                checkmark.style.strokeDashoffset = pathLength;
+                
+                setTimeout(() => {
+                    checkmark.style.transition = 'stroke-dashoffset 0.6s ease-in-out';
+                    checkmark.style.strokeDashoffset = 0;
+                }, 900);
+            }
+        });
+
+        // Efectos de hover mejorados para los botones
+        document.querySelectorAll('a[href="#"]').forEach(btn => {
+            btn.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-3px) scale(1.02)';
+            });
+            
+            btn.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

@@ -143,7 +143,7 @@ LANGUAGES = [
 
 LANGUAGE_CODE = 'es-cl'
 
-TIME_ZONE = 'America/Santiago'
+TIME_ZONE = 'Chile/Continental'
 
 USE_I18N = True
 

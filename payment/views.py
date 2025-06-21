@@ -127,19 +127,20 @@ def webpay_respuesta(request):
     token_ws = request.GET.get('token_ws') or request.POST.get('token_ws')
 
     if not token_ws:
-        return render(request, 'token_fallido.html', {'error':'token invalido'})
+        return render(request, 'token_fallido.html', {'error': 'Token inválido'})
 
     resultado = obtener_estado_pago_webpay(token_ws)
 
     if resultado:
         estado = resultado.get('status')
+
         if estado == 'AUTHORIZED':
             if request.user.is_authenticated:
-                orden = Orden.objects.filter(token_ws=token_ws, status=OrdenStatus.CREATED).first()
+                orden = Orden.objects.filter(token_ws=token_ws).first()
 
                 if orden:
                     if orden.status == OrdenStatus.PAYED:
-                        return render(request, 'confirmed.html', {'resultado': resultado})
+                        return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden})
 
                     orden.status = OrdenStatus.PAYED
                     orden.save(update_fields=['status'])
@@ -167,28 +168,31 @@ def webpay_respuesta(request):
                                 cart.productos.clear()
                                 cart.update_totals()
                         except Exception as e:
-                            messages.error(request, f"Error al procesar la transacción")
+                            messages.error(request, f"Error al procesar la transacción: {e}")
                             return redirect('orden')
 
-                    # **Aquí guardas la hora local (sin UTC)**
                     hora_local = timezone.localtime(timezone.now())
-                    orden.fecha_pagada = hora_local  # **Mantener la hora local, no la de Webpay**
-
-                    # Guardar el total y la fecha pagada en la base de datos
+                    orden.fecha_pagada = hora_local
                     orden.total = original_total
                     orden.save(update_fields=['total', 'fecha_pagada'])
 
-                    # Envío de correo de confirmación del pedido
-                    confirmacion_pedido_email(request, token_ws)
+                confirmacion_pedido_email(request, token_ws)
+                
+                print('ORDEN:',orden)
+                # Make sure to return a valid response here
+                return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden})
 
-            return render(request, 'confirmed.html', {'resultado': resultado})
         elif estado == 'INITIALIZED':
             return render(request, 'peding.html', {'resultado': resultado, 'token_ws': token_ws})
+
         elif estado == 'FAILED':
             return render(request, 'paymen_failed.html', {'resultado': resultado})
+
         else:
             return render(request, 'payment_unknown.html', {'resultado': resultado})
+
     else:
+        # Ensure there's a return statement in case the result is None
         return render(request, 'paymen_failed.html', {'error': 'No se pudo obtener el estado del pago'})
 
 
