@@ -6,7 +6,7 @@
     <!-- Cabezera -->
     <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white mb-6 relative overflow-hidden">
         <h1 class="text-2xl font-bold">Reporte de Pedidos</h1>
-        <p class="text-blue-100">Administra y supervisa todos los pedidos de tu negocio</p>
+        <p class="text-blue-100">Administra y supervisa el reporte de pedidos de tu negocio</p>
         <p class="text-blue-200 text-sm mt-1">Hoy es {{dia_de_la_semana}}, {{fecha_formateada}}</p>
     </div>
 
@@ -17,7 +17,6 @@
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Total Ordenes</p>
                     <h3 class="text-2xl font-bold text-gray-900" id="total-orders">{{total_ordenes | format_miles}}</h3>
-                    <p class="text-sm text-green-600 mt-1">+15% desde el mes pasado</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -32,7 +31,6 @@
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Ingresos Totales</p>
                     <h3 class="text-2xl font-bold text-gray-900" id="total-revenue">{{total_ingresos | format_price}}</h3>
-                    <p class="text-sm text-green-600 mt-1">+26% desde el mes pasado</p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -47,7 +45,6 @@
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Pedidos Completados</p>
                     <h3 class="text-2xl font-bold text-gray-900" id="completed-orders">{{total_completadas | format_miles}}</h3>
-                    <p class="text-sm text-green-600 mt-1">+8% desde el mes pasado</p>
                 </div>
                 <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                     <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -58,29 +55,38 @@
         </div>
     </div>
 
-    <!-- Filtros -->
+<!-- Filtros -->
 <div class="bg-white rounded-lg p-6 shadow-sm border mb-6">
-    <div class="flex flex-col md:flex-row gap-4 items-center w-full">
-        <!-- Filtro por estado (ocupa el 1/3 del espacio) -->
-        <div class="w-full md:w-1/3">
-            {% include 'list_report_ordenes/filtros/filtro_estado_report.html' %}
+    <div class="flex flex-col gap-4 w-full">
+        
+        <!-- Fila 1: Filtros en una sola fila en desktop, stack en mobile -->
+        <div class="flex flex-col lg:flex-row gap-4 w-full">
+            <!-- Filtro por estado -->
+            <div class="w-full lg:w-1/2">
+                {% include 'list_report_ordenes/filtros/filtro_estado_report.html' %}
+            </div>
+
+            <!-- Filtro de fechas -->
+            <div class="w-full lg:w-1/2">
+                {% include 'list_report_ordenes/filtros/filtro_fecha_report.html' %}
+            </div>
         </div>
 
-        <!-- Filtro de fechas (ocupa 1/3 del espacio) -->
-        <div class="flex gap-2 w-full md:w-1/3 justify-center items-center">
-             {% include 'list_report_ordenes/filtros/filtro_fecha_report.html' %}
-        </div>
-
-        <!-- Botón de descargar (ocupa el 1/3 del espacio) -->
-        <div class="w-full md:w-1/3 flex justify-center">
+        <!-- Fila 2: Botón de descargar siempre en su propia fila -->
+        <div class="w-full flex justify-center lg:justify-end pt-2">
             <a href="{% url 'descargar_ordenes_filtradas' %}?descargar=true
             {% if fecha_inicio and fecha_fin %}
                 &fecha_inicio={{ fecha_inicio }}&fecha_fin={{ fecha_fin }}
             {% else %}
                 &searchEstadoreporte={{ queryestadoreport|default:'' }}
             {% endif %}" 
-            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out w-full md:w-auto text-center">
-                Descargar Reporte Excel
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg shadow-lg transform hover:scale-105 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all duration-300 ease-in-out w-full sm:w-auto text-center min-w-[200px]">
+                <span class="flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Descargar Reporte Excel
+                </span>
             </a>
         </div>
     </div>
@@ -126,7 +132,89 @@
                 </tbody>
             </table>
         </div>
-        
+        <div class="bg-white rounded-xl shadow-lg border border-gray-100 p-8 mt-6">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <!-- Info de resultados mejorada -->
+        <div class="flex items-center gap-3 text-sm text-gray-600">
+            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <div>
+                <span class="block font-semibold text-gray-900">
+                    {{ ordens.start_index }}-{{ ordens.end_index }} de {{ ordens.paginator.count }}
+                </span>
+                <span class="text-xs text-gray-500">pedidos encontrados</span>
+            </div>
+        </div>
+
+        <!-- Controles de paginación mejorados -->
+        <div class="flex items-center gap-2">
+            <!-- Botón anterior -->
+            {% if ordens.has_previous %}
+                <a href="?page={{ ordens.previous_page_number }}" 
+                   class="flex items-center gap-2 px-4 py-2.5 text-gray-700 bg-white border-2 border-gray-200 rounded-lg font-medium text-sm transition-all duration-200 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span class="hidden sm:inline">Anterior</span>
+                </a>
+            {% else %}
+                <span class="flex items-center gap-2 px-4 py-2.5 text-gray-400 bg-gray-50 border-2 border-gray-200 rounded-lg font-medium text-sm cursor-not-allowed shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span class="hidden sm:inline">Anterior</span>
+                </span>
+            {% endif %}
+
+            <!-- Números de página -->
+            <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg">
+                {% for i in ordens.paginator.page_range %}
+                    {% if i == ordens.number %}
+                        <span class="w-10 h-10 flex items-center justify-center text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow-lg font-bold text-sm transform scale-105 transition-all duration-200">
+                            {{ i }}
+                        </span>
+                    {% elif i >= ordens.number|add:'-2' and i <= ordens.number|add:'2' %}
+                        <a href="?page={{ i }}" 
+                           class="w-10 h-10 flex items-center justify-center text-gray-700 bg-white rounded-lg font-semibold text-sm transition-all duration-200 hover:bg-blue-100 hover:text-blue-700 hover:shadow-md border border-gray-200 hover:border-blue-300">
+                            {{ i }}
+                        </a>
+                    {% elif i == 1 or i == ordens.paginator.num_pages %}
+                        <a href="?page={{ i }}" 
+                           class="w-10 h-10 flex items-center justify-center text-gray-700 bg-white rounded-lg font-semibold text-sm transition-all duration-200 hover:bg-blue-100 hover:text-blue-700 hover:shadow-md border border-gray-200 hover:border-blue-300">
+                            {{ i }}
+                        </a>
+                        {% if not forloop.last and ordens.number|add:'2' < i %}
+                            <span class="w-10 h-10 flex items-center justify-center text-gray-400 text-sm font-bold">
+                                ...
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Botón siguiente -->
+            {% if ordens.has_next %}
+                <a href="?page={{ ordens.next_page_number }}" 
+                   class="flex items-center gap-2 px-4 py-2.5 text-gray-700 bg-white border-2 border-gray-200 rounded-lg font-medium text-sm transition-all duration-200 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 shadow-sm">
+                    <span class="hidden sm:inline">Siguiente</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            {% else %}
+                <span class="flex items-center gap-2 px-4 py-2.5 text-gray-400 bg-gray-50 border-2 border-gray-200 rounded-lg font-medium text-sm cursor-not-allowed shadow-sm">
+                    <span class="hidden sm:inline">Siguiente</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
         <div id="no-orders" class="text-center py-12 hidden">
             <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>

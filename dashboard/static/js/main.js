@@ -28,6 +28,10 @@ document.addEventListener("DOMContentLoaded", () => {
       btnFiltrarIndId: "btn-filtrar-chart4",
       btnBorrarIndId: "btn-borrar-filtro-chart4",
     },
+    {
+      id: "chart5",
+      apiUrl: "/admin-dashboard/api/get-chart5/",
+    },
   ];
 
   // Instanciar gráficos y guardar referencias
@@ -72,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const response = await fetch(url);
       const data = await response.json();
+      console.log(data);
 
       chart.hideLoading();
       if (!data.series || data.series.length === 0) {
@@ -154,4 +159,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Carga inicial sin filtros
   cargarTodosGraficos("");
+  window.addEventListener("resize", () => {
+    // Recargar todos los gráficos cuando se redimensiona la ventana
+    Object.values(graficos).forEach((grafico) => {
+      grafico.resize();
+    });
+  });
+
+  document.querySelectorAll('.bg-white').forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+            this.style.transition = 'transform 0.2s ease-in-out';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+
 });

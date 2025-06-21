@@ -1,3 +1,4 @@
+
 from django.shortcuts import redirect,render
 from django.urls import reverse
 import requests
@@ -6,16 +7,17 @@ import random
 from django.conf import settings
 from cart.models import Cart
 from orden.models import Orden, OrdenStatus
-from django.contrib import messages
 from orden.models import OrdenProducto
-from django.utils.dateparse import parse_datetime
-from django.utils import timezone
+from profiles.models import UserProfile
+from django.contrib import messages
 from django.core.mail import send_mail
 import os
 from django.template.loader import render_to_string
 from django.db import transaction
-from profiles.models import UserProfile
-
+from datetime import datetime
+from django.utils import timezone
+from dateutil.parser import parse
+import pytz
 
 
 
@@ -124,37 +126,26 @@ def obtener_estado_pago_webpay(token):
 def webpay_respuesta(request):
     token_ws = request.GET.get('token_ws') or request.POST.get('token_ws')
 
-    print("Método de la solicitud:", request.method)
-    print(f"Token recibido en return_url: {token_ws}")
-
     if not token_ws:
         return render(request, 'token_fallido.html', {'error':'token invalido'})
-    
-    print("Token recibido:", token_ws)
 
     resultado = obtener_estado_pago_webpay(token_ws)
-    print("Resultado Webpay:", resultado)
-
 
     if resultado:
         estado = resultado.get('status')
         if estado == 'AUTHORIZED':
-            
-
             if request.user.is_authenticated:
                 orden = Orden.objects.filter(token_ws=token_ws, status=OrdenStatus.CREATED).first()
-                
+
                 if orden:
                     if orden.status == OrdenStatus.PAYED:
                         return render(request, 'confirmed.html', {'resultado': resultado})
-                    
+
                     orden.status = OrdenStatus.PAYED
                     orden.save(update_fields=['status'])
-                    print(f'estado actualizado: {Orden.status}')
                     original_total = orden.total
 
                     cart = orden.cart
-
                     if cart:
                         try:
                             with transaction.atomic():
@@ -167,46 +158,39 @@ def webpay_respuesta(request):
                                         product.save()
 
                                         OrdenProducto.objects.create(
-                                        orden=orden,
-                                        producto=cart_product.productos,
-                                        quantity=cart_product.quantity)
+                                            orden=orden,
+                                            producto=cart_product.productos,
+                                            quantity=cart_product.quantity)
                                     else:
                                         messages.error(request, f"Stock insuficiente para el producto {product.name}.")
                                         return redirect('orden')    
                                 cart.productos.clear()
                                 cart.update_totals()
-                                print(f'carrito limpiado: {cart}')
                         except Exception as e:
                             messages.error(request, f"Error al procesar la transacción")
                             return redirect('orden')
 
-                    transaction_date = resultado.get("transaction_date")
-                    print("transaction_date cruda:", transaction_date)
+                    # **Aquí guardas la hora local (sin UTC)**
+                    hora_local = timezone.localtime(timezone.now())
+                    orden.fecha_pagada = hora_local  # **Mantener la hora local, no la de Webpay**
 
-                    if transaction_date:
-                        parsed_date = parse_datetime(transaction_date)
-                        print("parsed_date:", parsed_date)
-                        if parsed_date:
-                            orden.fecha_pagada = timezone.localtime(parsed_date)
-                            print("Fecha con hora local guardada:", orden.fecha_pagada)
-
+                    # Guardar el total y la fecha pagada en la base de datos
                     orden.total = original_total
-                    orden.save(update_fields=['total','fecha_pagada'])
-                    print(f"Total después de la transacción: {orden.total}")
+                    orden.save(update_fields=['total', 'fecha_pagada'])
 
-                    #envio de correo de confirmacion del pedido
+                    # Envío de correo de confirmación del pedido
                     confirmacion_pedido_email(request, token_ws)
 
             return render(request, 'confirmed.html', {'resultado': resultado})
         elif estado == 'INITIALIZED':
-            return render(request, 'peding.html', {'resultado': resultado , 'token_ws': token_ws})
+            return render(request, 'peding.html', {'resultado': resultado, 'token_ws': token_ws})
         elif estado == 'FAILED':
             return render(request, 'paymen_failed.html', {'resultado': resultado})
         else:
             return render(request, 'payment_unknown.html', {'resultado': resultado})
     else:
         return render(request, 'paymen_failed.html', {'error': 'No se pudo obtener el estado del pago'})
-    
+
 
 
 def confirmacion_pedido_email(request,token_ws):

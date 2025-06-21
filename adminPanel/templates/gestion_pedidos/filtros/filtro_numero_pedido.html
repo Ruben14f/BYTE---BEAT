@@ -1,13 +1,25 @@
-<form action="{% url 'buscar_orden' %}" method="GET" class="flex items-center gap-2 w-full">
-    <div class="relative flex-1">
-        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <input type="text" name="searchNumOrden" placeholder="Buscar número orden" 
-            value="{{ querynumorden }}"
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+<form action="{% url 'buscar_orden' %}" method="GET" class="w-full">
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200/50 shadow-sm">
+        <!-- Título del filtro -->
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800">Filtrar por Número de Pedido</h3>
+        </div>
+
+        <!-- Campo de búsqueda por número de orden -->
+        <div class="mb-6">
+            <input type="text" name="searchNumOrden" value="{{ querynumorden }}" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200" placeholder="Buscar número orden..." />
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex justify-end">
+            <button type="submit" class="group relative px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 active:scale-95 min-w-[160px]">
+                Buscar
+            </button>
+        </div>
     </div>
-    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-        Buscar
-    </button>
 </form>

@@ -7,6 +7,7 @@ from profiles.models import Comuna, Ciudad
 from django.db.models.signals import pre_save
 import uuid
 from django.db.models.functions import Coalesce
+from django.utils.timezone import localdate
 
 
 class OrdenStatus(models.TextChoices):
@@ -54,7 +55,17 @@ class Orden(models.Model):
 
         super().save(*args, **kwargs)
 
-
+    @classmethod
+    def ordenes_recentes(cls, limite=10):
+        hoy = localdate() 
+        return (
+            cls.objects
+            .filter(create_at=hoy, status='PAYED')  
+            .annotate(total_vendido=Coalesce(Sum('productos_orden__quantity'), 0))  
+            .order_by('-fecha_pagada') 
+            [:limite] 
+        )
+    
 
 class OrdenProducto(models.Model):
     orden = models.ForeignKey('Orden', on_delete=models.CASCADE, related_name='productos_orden')

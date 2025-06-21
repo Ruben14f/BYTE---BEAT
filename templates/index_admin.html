@@ -1,5 +1,6 @@
 {% extends 'base_admin.html' %}
 {% load precios_tag %}
+
 <title>{% block title %}Gestor administrativo{% endblock %}</title>
 
 {% block content_admin %}
@@ -39,8 +40,6 @@
                             {% else %}
                                 {{ total_ventas_cantidad |format_miles}}
                             {% endif %}
-                            
-                        <p class="text-green-600 text-sm">+15% desde el mes pasado</p>
                     </div>
                     <div class="bg-blue-100 p-3 rounded-full">
                         <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -65,8 +64,6 @@
                                 {{ total_ventas_pesos|format_price }}
                             {% endif %}
                         </p>
-
-                        <p class="text-green-600 text-sm">+26% desde el mes pasado</p>
                     </div>
                     <div class="bg-green-100 p-3 rounded-full">
                         <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -89,8 +86,6 @@
                             {% else %}
                                 {{productos_activos|format_miles}}
                             {% endif %}
-                            
-                        <p class="text-green-600 text-sm">+8% desde el mes pasado</p>
                     </div>
                     <div class="bg-purple-100 p-3 rounded-full">
                         <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
@@ -104,7 +99,6 @@
 
         <!-- Mini resumen visual -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Monthly Sales Chart -->
             <div class="bg-white rounded-lg shadow-sm border p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Ventas Mensuales</h3>
                 <div class="space-y-4">
@@ -122,7 +116,6 @@
                 </div>
             </div>
 
-            <!-- Top Products -->
             <div class="bg-white rounded-lg shadow-sm border p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Productos Más Vendidos</h3>
                 <div class="space-y-4">
@@ -138,6 +131,61 @@
                 </div>
             </div>
         </div>
+
+        <!-- Pedidos recientes -->
+        <div class="bg-white rounded-lg p-6 shadow-sm border mb-6 mt-6">
+
+            <!-- Header -->
+            <div class="px-6 py-6 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Pedidos Recientes
+                </h2>
+            </div>
+
+            <!-- Lista de Pedidos -->
+            <div class="divide-y divide-gray-100">
+                {% for orden in ordenes_recientes %}
+                <!-- Pedido 1 -->
+                <div class="px-6 py-5 hover:bg-gray-50 transition-colors duration-200">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4 flex-1">
+                            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                #{{ forloop.counter }}
+                            </div>
+                            <div class="flex-1">
+                                <div class="font-semibold text-gray-900 text-sm mb-1">Pedido #{{ orden.num_orden }}</div>
+                                <div class="text-gray-600 text-sm mb-1">{{ orden.user.get_full_name }}</div>
+                                <div class="text-gray-400 text-xs">
+                                    {% for producto in orden.cart.productos.all %}
+                                        {{ producto.nombre }} x{{ producto.quantity }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-end gap-1">
+                            <div class="font-semibold text-gray-900">{{ orden.total | format_price }}</div>
+                            <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full uppercase tracking-wide">
+                                Nuevo
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="px-6 py-4 text-gray-500">No hay pedidos recientes.</p>
+                {% endfor %}
+            </div>
+
+            <!-- Footer Ver Todos -->
+            <div class="px-6 py-4 border-t border-gray-100 text-center">
+                <a href="{% url 'list_ordenes_admin' %}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium hover:underline transition-colors">
+                    Ver todos los pedidos →
+                </a>
+            </div>
+        </div>
+
     </div>
 
 <script>

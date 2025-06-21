@@ -25,54 +25,167 @@
             }
         }
     </script>
-
 </head>
 <body>
     <div class="flex min-h-screen">
-        <div class="w-64 bg-sidebar-dark text-white">
-            <div class="p-4">
+        <!-- Sidebar -->
+        <div id="sidebar" class="w-64 bg-sidebar-dark text-white transition-all duration-300 ease-in-out fixed xl:static z-30 h-full xl:h-auto transform xl:transform-none -translate-x-full xl:translate-x-0">
+            <!-- Header del sidebar -->
+            <div class="flex justify-between items-center p-4">
                 <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 bg-primary-blue rounded flex items-center justify-center">
                         <span class="text-sm font-bold">SG</span>
                     </div>
-                    <span class="font-semibold">Byte & Beat</span>
+                    <span class="font-semibold sidebar-text">Byte & Beat</span>
                 </div>
+                <button onclick="toggleSidebar()" class="text-white hover:text-gray-300 xl:hidden">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
             </div>
             
-            <nav class="mt-8">
-                <a href="{% url 'admin_index' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-home h-6 w-6 text-gray-300 mr-2"></i>
-                    Inicio
+            <!-- Navegación -->
+            <nav class="mt-4">
+                <a href="{% url 'admin_index' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-home h-6 w-6 text-gray-300 mr-3"></i>
+                    <span class="sidebar-text">Inicio</span>
                 </a>
 
-                <a href="{% url 'list_ordenes_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-box h-6 w-6 text-gray-300 mr-2"></i>
-                    Gestión de Pedidos
+                <a href="{% url 'list_ordenes_admin' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-box h-6 w-6 text-gray-300 mr-3"></i>
+                    <span class="sidebar-text">Gestión de Pedidos</span>
                 </a>
 
-                <a href="{% url 'list_product_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-cogs h-6 w-6 text-gray-300 mr-2"></i>
-                    Gestión de Productos
+                <a href="{% url 'list_product_admin' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-cogs h-6 w-6 text-gray-300 mr-3"></i>
+                    <span class="sidebar-text">Gestión de Productos</span>
                 </a>
 
-                <a href="{% url 'orden_list_report' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-chart-line h-6 w-6 text-gray-300 mr-2"></i>
-                    Reportes de Ventas
+                <a href="{% url 'orden_list_report' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-chart-line h-6 w-6 text-gray-300 mr-3"></i>
+                    <span class="sidebar-text">Reportes de Ventas</span>
                 </a>
 
-                <a href="{% url 'dashboard_admin' %}" class="flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
-                    <i class="fas fa-tachometer-alt h-6 w-6 text-gray-300 mr-2"></i>
-                    Dashboard
+                <a href="{% url 'dashboard_admin' %}" class="sidebar-link flex items-center px-4 py-3 text-gray-300 hover:bg-gray-700 transition-colors">
+                    <i class="fas fa-tachometer-alt h-6 w-6 text-gray-300 mr-3"></i>
+                    <span class="sidebar-text">Dashboard</span>
                 </a>
             </nav>
-
         </div>
-        {% block content_admin %}
 
-        {% endblock %}
+        <!-- Overlay para todas las pantallas no-desktop -->
+        <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 z-20 xl:hidden hidden" onclick="closeSidebar()"></div>
+
+        <!-- Contenido principal -->
+        <div id="main-content" class="flex-1 flex flex-col transition-all duration-300 ease-in-out">
+            <!-- Header superior para todas las pantallas no-desktop -->
+            <header class="bg-white shadow-sm border-b xl:hidden sticky top-0 z-10">
+                <div class="flex items-center justify-between p-4">
+                    <button onclick="toggleSidebar()" class="text-gray-600 hover:text-primary-blue">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                    <h1 class="text-lg font-semibold text-gray-800">{% block page_title %}Panel Administrativo{% endblock %}</h1>
+                    <div class="w-6"></div> <!-- Spacer -->
+                </div>
+            </header>
+
+            <!-- Área de contenido con scroll -->
+            <div class="flex-1 p-6 overflow-y-auto bg-gray-50">
+                {% block content_admin %}
+                <!-- Aquí va el contenido específico de cada página -->
+                {% endblock %}
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
+    
+    <script>
+        let sidebarOpen = false;
         
+        // Función para detectar si es una pantalla de escritorio
+        function isDesktop() {
+            return window.innerWidth >= 1280; // xl breakpoint de Tailwind
+        }
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            sidebarOpen = !sidebarOpen;
+            
+            if (!isDesktop()) { 
+                // Para móviles, tablets y pantallas medianas
+                if (sidebarOpen) {
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebar.classList.add('translate-x-0');
+                    overlay.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebar.classList.remove('translate-x-0');
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }
+            } else { 
+                // Para pantallas de escritorio (opcional: sidebar colapsible)
+                if (sidebarOpen) {
+                    sidebar.classList.remove('w-16');
+                    sidebar.classList.add('w-64');
+                    const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                    sidebarTexts.forEach(text => text.classList.remove('hidden'));
+                } else {
+                    sidebar.classList.remove('w-64');
+                    sidebar.classList.add('w-16');
+                    const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                    sidebarTexts.forEach(text => text.classList.add('hidden'));
+                }
+            }
+        }
+
+        function closeSidebar() {
+            if (sidebarOpen && !isDesktop()) {
+                toggleSidebar();
+            }
+        }
+
+        // Manejar cambios de tamaño de ventana
+        window.addEventListener('resize', function() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            
+            if (isDesktop()) {
+                // Pantallas de escritorio
+                sidebar.classList.remove('-translate-x-full', 'translate-x-0', 'w-16');
+                sidebar.classList.add('w-64');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                
+                const sidebarTexts = document.querySelectorAll('.sidebar-text');
+                sidebarTexts.forEach(text => text.classList.remove('hidden'));
+                
+                sidebarOpen = false;
+            } else {
+                // Móviles, tablets y pantallas medianas
+                sidebar.classList.add('-translate-x-full');
+                sidebar.classList.remove('translate-x-0');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                sidebarOpen = false;
+            }
+        });
+
+        // Cerrar sidebar al hacer clic en enlaces (para todas las pantallas no-desktop)
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    if (!isDesktop() && sidebarOpen) {
+                        closeSidebar();
+                    }
+                });
+            });
+        });
+    </script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.6.0/echarts.min.js"></script>
 </html>

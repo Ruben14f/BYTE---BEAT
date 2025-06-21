@@ -1,119 +1,198 @@
 {% extends 'base_admin.html' %}
 {% load static %}
+{% load precios_tag %}
 
 {% block content_admin %}
-<link rel="stylesheet" href="{% static 'css/style.css' %}">
-Dashboard
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<div class="flex-1 p-6 overflow-y-auto">
+  <!-- Header -->
+  <div class="mb-8">
+      <div class="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6 text-white">
+          <h1 class="text-3xl font-bold mb-2">Dashboard del negocio</h1>
+          <p class="text-purple-100 mb-1">Resumen general de tu negocio</p>
+          <p class="text-sm text-purple-200">Hoy es {{dia_de_la_semana}}, {{fecha_formateada}}</p>
+      </div>
+  </div>
 
-<div class="filtro-general">
-  <label for="filtro">Filtrar todos los graficos por fecha:</label>
-  <select id="filtro">
-    <option value="" selected disabled>Filtrar por:</option>
-    <option value="today">Hoy</option>
-    <option value="week">Esta semana</option>
-    <option value="month">Este mes</option>
-    <option value="year">Este año</option>
-    <option value="7days">Últimos 7 días</option>
-    <option value="30days">Últimos 30 días</option>
-  </select>
-  <button id="btn-filtrar">Aplicar filtro</button>
-  <button id="btn-borrar-filtro">Borrar filtro</button>
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <div class="bg-white rounded-xl p-6 shadow-sm border">
+      <h2 class="text-xl font-semibold mb-4 text-center">Distribución de ventas</h2>
+      <div class="space-y-6"> <!-- Espaciado entre las categorías -->
+        {% for categoria in categorias %}
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center mr-4">
+              <!-- Reducir el tamaño del texto para que no se desborde -->
+              <span class="text-xs font-bold text-blue-600">{{ categoria.porcentaje|floatformat:0 }}%</span>
+            </div>
+            <div class="flex flex-col">
+              <span class="text-gray-700 font-medium">{{ categoria.nombre }}</span>
+              <div class="w-48 h-2 bg-blue-200 rounded-full">
+                <div class="h-full bg-blue-600 rounded-full" style="width: {{ categoria.porcentaje }}%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+
+
+  <!-- Gráfico de Línea ingresos semanales -->
+  <div class="bg-white rounded-xl p-6 shadow-sm border">
+      <div id="chart5" class="w-full h-[430px]"></div>
+  </div>
 </div>
 
 
-  
 
-<div class="filtro-chart2">
-  <label for="filtro-chart2">Filtrar gráfico 1:</label>
-  <select id="filtro-chart2">
-    <option value="" selected>Todos</option>
-    <option value="7days">Últimos 7 días</option>
-    <option value="30days">Últimos 30 días</option>
-    <option value="year">Este año</option>
-    <option value="comparativa_mes">Comparar con mes anterior</option>
-    <option value="comparativa_anio">Comparar con año anterior</option>
-  </select>
-  <button id="btn-filtrar-chart2">Aplicar filtro gráfico 2</button>
-  <button id="btn-borrar-filtro-chart2">Borrar filtro gráfico 2</button>
+
+  <!-- Filtros Globales -->
+  <div class="mb-6 bg-white rounded-xl p-4 shadow-sm border">
+      <div class="flex flex-wrap items-center gap-4">
+          <div class="flex items-center gap-2">
+              <i class="fas fa-filter text-gray-500"></i>
+              <span class="font-medium text-gray-700">Filtrar todos los graficos por fecha:</span>
+          </div>
+          <select id="filtro" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+              <option value="" selected disabled>Filtrar por:</option>
+              <option value="today">Hoy</option>
+              <option value="week">Esta semana</option>
+              <option value="month">Este mes</option>
+              <option value="year">Este año</option>
+              <option value="7days">Últimos 7 días</option>
+              <option value="30days">Últimos 30 días</option>
+          </select>
+          <div class="flex gap-2 ml-auto">
+              <button id="btn-filtrar" class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                  <i class="fas fa-download"></i>
+                  Aplicar filtro
+              </button>
+              <button id="btn-borrar-filtro" class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                  <i class="fas fa-sync-alt"></i>
+                  Borrar filtro
+              </button>
+          </div>
+      </div>
+  </div>
+
+<div class="grid grid-cols-1 gap-6 mb-8">
+  <!-- Gráfico de Barras -->
+<div class="bg-white rounded-xl p-6 shadow-sm border flex flex-col w-full">
+    <div class="flex flex-col md:flex-row items-center justify-between mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4 md:mb-0">Ventas por categorías</h3>
+        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+            <select id="filtro-chart2" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-4 md:mb-0 w-full md:w-auto">
+                <option value="" selected>Todos</option>
+                <option value="7days">Últimos 7 días</option>
+                <option value="30days">Últimos 30 días</option>
+                <option value="year">Este año</option>
+                <option value="comparativa_mes">Comparar con mes anterior</option>
+                <option value="comparativa_anio">Comparar con año anterior</option>
+            </select>
+            <button id="btn-filtrar-chart2" class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors mb-4 md:mb-0 w-full md:w-auto">
+                <i class="fas fa-download"></i>
+                Aplicar filtro
+            </button>
+            <button id="btn-borrar-filtro-chart2" class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors w-full md:w-auto">
+                <i class="fas fa-sync-alt"></i>
+                Borrar filtro
+            </button>
+        </div>
+    </div>
+    <div id="chart2" class="w-full h-[430px]"></div>
 </div>
-<div id="chart2" style="width: 600px; height: 400px;"></div>
 
-
-<div class="filtro-chart3">
-  <label for="filtro-chart3">Filtrar gráfico 2:</label>
-  <select id="filtro-chart3">
-    <option value="" selected>Todos</option>
-    <option value="7days">Últimos 7 días</option>
-    <option value="30days">Últimos 30 días</option>
-    <option value="year">Este año</option>
-    <option value="comparativa_mes">Comparar con mes anterior</option>
-    <option value="comparativa_anio">Comparar con año anterior</option>
-  </select>
-  <button id="btn-filtrar-chart3">Aplicar filtro gráfico 2</button>
-  <button id="btn-borrar-filtro-chart3">Borrar filtro gráfico 2</button>
-</div>
-<div id="chart3" style="width: 600px; height: 400px;"></div>
-
-
-<div class="filtro-chart4">
-  <label for="filtro-chart4">Filtrar gráfico 3:</label>
-  <select id="filtro-chart4">
-    <option value="" selected>Todos</option>
-    <option value="7days">Últimos 7 días</option>
-    <option value="30days">Últimos 30 días</option>
-    <option value="year">Este año</option>
-  </select>
-
-  <label for="top_filter_chart4">Filtro Top:</label>
-  <select id="top_filter_chart4">
-    <option value="all" selected>Todos los productos</option>
-    <option value="top5">Top 5 más vendidos</option>
-    <option value="top10">Top 10 más vendidos</option>
-    <option value="less5">Menos 5 vendidos</option>
-  </select>
-
-  <button id="btn-filtrar-chart4">Aplicar filtro gráfico 3</button>
-  <button id="btn-borrar-filtro-chart4">Borrar filtro gráfico 3</button>
+  <!-- Gráfico de Línea -->
+<div class="bg-white rounded-xl p-6 shadow-sm border">
+    <div class="flex flex-col md:flex-row items-center justify-between mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4 md:mb-0">Tendencia de ventas por categorías</h3>
+        <div class="flex flex-col md:flex-row items-center gap-4 w-full md:w-auto">
+            <select id="filtro-chart3" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent mb-4 md:mb-0 w-full md:w-auto">
+                <option value="" selected>Todos</option>
+                <option value="7days">Últimos 7 días</option>
+                <option value="30days">Últimos 30 días</option>
+                <option value="year">Este año</option>
+                <option value="comparativa_mes">Comparar con mes anterior</option>
+                <option value="comparativa_anio">Comparar con año anterior</option>
+            </select>
+            <button id="btn-filtrar-chart3" class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors mb-4 md:mb-0 w-full md:w-auto">
+                <i class="fas fa-download"></i>
+                Aplicar filtro
+            </button>
+            <button id="btn-borrar-filtro-chart3" class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors w-full md:w-auto">
+                <i class="fas fa-sync-alt"></i>
+                Borrar filtro
+            </button>
+        </div>
+    </div>
+    <div id="chart3" class="w-full h-[430px]"></div>
 </div>
 
-<div id="chart4" style="width: 600px; height: 400px;"></div>
+<!-- Gráfico de torta -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"> 
+<div class="bg-white rounded-xl p-6 shadow-sm border">
+    <div class="flex flex-col items-start mb-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Ventas por productos</h3>
+        
+        <!-- Filtros -->
+        <div class="filtro-chart4 flex flex-col items-start gap-4 w-full">
+            <label for="filtro-chart4" class="text-sm text-gray-600">Filtrar gráfico:</label>
+            <select id="filtro-chart4" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full">
+                <option value="" selected>Todos</option>
+                <option value="7days">Últimos 7 días</option>
+                <option value="30days">Últimos 30 días</option>
+                <option value="year">Este año</option>
+            </select>
+
+            <label for="top_filter_chart4" class="text-sm text-gray-600">Filtro Top:</label>
+            <select id="top_filter_chart4" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full">
+                <option value="all" selected>Todos los productos</option>
+                <option value="top5">Top 5 más vendidos</option>
+                <option value="top10">Top 10 más vendidos</option>
+                <option value="less5">Menos 5 vendidos</option>
+            </select>
+
+            <div class="flex gap-2 w-full">
+                <button id="btn-filtrar-chart4" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors w-full">
+                    Aplicar filtro
+                </button>
+                <button id="btn-borrar-filtro-chart4" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors w-full">
+                    Borrar filtro
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor del gráfico -->
+    <div id="chart4" class="w-full h-[430px] flex-shrink-0"></div>
+</div>
 
 
-<!-- AGREGAR GRAFICO DE BARRAS PARA VENTAS MENSUALES  -->
-<!-- GRAFICO PARA INGRESOS SEMANALES -->
-<!-- <canvas id="myChart"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  var ctx = document.getElementById('myChart').getContext('2d');
-  var myChart = new Chart(ctx, {
-    type: 'line', // Tipo de gráfico de línea
-    data: {
-      labels: ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sab', 'Dom'], // Días de la semana
-      datasets: [{
-        label: 'Ingresos Semanales',
-        data: [7000, 10000, 14000, 18000, 21000, 26000, 23000], // Los datos de ingresos
-        borderColor: 'rgba(0, 123, 255, 1)', // Color de la línea
-        backgroundColor: 'rgba(0, 123, 255, 0.2)', // Color de la franja celeste
-        fill: true, // Llenar debajo de la línea
-        tension: 0.4, // Suaviza la línea
-      }]
-    },
-    options: {
-      responsive: true,
-      scales: {
-        y: {
-          beginAtZero: true // Empieza el eje Y desde cero
-        }
-      }
-    }
-  });
-</script> -->
-
-
-
-
+    <!-- Lista de productos con indicadores al lado derecho -->
+    <div class="bg-white rounded-xl p-6 shadow-sm border">
+        <h2 class="text-center mt-5"><strong>5 Productos más vendidos</strong></h2>
+        {% for producto in mas_vendido %}
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg mt-5">
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                    <span class="w-4 h-4 bg-blue-500 rounded-full flex-shrink-0"></span>
+                    <span class="text-sm font-medium text-gray-700 truncate">{{ producto.name }}</span> 
+                </div>
+                <div class="text-right flex-shrink-0 ml-4">
+                    <div class="text-sm font-semibold text-gray-900">{{ producto.total_vendido }}</div> 
+                    <div class="text-xs text-gray-500">{{ producto.price | format_price }} c/u</div> 
+                    <div class="text-xs text-gray-500">Total: {{ producto.total_vendido_precio | format_price }}</div> 
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 
 </div>
+
+</div>
+
 <script src="{% static 'js/main.js' %}" defer></script>
+
 {% endblock %}
 

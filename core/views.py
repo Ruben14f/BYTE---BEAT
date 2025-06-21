@@ -11,17 +11,18 @@ from products.models import Product
 from django.db.models.functions import TruncMonth
 from adminPanel.utils import ingresos_totales
 from adminPanel.utils import *
+import pytz
+
 
 
 def tests(request):
     return render(request, 'testdesign.html')
+    
 # Create your views here.
 def index(request):
     category = Category.objects.annotate(product_count=Count('product')).filter(product_count__gt=0)
 
     mayor_vendido = OrdenProducto.total_productos_mas_vendido()
-
-
     return render(request, 'index.html',{
         'categoria' : category,
         'mas_vendido' : mayor_vendido
@@ -50,6 +51,9 @@ def index_admin(request):
     # Obtener ventas mensuales
     ventas = ventas_mensuales()
 
+    #10 Ordenes recientes
+    ordenes_recientes = Orden.ordenes_recentes(limite=10)
+
     return render(request, 'index_admin.html', {
         'profile' : profile,
         'fecha_formateada': hora_actual,
@@ -58,7 +62,8 @@ def index_admin(request):
         'total_ventas_cantidad': ordenes_totales_vendido,
         'productos_activos': productos_activos,
         'mas_vendido': mayor_vendido,
-        'ventas_mensuales': ventas
+        'ventas_mensuales': ventas,
+        'ordenes_recientes': ordenes_recientes
     })
 
 

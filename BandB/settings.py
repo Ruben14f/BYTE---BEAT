@@ -141,7 +141,7 @@ LANGUAGES = [
     ('es-es', 'Español'),
 ]
 
-LANGUAGE_CODE = 'es-es'
+LANGUAGE_CODE = 'es-cl'
 
 TIME_ZONE = 'America/Santiago'
 

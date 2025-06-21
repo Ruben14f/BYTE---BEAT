@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .forms import ProductForm
+from .utils import *
 from django.contrib import messages
 from products.models import Product, Brand, Category,ProductStatus
 from orden.models import Orden, OrdenStatus
@@ -9,7 +10,9 @@ from users.models import User
 from django.core.mail import send_mail
 import os
 from django.template.loader import render_to_string
-from .utils import *
+from django.utils.timezone import now, localtime
+from django.utils import formats
+from django.core.paginator import Paginator
 
 #GESTION DE PRODUCTOS
 def listado_productos(request):
@@ -17,6 +20,10 @@ def listado_productos(request):
     marca = Brand.objects.all()
     categorias = Category.objects.all()
     product_status = ProductStatus.choices
+
+    paginator = Paginator(productos, 15) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
 
     resumen_estados_qs = (
         productos
@@ -41,8 +48,12 @@ def listado_productos(request):
     #Total de productos sin stock
     t_sin_stock = productos_sin_stock()
 
+    hora_actual = localtime(now()).date() 
+    dia_de_la_semana = formats.date_format(hora_actual, "l")
+
+
     return render(request, 'gestion_productos/list_product.html',{
-        'products': productos,
+        'products': page_obj,
         'brands' : marca,
         'categories' : categorias,
         'statusproduct' : product_status,
@@ -50,7 +61,9 @@ def listado_productos(request):
         'total_productos' : t_productos,
         'total_productos_activos' : t_productos_activos,  
         'total_stock_bajo' : t_stock_bajo,
-        'total_sin_stock' : t_sin_stock
+        'total_sin_stock' : t_sin_stock,
+        'fecha_formateada': hora_actual,
+        'dia_de_la_semana': dia_de_la_semana,
     })
     
 def agregar_producto(request):
@@ -206,6 +219,10 @@ def estado_product_search(request):
 def listado_ordenes(request):
     ordenes = Orden.objects.all().order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
+
+    paginator = Paginator(ordenes, 3) 
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
     resumen_estados_qs = (
         ordenes
@@ -228,14 +245,19 @@ def listado_ordenes(request):
     #Total ingresos por ordenes
     total_ingresos = ingresos_totales()
 
+    hora_actual = localtime(now()).date() 
+    dia_de_la_semana = formats.date_format(hora_actual, "l")
+
 
     return render(request, 'gestion_pedidos/list_ordenes.html',{
-        'ordens' : ordenes,
+        'ordens' : page_obj,
         'statusorden' : orden_status,
         'resumen_estados' : resumen_estados,
         'total_ordenes' : total_ordenes_hoy,
         'total_completadas' : total_completadas,
-        'total_ingresos' : total_ingresos
+        'total_ingresos' : total_ingresos,
+        'fecha_formateada': hora_actual,
+        'dia_de_la_semana': dia_de_la_semana,
     })
 
 def detail_orden(request, id):

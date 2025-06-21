@@ -52,7 +52,6 @@
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Ventas hoy</p>
                     <h3 class="text-2xl font-bold text-gray-900" id="total-orders">{{total_ordenes | format_miles}}</h3>
-                    <p class="text-sm text-green-600 mt-1">+15% desde el mes pasado</p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                     <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +66,6 @@
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Ingresos Totales</p>
                     <h3 class="text-2xl font-bold text-gray-900" id="total-revenue">{{total_ingresos | format_price}}</h3>
-                    <p class="text-sm text-green-600 mt-1">+26% desde el mes pasado</p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
                     <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -82,7 +80,6 @@
                 <div>
                     <p class="text-sm text-gray-600 mb-1">Pedidos Completados</p>
                     <h3 class="text-2xl font-bold text-gray-900" id="completed-orders">{{total_completadas | format_miles}}</h3>
-                    <p class="text-sm text-green-600 mt-1">+8% desde el mes pasado</p>
                 </div>
                 <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
                     <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -93,24 +90,30 @@
         </div>
     </div>
 
+
     <!-- Filtros -->
     <div class="bg-white rounded-lg p-6 shadow-sm border mb-6">
-        <div class="flex flex-col md:flex-row gap-4">
-            <div class="flex-1">
+        <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+            <!-- Filtro de Número de Pedido -->
+            <div class="w-full md:w-1/2">
                 <div class="relative">
                     {% include 'gestion_pedidos/filtros/filtro_numero_pedido.html' %}
                 </div>
             </div>
             
-            <div class="relative">
-                {% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}
+            <!-- Filtro de Estado de Pedido -->
+            <div class="w-full md:w-1/2">
+                <div class="relative">
+                    {% include 'gestion_pedidos/filtros/filtro_estado_pedido.html' %}
+                </div>
             </div>
         </div>
     </div>
 
+
     <!-- Ordenes -->
     <div class="bg-white rounded-lg shadow-sm border">
-        <div class="overflow-x-auto max-h-[500px]">
+        <div class="overflow-x-auto max-h-[1000px]">
             <table class="w-full">
                 <thead>
                     <tr class="border-b border-gray-200 bg-gray-50">
@@ -150,6 +153,90 @@
                 </tbody>
             </table>
         </div>
+<div class="bg-white rounded-xl shadow-lg border border-gray-100 p-8 mt-6">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
+        <!-- Info de resultados mejorada -->
+        <div class="flex items-center gap-3 text-sm text-gray-600">
+            <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+            </div>
+            <div>
+                <span class="block font-semibold text-gray-900">
+                    {{ ordens.start_index }}-{{ ordens.end_index }} de {{ ordens.paginator.count }}
+                </span>
+                <span class="text-xs text-gray-500">pedidos encontrados</span>
+            </div>
+        </div>
+
+        <!-- Controles de paginación mejorados -->
+        <div class="flex items-center gap-2">
+            <!-- Botón anterior -->
+            {% if ordens.has_previous %}
+                <a href="?page={{ ordens.previous_page_number }}" 
+                   class="flex items-center gap-2 px-4 py-2.5 text-gray-700 bg-white border-2 border-gray-200 rounded-lg font-medium text-sm transition-all duration-200 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span class="hidden sm:inline">Anterior</span>
+                </a>
+            {% else %}
+                <span class="flex items-center gap-2 px-4 py-2.5 text-gray-400 bg-gray-50 border-2 border-gray-200 rounded-lg font-medium text-sm cursor-not-allowed shadow-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                    <span class="hidden sm:inline">Anterior</span>
+                </span>
+            {% endif %}
+
+            <!-- Números de página -->
+            <div class="flex items-center gap-1 bg-gray-50 p-1 rounded-lg">
+                {% for i in ordens.paginator.page_range %}
+                    {% if i == ordens.number %}
+                        <span class="w-10 h-10 flex items-center justify-center text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg shadow-lg font-bold text-sm transform scale-105 transition-all duration-200">
+                            {{ i }}
+                        </span>
+                    {% elif i >= ordens.number|add:'-2' and i <= ordens.number|add:'2' %}
+                        <a href="?page={{ i }}" 
+                           class="w-10 h-10 flex items-center justify-center text-gray-700 bg-white rounded-lg font-semibold text-sm transition-all duration-200 hover:bg-blue-100 hover:text-blue-700 hover:shadow-md border border-gray-200 hover:border-blue-300">
+                            {{ i }}
+                        </a>
+                    {% elif i == 1 or i == ordens.paginator.num_pages %}
+                        <a href="?page={{ i }}" 
+                           class="w-10 h-10 flex items-center justify-center text-gray-700 bg-white rounded-lg font-semibold text-sm transition-all duration-200 hover:bg-blue-100 hover:text-blue-700 hover:shadow-md border border-gray-200 hover:border-blue-300">
+                            {{ i }}
+                        </a>
+                        {% if not forloop.last and ordens.number|add:'2' < i %}
+                            <span class="w-10 h-10 flex items-center justify-center text-gray-400 text-sm font-bold">
+                                ...
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            <!-- Botón siguiente -->
+            {% if ordens.has_next %}
+                <a href="?page={{ ordens.next_page_number }}" 
+                   class="flex items-center gap-2 px-4 py-2.5 text-gray-700 bg-white border-2 border-gray-200 rounded-lg font-medium text-sm transition-all duration-200 hover:border-blue-400 hover:bg-blue-50 hover:text-blue-700 shadow-sm">
+                    <span class="hidden sm:inline">Siguiente</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            {% else %}
+                <span class="flex items-center gap-2 px-4 py-2.5 text-gray-400 bg-gray-50 border-2 border-gray-200 rounded-lg font-medium text-sm cursor-not-allowed shadow-sm">
+                    <span class="hidden sm:inline">Siguiente</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </span>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
         
         <div id="no-orders" class="text-center py-12 hidden">
             <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

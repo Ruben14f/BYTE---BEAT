@@ -1,17 +1,294 @@
-<form action="{% url 'orden_list_filter' %}" method="GET" class="space-y-4">
-    <div class="flex flex-col md:flex-row gap-2 items-center">
-        <select name="searchEstadoreporte" id="searchEstadoreporte" class="border border-gray-300 rounded-lg p-2 w-full md:w-1/3">
-            <option disabled {% if not queryestadoreport %}selected{% endif %}>Seleccione estado</option>
-            {% for value, label in statusorden %}
-                <option value="{{ label }}" {% if label == queryestadoreport %}selected{% endif %}>{{ label }}</option>
-            {% endfor %}
-            {% if queryestadoreport %}
-                <option value="borrarFiltro">Borrar filtro</option>
-            {% endif %}
-        </select>
+<form action="{% url 'orden_list_filter' %}" method="GET" class="w-full">
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200/50 shadow-sm">
+        <!-- Título del filtro -->
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-800">Filtrar por Estado</h3>
+        </div>
 
-        <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg shadow-md transition-all duration-300 ease-in-out w-full md:w-auto">
-            Buscar por estado
-        </button>
+        <!-- Campo de selección -->
+        <div class="mb-6">
+            <label for="searchEstadoreporte" class="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                </svg>
+                Estado de la Orden
+            </label>
+            
+            <div class="relative group">
+                <select name="searchEstadoreporte" 
+                        id="searchEstadoreporte" 
+                        class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-400 group-hover:shadow-md appearance-none cursor-pointer text-gray-700">
+                    <option disabled {% if not queryestadoreport %}selected{% endif %} class="text-gray-400">
+                        🔍 Seleccione un estado...
+                    </option>
+                    {% for value, label in statusorden %}
+                        <option value="{{ label }}" 
+                                {% if label == queryestadoreport %}selected{% endif %}
+                                class="py-2 px-4 hover:bg-blue-50">
+                            {% if label == 'Pendiente' %}
+                            {% elif label == 'Procesando' %}
+                            {% elif label == 'Enviado' %}
+                            {% elif label == 'Entregado' %}
+                            {% elif label == 'Cancelado' %}
+                            {% else %}
+                            {% endif %} {{ label }}
+                        </option>
+                    {% endfor %}
+                    {% if queryestadoreport %}
+                        <option value="borrarFiltro" class="text-red-600 font-medium py-2 px-4 bg-red-50">
+                            🗑️ Limpiar filtro
+                        </option>
+                    {% endif %}
+                </select>
+                
+                <!-- Ícono de dropdown personalizado -->
+                <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400 transition-transform group-hover:text-blue-500 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="flex flex-col sm:flex-row gap-3 justify-end">
+            <!-- Botón limpiar (solo si hay filtro activo) -->
+            {% if queryestadoreport %}
+            <button type="button" 
+                    id="clearFilterBtn"
+                    class="group relative px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-lg shadow-lg hover:from-red-600 hover:to-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 active:scale-95">
+                <span class="flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                    Limpiar Estado
+                </span>
+            </button>
+            {% endif %}
+
+            <!-- Botón buscar -->
+            <button type="submit" 
+                    id="searchBtn"
+                    class="group relative px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 active:scale-95 min-w-[160px]">
+                <span class="flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Buscar por Estado
+                </span>
+                <!-- Efecto de brillo -->
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-10"></div>
+            </button>
+        </div>
+
+        <!-- Indicador de filtro activo -->
+        {% if queryestadoreport %}
+        <div class="mt-4 p-3 bg-blue-100 border border-blue-200 rounded-lg">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                    </svg>
+                    <span class="text-sm text-blue-800 font-medium">
+                        Filtrando por estado: <span class="px-2 py-1 bg-white rounded-md font-semibold">{{ queryestadoreport }}</span>
+                    </span>
+                </div>
+                <button type="button" 
+                        id="quickClearBtn" 
+                        class="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                        title="Quitar filtro">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Contador de opciones disponibles -->
+        <div class="mt-3 text-xs text-gray-500 flex items-center gap-1">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span>{{ statusorden|length }} estados disponibles para filtrar</span>
+        </div>
     </div>
 </form>
+
+<script>
+    const selectEstado = document.getElementById('searchEstadoreporte');
+    const searchBtn = document.getElementById('searchBtn');
+    const clearFilterBtn = document.getElementById('clearFilterBtn');
+    const quickClearBtn = document.getElementById('quickClearBtn');
+
+    // Efecto visual en el select
+    selectEstado.addEventListener('focus', function() {
+        this.parentElement.classList.add('ring-2', 'ring-blue-200', 'scale-[1.02]');
+        this.parentElement.classList.add('animate-pulse-blue');
+    });
+    
+    selectEstado.addEventListener('blur', function() {
+        this.parentElement.classList.remove('ring-2', 'ring-blue-200', 'scale-[1.02]');
+        this.parentElement.classList.remove('animate-pulse-blue');
+    });
+
+    // Cambio en select con animación
+    selectEstado.addEventListener('change', function() {
+        const selectedValue = this.value;
+        
+        // Efecto visual de selección
+        this.style.transform = 'scale(0.98)';
+        this.style.background = '#f3e8ff';
+        
+        setTimeout(() => {
+            this.style.transform = 'scale(1)';
+            this.style.background = 'white';
+        }, 150);
+
+        // Si selecciona "borrarFiltro", enviar automáticamente
+        if (selectedValue === 'borrarFiltro') {
+            // Efecto de limpieza
+            this.style.borderColor = '#ef4444';
+            setTimeout(() => {
+                this.form.submit();
+            }, 300);
+        } else {
+            // Activar botón de búsqueda con efecto
+            searchBtn.classList.add('animate-bounce');
+            setTimeout(() => {
+                searchBtn.classList.remove('animate-bounce');
+            }, 1000);
+        }
+    });
+
+    // Función para limpiar filtro
+    function clearFilter() {
+        selectEstado.value = '';
+        selectEstado.selectedIndex = 0;
+        
+        // Efecto visual de limpieza
+        selectEstado.style.transform = 'scale(0.95)';
+        selectEstado.style.borderColor = '#10b981';
+        
+        setTimeout(() => {
+            selectEstado.style.transform = 'scale(1)';
+            selectEstado.style.borderColor = '#d1d5db';
+            // Redirigir sin filtros
+            window.location.href = window.location.pathname;
+        }, 300);
+    }
+
+    // Event listeners para botones de limpiar
+    if (clearFilterBtn) {
+        clearFilterBtn.addEventListener('click', clearFilter);
+    }
+    
+    if (quickClearBtn) {
+        quickClearBtn.addEventListener('click', clearFilter);
+    }
+
+    // Animación de carga en botón submit
+    searchBtn.addEventListener('click', function(e) {
+        const selectedValue = selectEstado.value;
+        
+        if (!selectedValue || selectedValue === '' || selectEstado.selectedIndex === 0) {
+            e.preventDefault();
+            
+            // Efecto de error
+            selectEstado.style.borderColor = '#ef4444';
+            selectEstado.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.1)';
+            
+            // Animación de shake
+            selectEstado.style.animation = 'shake 0.5s ease-in-out';
+            
+            setTimeout(() => {
+                selectEstado.style.borderColor = '#d1d5db';
+                selectEstado.style.boxShadow = 'none';
+                selectEstado.style.animation = '';
+            }, 1500);
+            
+            // Mensaje de alerta suave
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'absolute top-0 left-0 right-0 bg-yellow-100 border border-yellow-300 text-yellow-800 px-4 py-2 rounded-md text-sm animate-fade-in';
+            alertDiv.innerHTML = '⚠️ Por favor selecciona un estado antes de buscar';
+            selectEstado.parentElement.style.position = 'relative';
+            selectEstado.parentElement.appendChild(alertDiv);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+            
+            return;
+        }
+        
+        // Animación de loading
+        const originalText = this.innerHTML;
+        this.innerHTML = `
+            <span class="flex items-center justify-center gap-2">
+                <svg class="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="m4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Buscando...
+            </span>
+        `;
+        
+        // Restaurar texto después de un delay
+        setTimeout(() => {
+            this.innerHTML = originalText;
+        }, 2000);
+    });
+
+    // Efecto hover en opciones (para navegadores que lo soporten)
+    selectEstado.addEventListener('mouseenter', function() {
+        this.style.borderColor = '#a855f7';
+    });
+    
+    selectEstado.addEventListener('mouseleave', function() {
+        if (document.activeElement !== this) {
+            this.style.borderColor = '#d1d5db';
+        }
+    });
+</script>
+
+<style>
+    /* Animaciones personalizadas */
+    @keyframes pulse-blue {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7); }
+        50% { box-shadow: 0 0 0 10px rgba(168, 85, 247, 0); }
+    }
+    
+    .animate-pulse-blue {
+        animation: pulse-blue 2s infinite;
+    }
+    
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        75% { transform: translateX(5px); }
+    }
+    
+    @keyframes fade-in {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .animate-fade-in {
+        animation: fade-in 0.3s ease-out;
+    }
+
+    /* Estilos personalizados para el select */
+    select option:hover {
+        background-color: #f3e8ff !important;
+    }
+    
+    select:focus option:checked {
+        background-color: #a855f7 !important;
+        color: white !important;
+    }
+</style>

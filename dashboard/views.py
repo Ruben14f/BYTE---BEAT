@@ -1,14 +1,29 @@
 from django.http.response import JsonResponse
 from django.shortcuts import render
 from orden.models import Orden
+from products.models import Category
+from orden.models import OrdenProducto
 import pandas as pd
 from datetime import datetime, timedelta, time,timezone, date
-from django.utils.timezone import now, make_aware
+from django.utils.timezone import now, make_aware,localtime
 from babel.dates import format_date
+from django.utils import formats
+
 
 
 def dashboard_view(request):
-    return render(request, 'dashboard_ordens.html')
+    mayor_vendido = OrdenProducto.total_productos_mas_vendido()
+    categorias = Category.ventas_por_categoria()
+
+    hora_actual = localtime(now()).date() 
+    dia_de_la_semana = formats.date_format(hora_actual, "l")
+
+    return render(request, 'dashboard_ordens.html', {
+        'mas_vendido': mayor_vendido,
+        'fecha_formateada': hora_actual,
+        'dia_de_la_semana': dia_de_la_semana,
+        'categorias': categorias
+    })
 
 #Grafico de barras
 def get_chart2(request):
@@ -580,6 +595,151 @@ def get_chart4(request):
     
     return JsonResponse(chart)
 
+#Grafico de linea para ingreso semanal
+def get_chart5(request):
+    # Obtener el rango de fechas (lunes a domingo de la semana actual)
+    today = datetime.today()
+    start_of_week = today - timedelta(days=today.weekday())  # Lunes de esta semana
+    end_of_week = start_of_week + timedelta(days=6)  # Domingo de esta semana
+
+    # Formatear las fechas para mostrar en el título (por ejemplo: Lun-16, Mar-17)
+    week_days = [start_of_week + timedelta(days=i) for i in range(7)]
+    week_days_str = [format_date(week_day, "EEE-dd", locale='es_ES') for week_day in week_days]  # Ejemplo: 'Lun-16', 'Mar-17'
+
+    # Filtrar las órdenes con estado "DELIVERED" y dentro del rango de la semana actual
+    ordenes = Orden.objects.prefetch_related('productos_orden__producto').filter(
+        fecha_pagada__gte=start_of_week,
+        fecha_pagada__lte=end_of_week,
+        fecha_pagada__isnull=False,
+        status='DELIVERED'
+    )
+
+    data = []
+    for orden in ordenes:
+        for op in orden.productos_orden.all():
+            precio_unitario = float(op.producto.price) if op.producto.price else 0
+            valor_venta = precio_unitario * op.quantity
+            fecha_dia = orden.fecha_pagada.date() if orden.fecha_pagada else None
+
+            data.append({
+                'valor': valor_venta,
+                'fecha_dia': fecha_dia,
+            })
+
+    # Si el DataFrame está vacío, generar un gráfico vacío con el mensaje "Sin Datos"
+    df = pd.DataFrame(data)
+
+    if df.empty:
+        chart_config = {
+            "title": {
+                "text": f"Ingresos Semanales - Sin Datos",
+                "subtext": f"Semana del {week_days_str[0]} a {week_days_str[6]}",
+                "left": "center",
+                "top": "10px",
+                "textStyle": {
+                    "fontSize": 18,
+                    "fontWeight": "bold"
+                }
+            },
+            "tooltip": {
+                "trigger": "axis",
+                "axisPointer": {
+                    "type": "cross",
+                    "label": {
+                        "backgroundColor": "#6a7985"
+                    }
+                }
+            },
+            "xAxis": {
+                "type": "category",
+                "data": week_days_str, 
+                "axisLabel": {
+                    "interval": 0, 
+                    "rotate": 45 
+                },
+                "boundaryGap": False  
+            },
+            "yAxis": {
+                "type": "value",
+                "splitLine": {
+                    "show": True
+                }
+            },
+            "series": [{
+                "data": [0, 0, 0, 0, 0, 0, 0], 
+                "type": "line",
+                "smooth": True,
+                "lineStyle": {
+                    "color": "rgba(29, 161, 242, 1)"
+                },
+                "symbol": "circle",
+                "symbolSize": 8
+            }]
+        }
+        return JsonResponse(chart_config)
+
+    # Agrupar por fecha (día) y sumar los valores de ventas
+    df_agrupado = df.groupby('fecha_dia')['valor'].sum().reset_index()
+
+    # Crear una lista para almacenar los ingresos semanales (lunes a domingo)
+    ingresos_semanales = []
+    for i in range(7):
+        fecha = start_of_week + timedelta(days=i)
+        ingresos_dia = df_agrupado[df_agrupado['fecha_dia'] == fecha.date()]['valor'].sum() if not df_agrupado[df_agrupado['fecha_dia'] == fecha.date()].empty else 0
+        ingresos_semanales.append(ingresos_dia)
+
+    chart_config = {
+        "title": {
+            "text": f"Ingresos Semanales",
+            "subtext": f"Semana del {week_days_str[0]} a {week_days_str[6]}",
+            "left": "center",
+            "top": "10px",
+            "textStyle": {
+                "fontSize": 18,
+                "fontWeight": "bold"
+            }
+        },
+        "tooltip": {
+            "trigger": "axis",
+            "axisPointer": {
+                "type": "cross",
+                "label": {
+                    "backgroundColor": "#6a7985"
+                }
+            }
+        },
+        "xAxis": {
+            "type": "category",
+            "data": week_days_str,  
+            "axisLabel": {
+                "interval": 0,  
+                "rotate": 45  
+            },
+            "boundaryGap": False  
+        },
+        "yAxis": {
+            "type": "value",
+            "splitLine": {
+                "show": True
+            }
+        },
+        "series": [{
+            "data": ingresos_semanales,
+            "type": "line",
+            "smooth": True, 
+            "areaStyle": {
+                "color": "rgba(29, 161, 242, 0.2)"  
+            },
+            "lineStyle": {
+                "color": "rgba(29, 161, 242, 1)"  
+            },
+            "symbol": "circle",  
+            "symbolSize": 8
+        }]
+    }
+
+    return JsonResponse(chart_config)
+
 #Filtro para todo el dashboard
 def get_date_range(request):
     range_type = request.GET.get('range', None) 
@@ -927,3 +1087,5 @@ def generar_comparativa_lineas(df, tipo='anio'):
             'yAxis': {'type': 'value', 'name': 'Ventas (Pesos)'},
             'series': [{'name': 'Sin datos', 'type': 'line', 'data': [0]}]
         }
+
+
