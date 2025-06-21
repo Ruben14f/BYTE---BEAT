@@ -58,7 +58,6 @@ def orden_list_filter(request):
     if request.GET.get('borrarFiltro'):
         return redirect('orden_list_report')
 
-    # ✅ Verifica si se debe descargar
     if 'descargar' in request.GET:
         # Si hay filtro de fecha, descargar solo ese rango de fechas
         if fecha_inicio and fecha_fin:
@@ -102,7 +101,6 @@ def orden_list_filter(request):
             messages.error(request, 'Formato de fecha inválido.')
             return redirect('orden_list_report')
 
-    # 🟢 Paginador aplicado al queryset filtrado
     paginator = Paginator(ordenes, 15)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
