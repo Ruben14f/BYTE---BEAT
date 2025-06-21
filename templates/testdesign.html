@@ -3,213 +3,961 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Byte & Beat - Confirmación de Compra</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Byte & Beat - Los mejores productos a un click</title>
     <style>
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        
-        @keyframes pulse-glow {
-            0% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
-            50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(0, 212, 255, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 30px rgba(0, 212, 255, 0.5); }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #111827;
+            color: #ffffff;
+            line-height: 1.6;
         }
-        
-        @keyframes checkmark {
-            0% { stroke-dasharray: 0 50; }
-            100% { stroke-dasharray: 50 0; }
+
+        /* Gradients and Backgrounds */
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e293b 0%, #3730a3 25%, #7c3aed 50%, #ec4899 75%, #06b6d4 100%);
         }
-        
-        .animate-float { animation: float 6s ease-in-out infinite; }
-        .animate-float-delay-2 { animation: float 6s ease-in-out infinite 2s; }
-        .animate-float-delay-4 { animation: float 6s ease-in-out infinite 4s; }
-        .animate-pulse-glow { animation: pulse-glow 2s infinite; }
-        .animate-checkmark { animation: checkmark 0.6s ease-in-out 0.9s both; }
-        
-        .bg-gradient-main {
-            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
-        }
-        
-        .text-gradient-blue-purple {
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
+
+        .gradient-text {
+            background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            color: transparent;
         }
-        
-        .text-gradient-green-blue {
-            background: linear-gradient(45deg, #00ff88, #00d4ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .bg-gradient-blue-purple {
-            background: linear-gradient(45deg, #00d4ff, #ff00ff);
-        }
-        
-        .bg-gradient-green-blue {
-            background: linear-gradient(45deg, #00ff88, #00d4ff);
-        }
-        
+
         .glass-effect {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .header-glass {
-            background: rgba(26, 26, 46, 0.8);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .navbar.scrolled {
+            background: rgba(17, 24, 39, 0.95);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .nav-menu li a {
+            color: #ffffff;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-menu li a:hover {
+            color: #8B5CF6;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .nav-menu li a.logout {
+            background: #dc2626;
+            color: white;
+        }
+
+        .nav-menu li a.logout:hover {
+            background: #b91c1c;
+        }
+
+        .cart-btn {
+            position: relative;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .cart-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ec4899;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(17, 24, 39, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+        }
+
+        .mobile-menu.active {
+            display: block;
+        }
+
+        .mobile-menu a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            transition: color 0.3s ease;
+        }
+
+        .mobile-menu a:hover {
+            color: #8B5CF6;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 64px;
+        }
+
+        .hero-bg-element {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .hero-bg-element:nth-child(1) {
+            top: -160px;
+            right: -160px;
+            width: 320px;
+            height: 320px;
+            background: #8B5CF6;
+            animation-delay: 0s;
+        }
+
+        .hero-bg-element:nth-child(2) {
+            bottom: -160px;
+            left: -160px;
+            width: 320px;
+            height: 320px;
+            background: #06B6D4;
+            animation-delay: 2s;
+        }
+
+        .hero-bg-element:nth-child(3) {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 320px;
+            height: 320px;
+            background: #EC4899;
+            animation-delay: 4s;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #d1d5db;
+            margin-bottom: 32px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-btn {
+            background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        /* Sections */
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-alt {
+            background-color: #1f2937;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: #9ca3af;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        .product-image {
+            height: 192px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+        }
+
+        .product-image.tech {
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+        }
+
+        .product-image.audio {
+            background: linear-gradient(135deg, #EC4899, #8B5CF6);
+        }
+
+        .product-image.music {
+            background: linear-gradient(135deg, #06B6D4, #10B981);
+        }
+
+        .product-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .product-description {
+            color: #9ca3af;
+            margin-bottom: 16px;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .product-btn {
+            background: #8B5CF6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .product-btn:hover {
+            background: #7c3aed;
+            transform: scale(1.05);
+        }
+
+        /* Category Grid */
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .category-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.1);
+        }
+
+        .category-icon.computers {
+            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
+        }
+
+        .category-icon.audio {
+            background: linear-gradient(135deg, #EC4899, #EF4444);
+        }
+
+        .category-icon.instruments {
+            background: linear-gradient(135deg, #10B981, #14B8A6);
+        }
+
+        .category-icon.accessories {
+            background: linear-gradient(135deg, #F59E0B, #F97316);
+        }
+
+        .category-title {
+            font-size: 1.125rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .category-description {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 64px 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 48px;
+        }
+
+        .footer-brand {
+            max-width: 400px;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.875rem;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .footer-brand p {
+            color: #d1d5db;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-btn {
+            background: #8B5CF6;
+            color: white;
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .social-btn:hover {
+            background: #7c3aed;
+            transform: scale(1.1);
+        }
+
+        .footer-section h4 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-section ul li a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section ul li a:hover {
+            color: #8B5CF6;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #374151;
+            padding-top: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-bottom p {
+            color: #9ca3af;
+            font-size: 0.875rem;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            color: #9ca3af;
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #8B5CF6;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.125rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-main min-h-screen text-white overflow-x-hidden">
-    
-    <!-- Elementos de fondo flotantes -->
-    <div class="fixed inset-0 opacity-10 pointer-events-none">
-        <div class="absolute w-48 h-48 border-2 border-cyan-400 rounded-full top-[10%] left-[15%] animate-float"></div>
-        <div class="absolute w-36 h-36 border-2 border-cyan-400 rounded-full top-[60%] right-[20%] animate-float-delay-2"></div>
-        <div class="absolute w-24 h-24 border-2 border-cyan-400 rounded-full bottom-[20%] left-[70%] animate-float-delay-4"></div>
-    </div>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo gradient-text">Byte & Beat</a>
+            
+            <ul class="nav-menu">
+                <li><a href="#home">Inicio</a></li>
+                <li><a href="#products">Productos</a></li>
+                <li><a href="#purchases">Mis Compras</a></li>
+                <li><a href="#admin">Panel Admin</a></li>
+                <li><a href="#logout" class="logout">Cerrar Sesión</a></li>
+                <li>
+                    <button class="cart-btn" id="cartBtn">
+                        🛒
+                        <span class="cart-count" id="cartCount">3</span>
+                    </button>
+                </li>
+            </ul>
 
-    <!-- Header -->
-    <header class="header-glass relative z-10">
-        <div class="flex flex-col md:flex-row justify-between items-center px-8 md:px-12 py-5 gap-5 md:gap-0">
-            <div class="text-2xl md:text-3xl font-bold text-gradient-blue-purple">
-                Byte & Beat
-            </div>
-            <nav>
-                <ul class="flex gap-6 md:gap-8 text-sm md:text-base">
-                    <li><a href="#inicio" class="font-medium hover:text-cyan-400 transition-colors duration-300">Inicio</a></li>
-                    <li><a href="#productos" class="font-medium hover:text-cyan-400 transition-colors duration-300">Productos</a></li>
-                    <li><a href="#mis-compras" class="font-medium hover:text-cyan-400 transition-colors duration-300">Mis compras</a></li>
-                    <li><a href="#panel" class="font-medium hover:text-cyan-400 transition-colors duration-300">Panel administrador</a></li>
-                </ul>
-            </nav>
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <span id="hamburger">☰</span>
+                <span id="close" style="display: none;">✕</span>
+            </button>
         </div>
-    </header>
 
-    <!-- Contenido principal -->
-    <main class="relative z-5 max-w-4xl mx-auto px-6 md:px-8 py-12 md:py-20 text-center">
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="#home">Inicio</a>
+            <a href="#products">Productos</a>
+            <a href="#purchases">Mis Compras</a>
+            <a href="#admin">Panel Admin</a>
+            <a href="#logout" style="color: #dc2626;">Cerrar Sesión</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero gradient-bg" id="home">
+        <div class="hero-bg-element"></div>
+        <div class="hero-bg-element"></div>
+        <div class="hero-bg-element"></div>
         
-        <!-- Ícono de éxito -->
-        <div class="w-28 h-28 md:w-32 md:h-32 mx-auto mb-8 md:mb-10 bg-gradient-blue-purple rounded-full flex items-center justify-center animate-pulse-glow opacity-0 animate-fade-in">
-            <svg class="w-14 h-14 md:w-16 md:h-16 text-white animate-checkmark" viewBox="0 0 52 52" fill="none" stroke="currentColor" stroke-width="3">
-                <path d="M14,27 L22,35 L38,19" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+        <div class="hero-content">
+            <h1 class="hero-title fade-in-up">
+                <span class="gradient-text">Los mejores productos</span>
+                <br>
+                <span>a un click</span>
+            </h1>
+            <p class="hero-subtitle fade-in-up">
+                Descubre lo mejor en tecnología e instrumentos musicales en Byte & Beat
+            </p>
+            <button class="hero-btn fade-in-up" onclick="scrollToSection('products')">
+                Explorar Productos
+            </button>
         </div>
+    </section>
 
-        <!-- Título -->
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 md:mb-6 text-gradient-blue-purple animate-slide-up">
-            ¡Compra Confirmada!
-        </h1>
-        <p class="text-lg md:text-xl text-gray-300 mb-10 md:mb-12 animate-slide-up">
-            Tu transacción ha sido procesada exitosamente
-        </p>
+    <!-- Productos Destacados -->
+    <section class="section" id="products">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="gradient-text">Productos Destacados</span>
+                </h2>
+                <p class="section-subtitle">Lo mejor de nuestra selección</p>
+            </div>
 
-        <!-- Tarjeta de detalles -->
-        <div class="glass-effect rounded-2xl p-6 md:p-10 mb-10 md:mb-12 text-left shadow-2xl animate-slide-up">
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300">Número de Orden:</span>
-                <span class="font-bold text-white">#14</span>
+            <div class="product-grid">
+                <div class="product-card ">
+                    <div class="product-image tech">💻</div>
+                    <h3 class="product-title">Laptop Gaming Pro</h3>
+                    <p class="product-description">Potencia extrema para gaming y trabajo profesional</p>
+                    <div class="product-footer">
+                        <span class="product-price gradient-text">$1,299</span>
+                        <button class="product-btn" onclick="addToCart('Laptop Gaming Pro', 1299)">Comprar</button>
+                    </div>
+                </div>
+
+                <div class="product-card ">
+                    <div class="product-image audio">🎧</div>
+                    <h3 class="product-title">Auriculares Premium</h3>
+                    <p class="product-description">Calidad de sonido profesional con cancelación de ruido</p>
+                    <div class="product-footer">
+                        <span class="product-price gradient-text">$249</span>
+                        <button class="product-btn" onclick="addToCart('Auriculares Premium', 249)">Comprar</button>
+                    </div>
+                </div>
+
+                <div class="product-card ">
+                    <div class="product-image music">🎹</div>
+                    <h3 class="product-title">Teclado Musical</h3>
+                    <p class="product-description">88 teclas con sensibilidad táctil profesional</p>
+                    <div class="product-footer">
+                        <span class="product-price gradient-text">$899</span>
+                        <button class="product-btn" onclick="addToCart('Teclado Musical', 899)">Comprar</button>
+                    </div>
+                </div>
             </div>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300">Nombre del cliente:</span>
-                <span class="font-bold text-white">#14</span>
-            </div>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300"> Email de contacto:</span>
-                <span class="font-bold text-white">#14</span>
-            </div>
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300"> "Envío" o "Retiro":</span>
-                <span class="font-bold text-white">#14</span>
-            </div>
-              <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300"> "Costo de envío":</span>
-                <span class="font-bold text-white">#14</span>
-            </div>
-             <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300"> " dirección completa":</span>
-                <span class="font-bold text-white">#14</span>
-            </div>
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300">Fecha de creación:</span>
-                <span class="font-bold text-white">27-20.220</span>
-            </div>
-            
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center py-4 border-b border-white/10 gap-2 md:gap-0">
-                <span class="font-semibold text-gray-300">Monto Total:</span>
-                <span class="font-bold text-2xl md:text-3xl text-gradient-blue-purple">$430,416</span>
+
+            <div style="text-align: center;">
+                <button class="hero-btn" onclick="showAllProducts()">
+                    Ver Todos los Productos
+                </button>
             </div>
         </div>
+    </section>
 
-        <!-- Botones de acción -->
-        <div class="flex flex-col md:flex-row gap-4 md:gap-6 justify-center items-center animate-slide-up">
-            <a href="#" class="w-full md:w-auto bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold py-4 px-8 rounded-full hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300">
-                Ver Detalles de Compra
-            </a>
-            <a href="#" class="w-full md:w-auto bg-transparent border-2 border-cyan-400 text-cyan-400 font-bold py-4 px-8 rounded-full hover:bg-cyan-400 hover:text-white hover:-translate-y-1 transition-all duration-300">
-                Continuar Comprando
-            </a>
+    <!-- Categorías -->
+    <section class="section section-alt">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <span class="gradient-text">Nuestras Categorías</span>
+                </h2>
+                <p class="section-subtitle">Encuentra exactamente lo que buscas</p>
+            </div>
+
+            <div class="category-grid">
+                <div class="category-card fade-in-up" onclick="filterByCategory('computers')">
+                    <div class="category-icon computers">💻</div>
+                    <h3 class="category-title">Computadoras</h3>
+                    <p class="category-description">Laptops, PCs, tablets y más</p>
+                </div>
+
+                <div class="category-card fade-in-up" onclick="filterByCategory('audio')">
+                    <div class="category-icon audio">🎧</div>
+                    <h3 class="category-title">Audio</h3>
+                    <p class="category-description">Auriculares, altavoces, micrófonos</p>
+                </div>
+
+                <div class="category-card fade-in-up" onclick="filterByCategory('instruments')">
+                    <div class="category-icon instruments">🎹</div>
+                    <h3 class="category-title">Instrumentos</h3>
+                    <p class="category-description">Teclados, guitarras, baterías</p>
+                </div>
+
+                <div class="category-card fade-in-up" onclick="filterByCategory('accessories')">
+                    <div class="category-icon accessories">🔌</div>
+                    <h3 class="category-title">Accesorios</h3>
+                    <p class="category-description">Cables, soportes, fundas</p>
+                </div>
+            </div>
         </div>
-    </main>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer gradient-bg">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h3 class="gradient-text">Byte & Beat</h3>
+                    <p>
+                        Tu destino principal para tecnología de vanguardia e instrumentos musicales de calidad profesional. 
+                        Conectamos la pasión por la tecnología con el amor por la música.
+                    </p>
+                    <div class="social-links">
+                        <button class="social-btn" onclick="openSocial('twitter')">🐦</button>
+                        <button class="social-btn" onclick="openSocial('facebook')">📘</button>
+                        <button class="social-btn" onclick="openSocial('instagram')">📷</button>
+                        <button class="social-btn" onclick="openSocial('youtube')">📺</button>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Enlaces Rápidos</h4>
+                    <ul>
+                        <li><a href="#home">Inicio</a></li>
+                        <li><a href="#products">Productos</a></li>
+                        <li><a href="#offers">Ofertas</a></li>
+                        <li><a href="#contact">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="mailto:info@bytebeat.com">📧 info@bytebeat.com</a></li>
+                        <li><a href="tel:+56912345678">📞 +56 9 1234 5678</a></li>
+                        <li><a href="#">📍 Santiago, Chile</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>© 2025 Byte & Beat. Todos los derechos reservados.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Política de Privacidad</a>
+                    <a href="#terms">Términos de Servicio</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
     <script>
-        // Configuración de animaciones personalizadas
-        const style = document.createElement('style');
-        style.textContent = `
-            .animate-fade-in {
-                animation: fadeIn 0.8s ease-out forwards;
-            }
-            
-            .animate-slide-up {
-                animation: slideUp 0.8s ease-out forwards;
-            }
-            
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            
-            @keyframes slideUp {
-                from { transform: translateY(30px); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // Animación del checkmark
-        document.addEventListener('DOMContentLoaded', function() {
-            const checkmark = document.querySelector('svg path');
-            if (checkmark) {
-                const pathLength = checkmark.getTotalLength();
-                
-                checkmark.style.strokeDasharray = pathLength;
-                checkmark.style.strokeDashoffset = pathLength;
-                
-                setTimeout(() => {
-                    checkmark.style.transition = 'stroke-dashoffset 0.6s ease-in-out';
-                    checkmark.style.strokeDashoffset = 0;
-                }, 900);
+        // Variables globales
+        let cartItems = [];
+        let cartCount = 3;
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
             }
         });
 
-        // Efectos de hover mejorados para los botones
-        document.querySelectorAll('a[href="#"]').forEach(btn => {
-            btn.addEventListener('mouseenter', function() {
-                this.style.transform = 'translateY(-3px) scale(1.02)';
-            });
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const hamburger = document.getElementById('hamburger');
+        const closeIcon = document.getElementById('close');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            mobileMenu.classList.toggle('active');
             
-            btn.addEventListener('mouseleave', function() {
-                this.style.transform = 'translateY(0) scale(1)';
+            if (mobileMenu.classList.contains('active')) {
+                hamburger.style.display = 'none';
+                closeIcon.style.display = 'block';
+            } else {
+                hamburger.style.display = 'block';
+                closeIcon.style.display = 'none';
+            }
+        });
+
+        // Smooth scrolling
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                const offsetTop = element.offsetTop - 64; // Account for fixed navbar
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        // Add smooth scrolling to all nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                scrollToSection(targetId);
+                
+                // Close mobile menu if open
+                mobileMenu.classList.remove('active');
+                hamburger.style.display = 'block';
+                closeIcon.style.display = 'none';
             });
         });
-    </script>
-</body>
-</html>
+
+        // Cart functionality
+        function addToCart(productName, price) {
+            cartItems.push({
+                name: productName,
+                price: price,
+                quantity: 1
+            });
+            
+            cartCount++;
+            updateCartCount();
+            
+            // Show success message
+            showNotification(`${productName} agregado al carrito`, 'success');
+            
+            // Animate cart button
+            const cartBtn = document.getElementById('cartBtn');
+            cartBtn.style.transform = 'scale(1.2)';
+            setTimeout(() => {
+                cartBtn.style.transform = 'scale(1)';
+            }, 200);
+        }
+
+        function updateCartCount() {
+            document.getElementById('cartCount').textContent = cartCount;
+        }
+
+        // Cart button click
+        document.getElementById('cartBtn').addEventListener('click', function() {
+            showCart();
+        });
+
+        function showCart() {
+            if (cartItems.length === 0) {
+                showNotification('Tu carrito está vacío', 'info');
+                return;
+            }
+            
+            let cartContent = 'Productos en tu carrito:\n\n';
+            let total = 0;
+            
+            cartItems.forEach(item => {
+                cartContent += `${item.name} - $${item.price}\n`;
+                total += item.price;
+            });
+            
+            cartContent += `\nTotal: $${total}`;
+            
+            if (confirm(cartContent + '\n\n¿Proceder al checkout?')) {
+                showNotification('Redirigiendo al checkout...', 'success');
+            }
+        }
+
+        // Category filtering
+        function filterByCategory(category) {
+            showNotification(`Mostrando productos de ${category}`, 'info');
+            // Here you would implement actual filtering logic
+        }
+
+        // Show all products
+        function showAllProducts() {
+            showNotification('Cargando todos los productos...', 'info');
+            // Here you would implement navigation to products page
+        }
+
+        // Social media links
+        function openSocial(platform) {
+            const urls = {
+                twitter: 'https://twitter.com/bytebeat',
+                facebook: 'https://facebook.com/bytebeat',
+                instagram: 'https://instagram.com/bytebeat',
+                youtube: 'https://youtube.com/bytebeat'
+            };
+            
+            if (urls[platform]) {
+                window.open(urls[platform], '_blank');
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
+                color: white;

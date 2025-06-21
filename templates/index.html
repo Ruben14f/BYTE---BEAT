@@ -8,17 +8,18 @@
     <div class="hero-content animate-fade-in">
         <h1 class="hero-title">Los mejores productos<br>a un click</h1>
         <p class="hero-subtitle">Descubre lo mejor en tecnología e instrumentos musicales en Byte & Beat</p>
-        <button class="cta-button floating" >Explorar Productos</button>
+        <a class="cta-button floating" href="{% url 'view_products' %}">Explorar Productos</a>
     </div>
 </section>
 {% endblock %}
 
+
 {% block content %}
+<div class="section-divider"></div>
 
-<section id="categories" class="container our-categories-container">
-
-    <div class="text-center" style="color: #17F0D2;">
-        <h3>Productos Destacados</h3>
+<section id="categories" class="container our-categories-container section-shadow geometric-pattern">
+    <div class="text-center">
+        <h3 class="section-title-enhanced" style="color: #17F0D2;">Productos Destacados</h3>
     </div>
 
     <div class="container-our-categories">
@@ -30,7 +31,6 @@
                         <div class="d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px; background: white; margin-bottom: 20px;">
                             <span class="text-muted fs-4"><img src="{{product_vent.main_image.url}}" alt="" width="90%" height="90%"></span>
                         </div>
-                        
                         <div class="overlay">
                             <h6 class="fw-bold m-0" style="color: #2C2F47;">{{product_vent.category}}</h6>
                         </div>
@@ -39,33 +39,34 @@
                     <div class="card-body">
                         <h5 class="card-title fw-bold">{{product_vent.name}}</h5>
                         <p class="card-text mb-2" style="color: white;">{{product_vent.price | format_price }}</p>
-                        <a href="{% url 'detail_product' product_vent.slug %}" class="btn rounded-pill px-4" style="background: #17F0D2;">Añadir al carrito</a>
+                        <a href="{% url 'detail_product' product_vent.slug %}" class="btn rounded-pill px-4">Añadir al carrito</a>
                     </div>
                 </div>  
                 {% endfor %}             
-                
             </div>
         </div>
-        
     </div>
 </section>
 
-<section class="containter featured-products bg-secondary" style="padding-top: 1%;">
-    <div class="text-center" style="color: #17F0D2;">
-        <h3 class="title-featured">Nuestras Categorias</h3>
+<!-- Divisor creativo entre secciones -->
+<div class="creative-spacing"></div>
+
+<section class="container featured-products section-shadow section-fade-in" style="padding-top: 1%;">
+    <div class="text-center">
+        <h3 class="title-featured section-title-enhanced" style="color: #17F0D2;">Nuestras Categorias</h3>
     </div>
 
     <div class="container-featured-products">
         <div class="col-4-md col-12">
             <div class="row">
                 {% for categorys in categoria %}
-                    <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; ">
+                    <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{categorys.name}}</h5>
                             <p class="card-text">
                                 Descripcion de los productos en esta categoria
                             </p>
-                            <a href="{% url 'categorias_marcas_filtro' 'categoria' categorys.id|urlsafe_base64_encode_filter %}" class="btn rounded-pill px-4" style="background: #17F0D2;">Ver</a>
+                            <a href="{% url 'categorias_marcas_filtro' 'categoria' categorys.id|urlsafe_base64_encode_filter %}" class="btn rounded-pill px-4">Ver</a>
                         </div>
                     </div>
                 {% endfor %}
@@ -74,4 +75,45 @@
     </div>
 </section>
 
+<script>
+    // Tu lógica existente del IntersectionObserver
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+
+    // Observe all animated elements (tu código existente)
+    document.querySelectorAll('.animate-fade-in').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+
+    // Nuevo código para las animaciones de fade-in de secciones
+    const sectionObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observar secciones con fade-in
+    document.querySelectorAll('.section-fade-in').forEach(section => {
+        sectionObserver.observe(section);
+    });
+</script>
 {% endblock %}

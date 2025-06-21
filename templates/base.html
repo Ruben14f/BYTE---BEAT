@@ -13,10 +13,258 @@
     integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+  
   <title>{% block title %} Byte & Beat {% endblock %}</title>
+  <style>
+    body {
+        overflow-x: hidden;
+    }
+
+    .bg-gradient-main {
+        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        background-color: #0f3460; /* Fondo alternativo */
+    }
+
+    .container,
+    .container-fluid,
+    .card,
+    .btn,
+    .modal,
+    .navbar,
+    header,
+    main,
+    footer,
+    .mt-5 {
+        position: relative;
+        z-index: 10;
+    }
+
+    /* Navbar */
+    .navbar {
+        z-index: 10000; 
+    }
+
+    /* Elementos flotantes */
+    .floating-elements {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0.1;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    /* Estilo de los círculos flotantes */
+    .floating-circle {
+        position: absolute;
+        border: 2px solid #00d4ff;
+        border-radius: 50%;
+    }
+
+    .circle-large {
+        width: 192px;
+        height: 192px;
+        top: 10%;
+        left: 15%;
+    }
+
+    .circle-medium {
+        width: 144px;
+        height: 144px;
+        top: 60%;
+        right: 20%;
+    }
+
+    .circle-small {
+        width: 96px;
+        height: 96px;
+        bottom: 20%;
+        left: 70%;
+    }
+
+    /* Asegura que el texto sea visible */
+    body {
+        background-color: #0f3460;
+        color: white;
+    }
+
+    /* Animación de los círculos flotantes */
+    @keyframes float {
+        0%, 100% { 
+            transform: translateY(0px) rotate(0deg); 
+        }
+        50% { 
+            transform: translateY(-20px) rotate(180deg); 
+        }
+    }
+
+    /* Clases de animación */
+    .animate-float { 
+        animation: float 6s ease-in-out infinite; 
+    }
+
+    .animate-float-delay-2 { 
+        animation: float 6s ease-in-out infinite 2s; 
+    }
+
+    .animate-float-delay-4 { 
+        animation: float 6s ease-in-out infinite 4s; 
+    }
+
+    /* Navbar personalizado */
+    .navbar-toggler {
+        background-color: white;
+    }
+
+    .navbar-brand {
+        color: #17F0D2;
+    }
+
+    .navbar-nav a {
+        color: white;
+    }
+
+    .initial-user {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #17F0D2;
+        background-color: #1E1F36;
+        border-radius: 50%;
+        padding: 10px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+    }
+
+    /* Footer */
+    .footer {
+        background-color: #1e1e2f;
+        color: white;
+        padding: 0;
+    }
+
+    .footer-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 40px 5%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .footer-column {
+        flex: 1;
+        min-width: 200px;
+        margin-bottom: 20px;
+        padding: 0 15px;
+    }
+
+    .footer-column h4 {
+        color: #00ffd5;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    .footer-column ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-column ul li {
+        margin-bottom: 10px;
+    }
+
+    .footer-column ul li a {
+        color: #ccc;
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+
+    .footer-column ul li a:hover {
+        color: #00ffd5;
+    }
+
+    .footer-logo {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .footer-logo img {
+        height: 40px;
+    }
+
+    .company-info p {
+        color: #ccc;
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 10px;
+    }
+
+    .footer-bottom {
+        background-color: #191927;
+        padding: 15px 0;
+        text-align: center;
+        font-size: 13px;
+        color: #888;
+    }
+
+    .footer-bottom p {
+        margin: 0;
+    }
+
+    .footer-bottom a {
+        color: #ccc;
+        text-decoration: none;
+    }
+
+    .footer-bottom a:hover {
+        color: #00ffd5;
+    }
+
+    @media (max-width: 768px) {
+        .footer-column {
+            min-width: 50%;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .footer-column {
+            min-width: 100%;
+        }
+
+        .newsletter-form {
+            flex-direction: column;
+        }
+
+        .newsletter-form input {
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .newsletter-form button {
+            border-radius: 4px;
+        }
+    }
+
+  </style>
 </head>
 
-<body style="background-color: #1E1F36;">
+<body class="bg-gradient-main">
+
+  <!-- Elementos de fondo flotantes -->
+  <div class="floating-elements">
+    <div class="floating-circle circle-large animate-float"></div>
+    <div class="floating-circle circle-medium animate-float-delay-2"></div>
+    <div class="floating-circle circle-small animate-float-delay-4"></div>
+  </div>
 
   {% block navbar %}
   <header>
@@ -31,10 +279,9 @@
         </div>
 
         <div class="collapse navbar-collapse justify-content-center order-3 order-lg-2 fs-5" id="navbarNav">
-          <div class="navbar-nav text-lg-start ">
+          <div class="navbar-nav text-lg-start">
             <a class="nav-link active text-light" href="{% url 'index' %}">Inicio</a>
             <a class="nav-link text-light" href="{% url 'view_products' %}">Productos</a>
-            <!-- <a class="nav-link text-light" href="#categories">Categorias</a> -->
             {% if user.is_authenticated %}
             <a class="nav-link text-light" href="{% url 'logout' %}">Cerrar sesion</a>
             <a class="nav-link text-light" href="{% url 'historial_orden' %}">Mis compras</a>
@@ -51,31 +298,22 @@
           {% else %}
           <a href="{% url 'login' %}"><i class="bi bi-person" style="color: white;"></i></a>
           {% endif %}
-         
-
         </div>
       </div>
     </nav>
 
     {% block banner %}
-
     {% endblock %}
   </header>
   {% endblock %}
   
-  {% block breadcrumb %}
-  {% include 'breadcrumb.html' %}
-  {% endblock %}
-
-
-
-  <div class="mt-5 pt-5">
-    {% block content %}
-
+    {% block breadcrumb %}
+    {% include 'breadcrumb.html' %}
     {% endblock %}
-  </div>
+    {% block content %}
+    {% endblock %}
 
-  {% include 'chatbot.html' %}
+    {% include 'chatbot.html' %}
   <footer class="footer mt-5 pt-5">
     <!-- Contenido principal del footer -->
     <div class="footer-content">
@@ -115,8 +353,10 @@
         <p>© 2025 Byte & Beat - Todos los derechos reservados | Diseñado con ♥ para los amantes de la tecnología</p>
     </div>
 </footer>
-</body>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+
 </html>

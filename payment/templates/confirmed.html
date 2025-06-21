@@ -1,16 +1,333 @@
 {% extends 'base.html' %}
-
 {% load static %}
+{% load precios_tag %}
 
 {% block content %}
+<style>
+    /* Success icon */
+.success-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00bcd4, #e91e63);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    position: relative;
+    animation: circleAppear 0.8s ease-out;
+}
 
-<div style="background: white;">
-    <H1>CONFIRMADO
-        {{resultado}}
-    </H1>
+.success-icon i {
+    font-size: 3rem; /* Aumenta el tamaño del ícono */
+    color: white;
+}
 
-    {{orden.num_orden}}
+/* Títulos */
+.success-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.success-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+/* Card */
+.order-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    animation: slideInUp 0.8s ease-out 0.4s both;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+    margin: 0 -1rem;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.order-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.order-value {
+    color: white;
+    font-weight: 600;
+}
+
+/* Botones */
+.btn-custom {
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    margin: 0.5rem;
+    text-decoration: none;
+    display: inline-block;
+    z-index: 10; /* Asegura que los botones estén por encima */
+}
+
+.btn-primary-custom {
+    background: rgba(233, 30, 99, 0.1);
+    color: #e91e63;
+    border: 1px solid rgba(233, 30, 99, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.btn-primary-custom:hover {
+    background: rgba(233, 30, 99, 0.2);
+    color: #e91e63;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+    border: 1px solid rgba(233, 30, 99, 0.5);
+}
+
+.btn-outline-custom {
+    background: rgba(0, 188, 212, 0.1);
+    color: #00bcd4;
+    border: 1px solid rgba(0, 188, 212, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.btn-outline-custom:hover {
+    background: rgba(0, 188, 212, 0.2);
+    color: #00bcd4;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.3);
+    border: 1px solid rgba(0, 188, 212, 0.5);
+}
+
+/* Contenedor de botones */
+.button-container {
+    margin-top: 3rem;
+    animation: slideInUp 0.8s ease-out 0.6s both;
+    text-align: center;
+}
+
+/* Animaciones */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+    .order-card {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    /* Cambiar el layout de los items a columna */
+    .order-item {
+        display: block; /* Cambiar a bloque para apilar */
+        width: 100%; /* Hacer que los items ocupen todo el ancho */
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+    .order-label {
+        font-weight: bold; /* Aseguramos que las etiquetas sean más destacadas */
+        display: block; /* Para que estén en una nueva línea */
+        margin-bottom: 0.5rem;
+    }
+
+    .order-value {
+        font-weight: 600;
+        display: block; /* Se separa de la etiqueta */
+        margin-bottom: 1rem;
+    }
+
+    .btn-custom {
+        width: 80%; /* Cambié a 80% para evitar que se estire demasiado */
+        margin: 1rem 0;
+    }
+
+    .success-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .success-icon i {
+        font-size: 2.5rem;
+    }
+}
+
+</style>
+
+<!-- Main Content -->
+<div class="main-container" style="margin-top: -100px;">
+    <div class="container">
+        <div class="text-center">
+            <!-- Success Icon -->
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+
+            <!-- Title -->
+            <h1 class="success-title">¡Compra Confirmada!</h1>
+            <p class="success-subtitle">Tu transacción ha sido procesada exitosamente</p>
+
+            <!-- Order Details Card -->
+            <div class="order-card">
+                <div class="order-item">
+                    <span class="order-label">Número de Orden:</span>
+                    <span class="order-value highlight">#{{orden.num_orden}}</span>
+                </div>
+                <div class="order-item">
+                    <span class="order-label">Nombre del cliente:</span>
+                    <span class="order-value highlight">{{orden.user.first_name | title }} {{orden.user.last_name | title}} </span>
+                </div>
+                <div class="order-item">
+                    <span class="order-label">Email de contacto:</span>
+                    <span class="order-value highlight">{{orden.user.email}}</span>
+                </div>
+                <div class="order-item">
+                    <span class="order-label">Metodo de entrega:</span>
+                    <span class="order-value highlight"> {{orden.get_delivery_method_display}}</span>
+                </div>
+                {% if orden.delivery_method == 'SHIPPING' %}
+                    <div class="order-item">
+                        <span class="order-label">Costo de envío:</span>
+                        <span class="order-value highlight">{{orden.envio_total | format_price}}</span>
+                    </div>
+                {% endif %}
+                <div class="order-item">
+                    <span class="order-label">Dirección completa:</span>
+                    <span class="order-value highlight">{{perfiluser.address.calle | title}} {{ perfiluser.address.num_direccion }}, {{ perfiluser.address.comuna.name | title }}, {{ perfiluser.address.ciudad }}</span>
+                </div>
+                <div class="order-item">
+                    <span class="order-label">Fecha de creación:</span>
+                    <span class="order-value">{{orden.fecha_pagada}}</span>
+                </div>
+                <div class="order-item">
+                    <span class="order-label">Monto Total:</span>
+                    <span class="order-value total-amount">{{orden.total | format_price}}</span>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-container">
+                <a href="#" class="btn-custom btn-outline-custom">
+                    <i class="fas fa-eye me-2"></i>Ver Detalles de Compra
+                </a>
+                <a href="#" class="btn-custom btn-outline-custom">
+                    <i class="fas fa-shopping-cart me-2"></i>Continuar Comprando
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
 
+<script>
+    // Add some interactive effects
+    document.addEventListener('DOMContentLoaded', function () {
+        // Animate order items on hover
+        const orderItems = document.querySelectorAll('.order-item');
+        orderItems.forEach(item => {
+            item.addEventListener('mouseenter', function () {
+                this.style.transform = 'translateX(5px)';
+            });
+
+            item.addEventListener('mouseleave', function () {
+                this.style.transform = 'translateX(0)';
+            });
+        });
+
+        // Add click effect to buttons
+        const buttons = document.querySelectorAll('.btn-custom');
+        buttons.forEach(button => {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                // Create ripple effect
+                const ripple = document.createElement('span');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                const x = e.clientX - rect.left - size / 2;
+                const y = e.clientY - rect.top - size / 2;
+
+                ripple.style.cssText = `
+                        position: absolute;
+                        width: ${size}px;
+                        height: ${size}px;
+                        left: ${x}px;
+                        top: ${y}px;
+                        background: rgba(255, 255, 255, 0.4);
+                        border-radius: 50%;
+                        transform: scale(0);
+                        animation: ripple 0.6s linear;
+                        pointer-events: none;
+                    `;
+
+                this.style.position = 'relative';
+                this.style.overflow = 'hidden';
+                this.appendChild(ripple);
+
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Success icon animation sequence
+        const successIcon = document.querySelector('.success-icon');
+        const checkIcon = document.querySelector('.success-icon i');
+
+        // Reset animations and start sequence
+        setTimeout(() => {
+            // The circle appears first (already animated with CSS)
+            // Then the check icon appears after 1.2s
+            // Finally the ripple effect starts after 1.5s
+        }, 100);
+    });
+
+    // Add CSS for ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+    document.head.appendChild(style);
+</script>
 {% endblock %}
