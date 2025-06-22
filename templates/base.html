@@ -18,6 +18,8 @@
   <style>
     body {
         overflow-x: hidden;
+        background-color: #0f3460;
+        color: white;
     }
     
     .bg-gradient-main {
@@ -25,10 +27,6 @@
         background-color: #0f3460; /* Fondo alternativo */
     }
 
-    /* Navbar */
-    .navbar {
-        z-index: 10000; 
-    }
 
     /* Elementos flotantes */
     .floating-elements {
@@ -70,12 +68,6 @@
         left: 70%;
     }
 
-    /* Asegura que el texto sea visible */
-    body {
-        background-color: #0f3460;
-        color: white;
-    }
-
     /* Animación de los círculos flotantes */
     @keyframes float {
         0%, 100% { 
@@ -104,61 +96,61 @@
 
 <body class="bg-gradient-main">
     
-  <!-- Elementos de fondo flotantes -->
-  <div class="floating-elements">
-    <div class="floating-circle circle-large animate-float"></div>
-    <div class="floating-circle circle-medium animate-float-delay-2"></div>
-    <div class="floating-circle circle-small animate-float-delay-4"></div>
-  </div>
+    <!-- Elementos de fondo flotantes -->
+    <div class="floating-elements">
+        <div class="floating-circle circle-large animate-float"></div>
+        <div class="floating-circle circle-medium animate-float-delay-2"></div>
+        <div class="floating-circle circle-small animate-float-delay-4"></div>
+    </div>
 
-  {% block navbar %}
-    <header>
-        <nav class="navbar navbar-expand-lg fixed-top" style="background: #191B2A;">
-        <div class="container-fluid d-flex">
-            <div class="d-flex align-items-center gap-2 order-1">
-            <button class="navbar-toggler" style="background-color: white;" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand mb-0 h1 fs-3" style="color: #D1A0FF;" href="{% url 'index' %}">Byte & Beat</a>
-            </div>
+    {% block navbar %}
+        <header>
+            <nav class="navbar navbar-expand-lg fixed-top" style="background: #191B2A;">
+            <div class="container-fluid d-flex">
+                <div class="d-flex align-items-center gap-2 order-1">
+                <button class="navbar-toggler" style="background-color: white;" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <a class="navbar-brand mb-0 h1 fs-3" style="color: #D1A0FF;" href="{% url 'index' %}">Byte & Beat</a>
+                </div>
 
-            <div class="collapse navbar-collapse justify-content-center order-3 order-lg-2 fs-5" id="navbarNav">
-            <div class="navbar-nav text-lg-start">
-                <a class="nav-link active text-light" href="{% url 'index' %}">Inicio</a>
-                <a class="nav-link text-light" href="{% url 'view_products' %}">Productos</a>
-            </div>
-            </div>
-            
-            <div class="d-flex gap-4 align-items-center order-2 order-lg-3" style="font-size: 32px;">
-            <a href="{% url 'cart' %}"><i class="bi bi-basket2 cart-icon" style="color: white;"></i></a>
-            {% if user.is_authenticated %}
-            <!-- Dropdown del usuario -->
-            <div class="dropdown">
-                <a href="#" class="initial-user dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;">
-                {{ initial | title }}
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="background-color: #2c2f3f; border: 1px solid rgba(255, 0, 255, 0.1);">
-                <li><a class="dropdown-item text-light" href="{% url 'perfil' %}" style="background-color: transparent;"><i class="bi bi-person-circle me-2"></i>Perfil</a></li>
-                <li><a class="dropdown-item text-light" href="{% url 'historial_orden' %}" style="background-color: transparent;"><i class="bi bi-bag-check me-2"></i>Mis compras</a></li>
-                {% if request.user.is_staff or request.user.is_superuser %}
-                <li><a class="dropdown-item text-light" href="{% url 'admin_index' %}" style="background-color: transparent;"><i class="bi bi-gear me-2"></i>Panel administrador</a></li>
+                <div class="collapse navbar-collapse justify-content-center order-3 order-lg-2 fs-5" id="navbarNav">
+                <div class="navbar-nav text-lg-start">
+                    <a class="nav-link active text-light" href="{% url 'index' %}">Inicio</a>
+                    <a class="nav-link text-light" href="{% url 'view_products' %}">Productos</a>
+                </div>
+                </div>
+                
+                <div class="d-flex gap-4 align-items-center order-2 order-lg-3" style="font-size: 32px;">
+                <a href="{% url 'cart' %}"><i class="bi bi-basket2 cart-icon" style="color: white;"></i></a>
+                {% if user.is_authenticated %}
+                <!-- Dropdown del usuario -->
+                <div class="dropdown">
+                    <a href="#" class="initial-user dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;">
+                    {{ initial | title }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" style="background-color: #2c2f3f; border: 1px solid rgba(255, 0, 255, 0.1);">
+                    <li><a class="dropdown-item text-light" href="{% url 'perfil' %}" style="background-color: transparent;"><i class="bi bi-person-circle me-2"></i>Perfil</a></li>
+                    <li><a class="dropdown-item text-light" href="{% url 'historial_orden' %}" style="background-color: transparent;"><i class="bi bi-bag-check me-2"></i>Mis compras</a></li>
+                    {% if request.user.is_staff or request.user.is_superuser %}
+                    <li><a class="dropdown-item text-light" href="{% url 'admin_index' %}" style="background-color: transparent;"><i class="bi bi-gear me-2"></i>Panel administrador</a></li>
+                    {% endif %}
+                    <li><hr class="dropdown-divider" style="border-color: white;"></li>
+                    <li><a class="dropdown-item text-light" href="{% url 'logout' %}" style="background-color: transparent;"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión</a></li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}"><i class="bi bi-person" style="color: white;"></i></a>
                 {% endif %}
-                <li><hr class="dropdown-divider" style="border-color: white;"></li>
-                <li><a class="dropdown-item text-light" href="{% url 'logout' %}" style="background-color: transparent;"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión</a></li>
-                </ul>
+                </div>
             </div>
-            {% else %}
-            <a href="{% url 'login' %}"><i class="bi bi-person" style="color: white;"></i></a>
-            {% endif %}
-            </div>
-        </div>
-        </nav>
+            </nav>
 
-        {% block banner %}
-        {% endblock %}
-    </header>
-  {% endblock %}
+            {% block banner %}
+            {% endblock %}
+        </header>
+    {% endblock %}
   
     {% block breadcrumb %}
     {% include 'breadcrumb.html' %}
@@ -169,45 +161,48 @@
     {% endblock %}
 
     {% include 'chatbot.html' %}
-  <footer class="footer mt-5 pt-5">
-    <!-- Contenido principal del footer -->
-    <div class="footer-content">
-        <!-- Columna 1: Información de la empresa -->
-        <div class="footer-column">
-            <div class="footer-logo">
-                <h3 style="color: #D1A0FF; margin: 0;">Byte & Beat</h3>
-            </div>
-            <div class="company-info">
-                <p>Tienda especializada en productos tecnológicos de alta calidad para músicos y entusiastas de la tecnología.</p>
-                <p><strong>Dirección:</strong> Av. Tecnología 123, Santiago</p>
-                <p><strong>Teléfono:</strong> +56 2 2345 6789</p>
-                <p><strong>Email:</strong> contacto@bytebeat.cl</p>
-            </div>
-            <div class="social-icons">
-                <a href="#" class="social-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
-                    </svg>
-                </a>
-                <a href="#" class="social-icon">
-                  <i class="bi bi-whatsapp"></i>
-                </a>
-            </div>
-        </div>
-        
-        <!-- Columna 2: Enlaces de categorías -->
-        <div class="footer-column">
-            <h4>Ayuda</h4>
-            <ul>
-                <li><a href="#">Formulario de contacto</a></li>
-            </ul>
-        </div>
-    </div>
 
-    <div class="footer-bottom">
-        <p>© 2025 Byte & Beat - Todos los derechos reservados | Diseñado con ♥ para los amantes de la tecnología</p>
+
+    <footer class="footer mt-5 pt-5">
+<!-- Contenido principal del footer -->
+<div class="footer-content">
+    <!-- Columna 1: Información de la empresa -->
+    <div class="footer-column">
+        <div class="footer-logo">
+            <h3 style="color: #D1A0FF; margin: 0;">Byte & Beat</h3>
+        </div>
+        <div class="company-info">
+            <p>Tienda especializada en productos tecnológicos de alta calidad para músicos y entusiastas de la tecnología.</p>
+            <p><strong>Dirección:</strong> Av. Tecnología 123, Santiago</p>
+            <p><strong>Teléfono:</strong> +56 2 2345 6789</p>
+            <p><strong>Email:</strong> contacto@bytebeat.cl</p>
+        </div>
+        <div class="social-icons">
+            <a href="#" class="social-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/>
+                </svg>
+            </a>
+            <a href="#" class="social-icon">
+                <i class="bi bi-whatsapp"></i>
+            </a>
+        </div>
     </div>
-</footer>
+    
+    <!-- Columna 2: Enlaces de categorías -->
+    <div class="footer-column">
+        <h4>Ayuda</h4>
+        <ul>
+            <li><a href="#">Formulario de contacto</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="footer-bottom">
+    <p>© 2025 Byte & Beat - Todos los derechos reservados | Diseñado con ♥ para los amantes de la tecnología</p>
+</div>
+    </footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"

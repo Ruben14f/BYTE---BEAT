@@ -7,15 +7,15 @@
     <div class="product-images">
         <div class="main-image">
             {% if product.main_image %}
-                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;"
+                <img id="main-image" src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100%; height: 100%;"
                     loading="lazy">
             {% endif %}
         </div>
-        <div class="thumbnail-images">
-            <div class="thumbnail active">
+        <div class="thumbnail-images mt-3">
+            <div class="thumbnail active" onclick="switchImages('{{ product.secondary_image.url }}', '{{ product.main_image.url }}')">
                 {% if product.secondary_image %}
-                <img src="{{ product.secondary_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;"
-                    loading="lazy">
+                <img class="secondary_img" src="{{ product.secondary_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;"
+                    loading="lazy" onmouseover="highlightImage(this)" onmouseout="removeHighlight(this)">
                 {% endif %}
             </div>
         </div>
@@ -40,6 +40,50 @@
         
     </div>
 </div>
+<script>
+    let currentMainImage = "{{ product.main_image.url }}";  // Inicializa con la imagen principal
+    let currentThumbnail = "{{ product.secondary_image.url }}";  // Inicializa con la imagen secundaria
+
+    // Función para alternar entre las imágenes
+    function switchImages(newMainImage, newThumbnail) {
+        const mainImage = document.getElementById("main-image");
+
+        // Cambiar la imagen principal con transición
+        mainImage.style.opacity = 0;  // Hacer desaparecer la imagen
+        setTimeout(() => {
+            mainImage.src = newMainImage;  // Cambiar la imagen principal
+            mainImage.style.opacity = 1;  // Restaurar opacidad
+
+            // Actualizar la miniatura correspondiente
+            const thumbnails = document.querySelectorAll(".thumbnail img");
+            thumbnails.forEach(img => {
+                if (img.src.includes(currentThumbnail)) {
+                    img.src = currentMainImage;  // Cambiar la miniatura para que muestre la imagen principal
+                } else if (img.src.includes(currentMainImage)) {
+                    img.src = currentThumbnail;  // Cambiar la miniatura para que muestre la imagen secundaria
+                }
+            });
+
+            // Actualizar las variables de la imagen actual
+            currentMainImage = newMainImage;
+            currentThumbnail = newThumbnail;
+        }, 500); // Tiempo de animación
+    }
+
+    // Función para resaltar la miniatura al pasar el mouse
+    function highlightImage(img) {
+        img.style.transform = "scale(1.1)";  // Aumentar tamaño
+        img.style.border = "2px solid #4CAF50";  // Borde verde
+        img.style.boxShadow = "0 4px 8px rgba(0, 0, 0, 0.2)";  // Sombra suave
+    }
+
+    // Función para quitar el resaltado de la miniatura
+    function removeHighlight(img) {
+        img.style.transform = "scale(1)";  // Restablecer tamaño
+        img.style.border = "2px solid transparent";  // Quitar el borde
+        img.style.boxShadow = "none";  // Quitar la sombra
+    }
+</script>
 
 
 {% endblock %}
