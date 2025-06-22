@@ -13,14 +13,30 @@
     <div class="search-bar">
         {% include 'search.html' %}
     </div>
+
+    <button class="mobile-filter-toggle" id="mobileFilterToggle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 6h18"/>
+            <path d="M7 12h10"/>
+            <path d="M10 18h4"/>
+        </svg>
+        Filtros
+        <span class="filter-count" id="filterCount" style="display: none;">0</span>
+    </button>
+
 </div>
 
+
+
+<!-- Overlay para cerrar filtros -->
+<div class="filter-overlay" id="filterOverlay"></div>
 
 {% if query  %}
     {% if has_results %}
         <h2 style="color: white; text-align: center;">Resultado de búsqueda  para: {{query | title }}</h2>
         <div class="container-main" >
-            <div class="filters">
+            <div class="filters" id="filtersPanel">
+                <button class="close-filters" id="closeFilters">&times;</button>
                 <h4 class="filter-title">Filtros</h4>
                 <hr style=" color: white;">
                 <div class="filter-section">
@@ -162,7 +178,8 @@
 {% else %}
 
 <div class="container-main">
-    <div class="filters">
+    <div class="filters" id="filtersPanel">
+        <button class="close-filters" id="closeFilters">&times;</button>
         <h4 class="filter-title">Filtros</h4>
         <hr style=" color: white;">
         <div class="filter-section">
@@ -262,4 +279,85 @@
 {% endif %}
 
 <script src="{% static 'js/list_product.js' %}"></script>
+
+<script>
+// JavaScript para manejar los filtros móviles
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileFilterToggle = document.getElementById('mobileFilterToggle');
+    const filtersPanel = document.getElementById('filtersPanel');
+    const closeFilters = document.getElementById('closeFilters');
+    const filterOverlay = document.getElementById('filterOverlay');
+    const filterCount = document.getElementById('filterCount');
+
+    // Función para abrir filtros
+    function openFilters() {
+        filtersPanel.classList.add('active'); // Muestra el panel de filtros
+        filterOverlay.classList.add('active'); // Muestra el overlay
+        document.body.style.overflow = 'hidden'; // Prevenir el scroll del body
+    }
+
+    // Función para cerrar filtros
+    function closeFiltersPanel() {
+        filtersPanel.classList.remove('active'); // Oculta el panel de filtros
+        filterOverlay.classList.remove('active'); // Oculta el overlay
+        document.body.style.overflow = ''; // Restaurar scroll del body
+    }
+
+    // Event listeners
+    mobileFilterToggle.addEventListener('click', openFilters); // Abre los filtros al hacer clic en el botón
+    closeFilters.addEventListener('click', closeFiltersPanel); // Cierra los filtros al hacer clic en el botón de cerrar
+    filterOverlay.addEventListener('click', closeFiltersPanel); // Cierra los filtros si se hace clic fuera de los filtros
+
+    // Cerrar con tecla ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeFiltersPanel();
+        }
+    });
+
+    // Función para contar filtros activos
+    function updateFilterCount() {
+        const urlParams = new URLSearchParams(window.location.search);
+        let activeFilters = 0;
+
+        // Contar parámetros de filtro (ajusta según tus parámetros)
+        if (urlParams.get('price_order') && urlParams.get('price_order') !== 'recomendado') activeFilters++;
+        if (urlParams.get('min_price')) activeFilters++;
+        if (urlParams.get('max_price')) activeFilters++;
+        if (urlParams.get('categoria')) activeFilters++;
+        if (urlParams.get('marca')) activeFilters++;
+
+        if (activeFilters > 0) {
+            filterCount.textContent = activeFilters;
+            filterCount.style.display = 'flex';
+        } else {
+            filterCount.style.display = 'none';
+        }
+    }
+
+    // Actualizar contador al cargar la página
+    updateFilterCount();
+
+    // Cerrar filtros automáticamente después de aplicar un filtro en móvil
+    const filterForms = filtersPanel.querySelectorAll('form');
+    filterForms.forEach(form => {
+        form.addEventListener('submit', function() {
+            if (window.innerWidth <= 768) {
+                setTimeout(closeFiltersPanel, 100);
+            }
+        });
+    });
+
+    // Cerrar filtros al hacer clic en enlaces de filtro en móvil
+    const filterLinks = filtersPanel.querySelectorAll('.filter-label');
+    filterLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            if (window.innerWidth <= 768) {
+                setTimeout(closeFiltersPanel, 100);
+            }
+        });
+    });
+});
+
+</script>
 {% endblock %}
