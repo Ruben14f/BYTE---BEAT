@@ -52,6 +52,10 @@
     animation: glow 2s ease-in-out infinite alternate;
 }
 
+.section-title-enhanced {
+    color: #D1A0FF;
+}
+
 @keyframes glow {
     from {
         text-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
@@ -80,7 +84,8 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     font-weight: bold;
-    display: inline-block; /* Asegura que el botón se mantenga en línea */
+    display: inline-block;
+    /* Asegura que el botón se mantenga en línea */
     text-decoration: none;
 }
 
@@ -90,24 +95,7 @@
     box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
-    .nav-menu {
-        display: none;
-    }
 
-    .hero-title {
-        font-size: 2.5rem;
-    }
-
-    .hero-subtitle {
-        font-size: 1.1rem;
-    }
-
-    .categories-grid {
-        grid-template-columns: 1fr;
-    }
-}
 
 /* Animaciones adicionales */
 .animate-fade-in {
@@ -211,6 +199,7 @@
 .card-hover {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .card-hover:hover {
     transform: translateY(-8px);
     box-shadow: 0 0 15px 4px rgba(138, 92, 246, 0.582) !important;
@@ -233,7 +222,9 @@
 .btn:hover {
     background: #7c3aed;
     transform: scale(1.05);
+    color: #fff;
 }
+
 .overlay {
     position: absolute;
     top: 0;
@@ -282,9 +273,23 @@
         padding: 15px;
 
     }
+       .nav-menu {
+        display: none;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+    }
+
+    .categories-grid {
+        grid-template-columns: 1fr;
+    }
 
 }
-
 
 /* móviles pequeños */
 @media (max-width: 640px) {

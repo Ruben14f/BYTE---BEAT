@@ -23,7 +23,7 @@
                 <h4 class="filter-title">Filtros</h4>
                 <hr style=" color: white;">
                 <div class="filter-section">
-                    <h6>Filtro por categoria</h6>
+                    <h6>Filtrar por categoria</h6>
                     {% for categoys in categorias %}
                     <div class="filter-option">
                         <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id %}" class="filter-label">
@@ -33,7 +33,7 @@
                     
                     {% endfor %}
 
-                    <h6>Filtro por marcas</h6>
+                    <h6>Filtrar por marcas</h6>
                     {% for brand in marcas %}
                     <div class="filter-option">
                         <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id %}" class="filter-label">
@@ -101,8 +101,7 @@
                                 <div class="product-name">{{ product.name | title }}</div>
                                 <div class="product-price">{{ product.price | format_price }}</div>
                                 <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-                                <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
-                                        producto</a></button>
+                                <a class="btn add-to-cart-a" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
                             </div>
                         </div>
                         {% endif %}
@@ -118,7 +117,7 @@
                 <h4 class="filter-title">Filtros</h4>
                 <hr style=" color: white;">
                 <div class="filter-section">
-                    <h6>Filtro por categoria</h6>
+                    <h6>Filtrar por categoria</h6>
                     {% for categoys in categorias %}
                     <div class="filter-option">
                         <a href="{% url 'categorias_marcas_filtro' 'categoria' categoys.id %}" class="filter-label">
@@ -128,7 +127,7 @@
                     
                     {% endfor %}
 
-                    <h6>Filtro por marcas</h6>
+                    <h6>Filtrar por marcas</h6>
                     {% for brand in marcas %}
                     <div class="filter-option">
                         <a href="{% url 'categorias_marcas_filtro' 'marca' brand.id %}" class="filter-label">
@@ -190,7 +189,7 @@
             <form method="get" action="{% url 'view_products' %}">
                 <div style="display: flex; justify-content: center; align-items: center;">
                     <select name="price_order" id="price_order" style="margin-bottom: 15px;">
-                        <option value="ordenpor"disabled  style="color: #0BEAD0" selected>Ordenar por</option>
+                        <option value="ordenpor"disabled  style="color: white" selected>Ordenar por</option>
                         <option value="recomendado" {% if request.GET.price_order == 'recomendado' %}selected{% endif %}>
                             Recomendados</option>
                         <option value="asc" {% if request.GET.price_order == 'asc' %}selected{% endif %}>Precio: Menor a mayor
@@ -246,8 +245,7 @@
                         <div class="product-name">{{ product.name | title }}</div>
                         <div class="product-price">{{ product.price | format_price }}</div>
                         <!-- <button class="add-to-cart">Agregar al carrito</button> -->
-                        <button class="add-to-cart-a"><a href="{% url 'detail_product' product.slug %}">Ir al
-                                producto</a></button>
+                        <a class="btn add-to-cart-a" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
                     </div>
                 </div>
                 {% endif %}

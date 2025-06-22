@@ -2,8 +2,8 @@
 .initial-user{
     font-size: 1.5rem;           
     font-weight: bold;           
-    color: #17F0D2;              
-    background-color: #1E1F36;  
+    color: white;              
+    background-color: #0f3460 !important;  
     border-radius: 50%;         
     padding: 10px;               
     width: 40px;                 
@@ -16,29 +16,8 @@
 
 
 
-.footer {
-    background-color: #1e1e2f;
-    color: white;
-    padding: 0;
-}
-
-/* Banner de newsletter en el footer */
-.footer-banner {
-    background-color: #00ffd5;
-    color: #1e1e2f;
-    padding: 20px 0;
-    text-align: center;
-}
-
-.footer-banner h3 {
-    margin: 0 0 10px 0;
-    font-size: 18px;
-    font-weight: bold;
-}
-
-.footer-banner p {
-    margin: 0 0 15px 0;
-    font-size: 14px;
+.cart-icon:hover{
+    color: #006377 !important;
 }
 
 .newsletter-form {
@@ -64,6 +43,11 @@
     font-size: 14px;
     cursor: pointer;
 }
+.footer {
+    background-color: #1e1e2f;
+    color: white;
+    padding: 0;
+}
 
 /* Contenido principal del footer */
 .footer-content {
@@ -83,7 +67,7 @@
 }
 
 .footer-column h4 {
-    color: #00ffd5;
+    color: #D1A0FF !important;
     font-size: 16px;
     margin-bottom: 20px;
     position: relative;
@@ -107,7 +91,7 @@
 }
 
 .footer-column ul li a:hover {
-    color: #00ffd5;
+    color: #D1A0FF !important; 
 }
 
 .social-icons {
@@ -128,7 +112,7 @@
 }
 
 .social-icon:hover {
-    background-color: #00ffd5;
+    background-color: #D1A0FF !important;
 }
 
 .social-icon svg {
@@ -179,6 +163,34 @@
 .footer-bottom a:hover {
     color: #00ffd5;
 }
+
+/* Estilos adicionales para el dropdown */
+.dropdown-menu {
+  min-width: 200px;
+}
+.dropdown-item, .initial-user .cart-icon{
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #173f6f !important;
+}
+
+
+.initial-user:hover {
+  background-color: #006377 !important;
+  color: white;
+}
+
+/* Flecha del dropdown */
+.dropdown-toggle::after {
+  display: none;
+}
+
+.nav-link:hover{
+    color: #D1A0FF !important;
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {

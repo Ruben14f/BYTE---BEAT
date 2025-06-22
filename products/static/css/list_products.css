@@ -21,7 +21,7 @@
 }
 
 .search-bar button {
-    background-color: #0bebc8;
+    background-color: #7c3aed; /* Cambio aquí */
     color: #1e1d2b;
     border: none;
     padding: 0.8rem 1.5rem;
@@ -32,12 +32,12 @@
     align-items: center;
     justify-content: center;
     min-width: 60px;
+    
 }
-
 
 .section-title {
     text-align: center;
-    color: #0bebc8;
+    color: #D1A0FF !important;
     margin: 2rem 0;
     font-size: 1.8rem;
 }
@@ -50,7 +50,7 @@
 }
 
 .product-card {
-    background-color: #2d2b42;
+    background: rgba(255, 255, 255, 0.1) !important;
     border-radius: 1rem;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
@@ -59,16 +59,10 @@
     margin-bottom: 1rem;
 }
 
-.product-card {
-    background-color: #2d2b42;
-    border-radius: 1rem;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
 .product-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(11, 235, 200, 0.2);
+    transform: translateY(-8px);
+    box-shadow: 0 0 15px 4px rgba(124, 58, 237, 0.582) !important; /* Cambio aquí */
+    cursor: pointer;
 }
 
 .product-image {
@@ -91,7 +85,7 @@
 }
 
 .product-brand {
-    color: #0bebc8;
+    color: #D1A0FF;
     font-size: 0.8rem;
     margin-bottom: 0.3rem;
 }
@@ -111,25 +105,9 @@
     margin: 0.5rem 0;
 }
 
-.add-to-cart {
-    display: flex;
-    justify-content: center;
-    background-color: #0bebc8;
-    color: #1e1d2b;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 2rem;
-    font-weight: bold;
-    cursor: pointer;
-    width: 80%;
-    margin: auto;
-    transition: background-color 0.3s;
-    margin-bottom: 6px;
-}
-
 .add-to-cart-a {
     display: flex;
-    background-color: #0bebc8;
+    background-color: #7c3aed; /* Cambio aquí */
     border: none;
     padding: 0.5rem;
     border-radius: 2rem;
@@ -139,17 +117,14 @@
     width: 50%;
     transition: background-color 0.3s;
     margin-bottom: 5px;
+    transition: all 0.3s ease;
 }
 
-.add-to-cart-a a {
-    color: black !important;
+.btn:hover {
+    background: #7c3aed; /* Cambio aquí */
+    transform: scale(1.05);
+    color: #fff;
 }
-
-.add-to-cart:hover {
-    background-color: #09c4a6;
-}
-
-
 
 .container-main {
     display: flex;
@@ -158,11 +133,11 @@
     padding: 0 1rem;
 }
 
-/*Filtros*/
+/* Filtros */
 .filter-title {
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
-    color: #0bebc8;
+    color: white;
 }
 
 .filters {
@@ -184,7 +159,7 @@
     justify-content: center;
     justify-items: center;
     border-radius: 1rem;
-    background-color: #0bebc8;
+    background-color: #7c3aed; /* Cambio aquí */
     border: none;
     padding: 0.5rem;
     font-weight: bold;
@@ -192,10 +167,7 @@
     width: 50%;
     transition: background-color 0.3s;
     margin-bottom: 5px;
-}
-
-.add-orderby-cart:hover {
-    background-color: #09c4a6;
+    color: white;
 }
 
 .filter-section h6 {
@@ -219,21 +191,19 @@
 
 .filter-label:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #0BEAD0;
 }
 
 .filter-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(11, 234, 208, 0.2);
-    color: #0BEAD0;
+    background-color: rgba(124, 58, 237, 0.2); /* Cambio aquí */
+    color: #7c3aed; /* Cambio aquí */
     border-radius: 12px;
     padding: 2px 8px;
     font-size: 12px;
     margin-left: 8px;
 }
-
 
 .filter-section select {
     width: 100%;
@@ -251,14 +221,11 @@
     position: relative;
 }
 
-
 .filter-section select:hover,
 .filter-section select:focus {
     background-color: rgba(255, 255, 255, 0.1);
-    color: #0BEAD0;
     outline: none;
 }
-
 
 select option {
     background-color: #2c2f48;
@@ -266,93 +233,93 @@ select option {
 
 /* filtro price */
 :root {
-  --blue-color: #357ded;
-  --gray-color: #77889926;
+    --blue-color: #7c3aed; /* Cambio aquí */
+    --gray-color: #77889926;
 }
 
 /* range slider styles */
 
 .range-slider {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 20px;
-  padding-block: 20px;
-  color: white;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+    padding-block: 20px;
+    color: white;
 }
 
-
 .range-slider > input {
-  border: none;
-  outline: none;
-  background: var(--gray-color);
-  font-size: 16px;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
-  min-width: 64px;
-  max-width: 100px;
-  color: white;
-  cursor: default !important;
+    border: none;
+    outline: none;
+    background: var(--gray-color);
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    min-width: 64px;
+    max-width: 100px;
+    color: white;
+    cursor: default !important;
 }
 
 .range {
-  width: 100%;
-  display: grid;
-  position: relative;
-  z-index: 5;
-  cursor: default !important;
+    width: 100%;
+    display: grid;
+    position: relative;
+    z-index: 5;
+    cursor: default !important;
 }
 
 .range input {
-  grid-row: 2;
-  grid-column: 1;
-  pointer-events: none;
-  appearance: none;
-  background: transparent;
+    grid-row: 2;
+    grid-column: 1;
+    pointer-events: none;
+    appearance: none;
+    background: transparent;
 }
 
 .range input::-webkit-slider-thumb {
-  pointer-events: auto;
-  appearance: none;
-  width: 15px;
-  height: 15px;
-  background:  #0bebc8;
-  border-radius: 50%;
-  cursor: pointer;
+    pointer-events: auto;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: #7c3aed; /* Cambio aquí */
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 .slider {
-  position: absolute;
-  height: 5px;
-  width: 100%;
-  background: var(--gray-color);
-  top: 50%;
-  transform: translateY(-50%);
-  border-radius: 5px;
-  overflow: hidden;
-  z-index: -1;
+    position: absolute;
+    height: 5px;
+    width: 100%;
+    background: var(--gray-color);
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 5px;
+    overflow: hidden;
+    z-index: -1;
 }
 
 .progress {
-  position: absolute;
-  height: 100%;
-  background: #0bebc8;
-  cursor: default !important;
+    position: absolute;
+    height: 100%;
+    background: #7c3aed; /* Cambio aquí */
+    cursor: default !important;
 }
 
 .price-labels {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 0.5rem;
-  color: #ccc;
-  font-weight: 600;
-  font-size: 1rem;
-  width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0.5rem;
+    color: #ccc;
+    font-weight: 600;
+    font-size: 1rem;
+    width: 100%;
 }
+
 .price-labels label {
-  cursor: default;
+    cursor: default;
 }
 
 .rangeprice button {
@@ -361,7 +328,7 @@ select option {
     justify-content: center;
     justify-items: center;
     border-radius: 1rem;
-    background-color: #0bebc8;
+    background-color: #7c3aed; /* Cambio aquí */
     border: none;
     padding: 0.5rem;
     font-weight: bold;
@@ -369,4 +336,5 @@ select option {
     width: 50%;
     transition: background-color 0.3s;
     margin-bottom: 5px;
+    color: white;
 }
