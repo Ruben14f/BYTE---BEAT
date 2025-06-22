@@ -10,8 +10,6 @@ import uuid
 from django.db.models.functions import Coalesce
 from django.utils.timezone import localdate
 
-
-
 class OrdenStatus(models.TextChoices):
     CREATED = 'CREATED', 'Creado'
     PAYED = 'PAYED', 'Pagado'
