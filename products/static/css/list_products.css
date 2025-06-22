@@ -404,6 +404,26 @@ select option {
 
 
 
+@media (max-width: 480px) {
+    .filters {
+        width: 100%;
+        left: -100%;
+    }
+
+    .product-container {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .mobile-filter-toggle {
+        bottom: 15px;
+        right: 15px;
+        padding: 12px 16px;
+        font-size: 14px;
+    }
+}
+
 /* Móviles pequeños */
 @media (max-width: 640px) {
     .container-main {
@@ -428,7 +448,7 @@ select option {
         top: 0;
         width: 280px;
         height: 100vh;
-        background: #1a1a1a;
+        background: #2d2b42;
         z-index: 1001;
         overflow-y: auto;
         transition: left 0.3s ease;
@@ -440,110 +460,6 @@ select option {
 
     .filter-overlay.active {
         display: block; /* Se muestra el overlay */
-    }
-}
-
-/* Móviles grandes y tablets verticales */
-@media (min-width: 641px) and (max-width: 768px) {
-    .container-main {
-        display: flex;
-        flex-direction: row;
-        margin: 0 auto;
-        padding: 0 1rem;
-    }
-
-    .product-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding: 0 1rem;
-    }
-}
-
-/* Tablets horizontales y laptops pequeñas */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .container-main {
-        display: flex;
-        flex-direction: column;
-        margin: auto;
-        padding: 0 1rem;
-    }
-
-    .product-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 0 1rem;
-    }
-
-    .filters {
-        display: flex;
-        flex-direction: column;
-        margin: auto;
-        flex-wrap: wrap;
-        gap: 20px;
-        align-items: center;
-        justify-content: space-between;
-        width: 70%;
-        padding: 15px;
-        color: white;
-        margin-bottom: 5%;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) {
-    .container-main {
-        display: flex;
-        flex-direction: column;
-        margin: auto;
-        padding: 0 1rem;
-    }
-
-    .product-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 0 1rem;
-    }
-
-    .filters {
-        position: fixed;
-        left: -100%; /* Oculto por defecto */
-        top: 0;
-        width: 280px;
-        margin-top: 50px;
-        height: 100vh;
-        background: #1a1a1a;
-        overflow-y: auto;
-        transition: left 0.3s ease;
-    }
-
-    .filters.active {
-        left: 0; /* Los filtros se muestran */
-    }
-
-    .filter-overlay.active {
-        display: block; /* Se muestra el overlay */
-    }
-}
-
-/* Filtros para tablets grandes */
-@media (min-width: 1025px) {
-    .filters {
-        position: absolute;
-        left: -100%; /* Los filtros están ocultos */
-        top: 0;
-        width: 300px;
-        height: 100%;
-        background-color: #2d2b42;
-        transition: left 0.3s ease;
-    }
-
-    .filters.active {
-        left: 0; /* Los filtros se despliegan */
     }
 }
 
@@ -561,7 +477,7 @@ select option {
         width: 280px;
         margin-top: 50px;
         height: 100vh;
-        background: #1a1a1a;
+        background: #2d2b42;
         z-index: 1001;
         overflow-y: auto;
         transition: left 0.3s ease;
@@ -607,23 +523,116 @@ select option {
     }
 }
 
-@media (max-width: 480px) {
-    .filters {
-        width: 100%;
-        left: -100%;
+/* Móviles grandes y tablets verticales */
+@media (min-width: 641px) and (max-width: 768px) {
+    .container-main {
+        display: flex;
+        flex-direction: row;
+        margin: 0 auto;
+        padding: 0 1rem;
     }
 
     .product-container {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-        gap: 10px;
-        padding: 0 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 1rem;
+    }
+}
+
+/* Tablets horizontales y laptops pequeñas */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container-main {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        padding: 0 1rem;
     }
 
-    .mobile-filter-toggle {
-        bottom: 15px;
-        right: 15px;
-        padding: 12px 16px;
-        font-size: 14px;
+    .product-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 0 1rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container-main {
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        padding: 0 1rem;
+    }
+
+    .product-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 0 1rem;
+    }
+
+    .filters {
+        position: fixed;
+        left: -100%; /* Oculto por defecto */
+        top: 0;
+        width: 280px;
+        margin-top: 50px;
+        height: 100vh;
+        background: #2d2b42;
+        overflow-y: auto;
+        transition: left 0.3s ease;
+    }
+
+    .filters.active {
+        left: 0; /* Los filtros se muestran */
+    }
+
+    .filter-overlay.active {
+        display: block; /* Se muestra el overlay */
+    }
+}
+
+@media (min-width: 820px) and (max-width: 1180px){
+    .filters {
+        position: fixed;
+        left: -100%; /* Oculto por defecto */
+        top: 0;
+        width: 280px;
+        margin-top: 50px;
+        height: 100vh;
+        background: #2d2b42;
+        overflow-y: auto;
+        transition: left 0.3s ease;
+    }
+
+    .filters.active {
+        left: 0; /* Los filtros se muestran */
+    }
+
+    .filter-overlay.active {
+        display: block; /* Se muestra el overlay */
+    }
+
+}
+/* Filtros para tablets grandes */
+@media (min-width: 1025px) {
+    .filters {
+        position: absolute;
+        left: -100%; 
+        top: 0;
+        width: 300px;
+        height: 100%;
+        background-color: #2d2b42;
+        margin-top: 50px;
+        transition: left 0.3s ease;
+    }
+
+    .filters.active {
+        left: 0;
     }
 }
 
