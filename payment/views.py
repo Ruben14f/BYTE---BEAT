@@ -136,11 +136,16 @@ def webpay_respuesta(request):
 
         if estado == 'AUTHORIZED':
             if request.user.is_authenticated:
+                user_profile = UserProfile.objects.filter(user=request.user).first()
+
+                if user_profile:
+                    # Aquí puedes acceder a los datos de UserProfile
+                    print("Datos del perfil:", user_profile)
                 orden = Orden.objects.filter(token_ws=token_ws).first()
 
                 if orden:
                     if orden.status == OrdenStatus.PAYED:
-                        return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden})
+                        return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden ,'perfiluser' : user_profile})
 
                     orden.status = OrdenStatus.PAYED
                     orden.save(update_fields=['status'])
@@ -180,7 +185,7 @@ def webpay_respuesta(request):
                 
                 print('ORDEN:',orden)
                 # Make sure to return a valid response here
-                return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden})
+                return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden, 'perfiluser' : user_profile})
 
         elif estado == 'INITIALIZED':
             return render(request, 'peding.html', {'resultado': resultado, 'token_ws': token_ws})
