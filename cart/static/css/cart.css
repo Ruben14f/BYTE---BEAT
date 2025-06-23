@@ -14,6 +14,11 @@
     border-radius: 1rem;
     padding: 1.5rem;
 }
+
+.imange-detalle-products{
+    display: flex;
+    flex-direction: row;
+}
 .cart-item {
     display: flex;
     padding: 1.5rem 0;
@@ -41,7 +46,7 @@
     flex: 2;
 }
 .item-brand {
-    color: #0bebc8;
+    color: #D1A0FF;
     font-size: 0.9rem;
     margin-bottom: 0.3rem;
 }
@@ -112,7 +117,7 @@
 .summary-title {
     font-size: 1.2rem;
     margin-bottom: 1.5rem;
-    color: #0bebc8;
+    color: white;
 }
 .summary-row {
     display: flex;
@@ -135,8 +140,8 @@
     color: white;
 }
 .btn-gotopay {
-    background-color: #0bebc8;
-    color: #1e1d2b;
+    background-color: #7c3aed !important;
+    color: white;
     border: none;
     padding: 1rem;
     border-radius: 2rem;
@@ -146,16 +151,19 @@
     width: 100%;
     margin-top: 1rem;
     transition: background-color 0.3s;
+    
 }
 .btn-gotopay:hover {
-    background-color: #09c4a6;
+    background: #7c3aed;
+    transform: scale(1.05);
+    color: #fff;
 }
 .continue-shopping {
     text-align: center;
     margin-top: 1rem;
 }
 .continue-shopping a {
-    color: #0bebc8;
+    color: white !important;
     text-decoration: none;
 }
 .empty-cart {
@@ -204,13 +212,20 @@
         align-items: center;
         padding: 1rem 0;
     }
+    .item-container {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
     .item-image {
         width: 100px;
         height: 100px;
+        margin-right: 1rem;
     }
     .item-details {
         flex: 1;
         margin-top: 1rem;
+        text-align: center;
     }
     .item-name {
         font-size: 1rem;
@@ -235,9 +250,14 @@
     .cart-container {
         grid-template-columns: 1fr;
     }
+    .item-container {
+        display: flex;
+        align-items: center;
+    }
     .item-image {
         width: 100px;
         height: 100px;
+        margin-right: 1rem;
     }
     .item-details {
         margin-left: 1rem;
@@ -277,17 +297,21 @@
     .cart-container {
         max-width: 1200px;
         margin: 0 auto;
+        margin-top: 5%;
     }
 }
 
+/* Para pantallas pequeñas (menores a 768px) */
 @media screen and (max-width: 768px) {
-     .cart-container {
+    .cart-container {
         grid-template-columns: 1fr;
     }
     .item-image {
         width: 80px;
         height: 80px;
     }
-
+    .item-container {
+        flex-direction: row;
+        align-items: center;
+    }
 }
-

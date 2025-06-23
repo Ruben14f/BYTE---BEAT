@@ -1,6 +1,6 @@
 :root {
-    --primary: #00f2c3;
-    --primary-hover: #00d6aa;
+    --primary: #7c3aed;
+    --primary-hover: #7c3aed;
     --dark-bg: #1e1e2f;
     --card-bg: #27293d;
     --lighter-card-bg: #343654;
@@ -17,6 +17,9 @@ body {
 }
 
 
+.breadcrumb{
+    margin-bottom: 10%;
+}
 
 .container {
     max-width: 1200px;
@@ -77,8 +80,8 @@ body {
 }
 
 .delivery-option.option-active button {
-    background-color: #00f2c3;
-    color: black;
+    background-color: #7c3aed;
+    color: white;
 }
 
 .delivery-option:not(.option-active) button {
@@ -94,12 +97,12 @@ body {
 }
 
 .delivery-option.option-active p {
-    color: black; 
+    color: white; 
 }
 
 .option-active {
     background-color: var(--primary);
-    color: #000;
+    color: white;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
@@ -139,7 +142,7 @@ body {
 .address-text h3 {
     margin-top: 0;
     margin-bottom: 0.5rem;
-    color: var(--primary);
+    color: white;
 }
 
 .address-text p {
@@ -154,7 +157,7 @@ body {
 }
 
 .modify-link {
-    color: var(--primary);
+    color: white;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -180,7 +183,7 @@ body {
 .shipping-cost h3 {
     margin-top: 0;
     margin-bottom: 0.5rem;
-    color: var(--primary);
+    color: white;
 }
 
 .shipping-cost p {
@@ -190,7 +193,7 @@ body {
 }
 
 .modify-link {
-    color: var(--primary);
+    color: white;
     text-decoration: none;
 }
 
@@ -211,7 +214,7 @@ body {
 
 .summary-title {
     text-align: center;
-    color: var(--primary);
+    color: white;
     margin-top: 0;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
@@ -291,7 +294,7 @@ body {
 
 .btn-primary {
     background-color: var(--primary);
-    color: #000;
+    color: white;
     font-weight: bold;
 }
 
@@ -303,10 +306,11 @@ body {
 .continue-shopping {
     text-align: center;
     margin-top: 1rem;
+    color: white !important;
 }
 
 .continue-link {
-    color: var(--primary);
+    color: white;
     text-decoration: none;
 }
 

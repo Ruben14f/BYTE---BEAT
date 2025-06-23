@@ -11,23 +11,25 @@
             {% for cart_product in cart.product_related %}
                 {% with product=cart_product.productos %}
                 <div class="cart-item" id="product-{{ cart_product.id }}">
-
-                    <div class="item-image">
-                        {% if product.main_image %}
-                            <img src="{{ product.main_image.url }}" alt="{{ product.name }}" width="100px">
-                        {% else %}
-                            <div style="width:120px; height:120px; background:#fff; border-radius:0.5rem;"></div>
-                        {% endif %}
-                    </div>
-
-                    <div class="item-details">
-                        <div class="item-brand">{{ product.brand }}</div>
-                        <div class="item-name">{{ product.name }}</div>
-                        <div class="item-price">{{ product.price | format_price }}</div>
-                        <div class="item-quantity">
-                            {% include 'update_quantity.html' %}
+                    <div class="imange-detalle-products">
+                        <div class="item-image">
+                            {% if product.main_image %}
+                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" width="100px">
+                            {% else %}
+                                <div style="width:120px; height:120px; background:#fff; border-radius:0.5rem;"></div>
+                            {% endif %}
+                        </div>
+                        <div class="item-details">
+                            <div class="item-brand">{{ product.brand }}</div>
+                            <div class="item-brand">{{ product.sku }}</div>
+                            <div class="item-name">{{ product.name }}</div>
+                            <div class="item-price">{{ product.price | format_price }}</div>
+                            <div class="item-quantity">
+                                {% include 'update_quantity.html' %}
+                            </div>
                         </div>
                     </div>
+                    
 
                     <div class="item-actions">
                         <div class="item-total">
