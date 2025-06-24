@@ -72,28 +72,7 @@
     opacity: 0.9;
 }
 
-.cta-button {
-    background: linear-gradient(45deg, #00ffff, #ff00ff);
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
-    display: inline-block;
-    /* Asegura que el botón se mantenga en línea */
-    text-decoration: none;
-}
 
-/* Efecto hover */
-.cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
-}
 
 
 
@@ -131,23 +110,28 @@
 }
 
 .cta-button {
-    background: linear-gradient(45deg, #00ffff, #ff00ff);
-    border: none;
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    border-radius: 50px;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: bold;
+    background: linear-gradient(45deg, #00ffff, #ff00ff) !important;
+    border: none !important;
+    padding: 1rem 2rem !important;
+    font-size: 1.1rem !important;
+    border-radius: 50px !important;
+    color: white !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    font-weight: bold !important;
+    display: inline-block !important;
+    text-decoration: none !important;
 }
 
 .cta-button:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3);
+    transform: translateY(-3px) !important;
+    box-shadow: 0 10px 25px rgba(0, 255, 255, 0.3) !important;
 }
+
+
+
 
 .floating {
     animation: floating 3s ease-in-out infinite;
@@ -296,6 +280,9 @@
     .title-featured {
         margin-top: 15%;
         margin-bottom: 15%;
+    }
+    .hero{
+        margin-top: 6%;
     }
 }
 

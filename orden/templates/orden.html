@@ -42,7 +42,7 @@
                                     </div>
                                 </div>
                                 <div class="modify-address">
-                                    <a href="{% url 'modificar_direccion' orden.id %}" class="modify-link">✏️ Modificar dirección solo para este pedido</a>
+                                    <a href="{% url 'modificar_direccion' orden.id %}" class="modify-link btn">✏️ Modificar dirección solo para este pedido</a>
                                 </div>
                                 <div class="shipping-cost">
                                     <h3>Valor de envío</h3>
@@ -58,8 +58,8 @@
                                 </div>
                             </div>
                             
-                            <a href="{% url 'add_address' %}"  class="modify-link" style="margin-bottom: 5px;">✏️ Agregar dirección a mi perfil</a>
-                            <a href="{% url 'modificar_direccion' orden.id %}"  class="modify-link">✏️ Agregar dirección solo para este pedido</a>
+                            <a href="{% url 'add_address' %}"  class="modify-link btn" style="margin-bottom: 5px;">✏️ Agregar dirección a mi perfil</a>
+                            <a href="{% url 'modificar_direccion' orden.id %}"  class="modify-link btn">✏️ Agregar dirección solo para este pedido</a>
                         </div>
                             
                         {% endif %}
@@ -71,9 +71,8 @@
                             <div class="address-container">
                                 <div class="address-icon">📍</div>
                                 <div class="address-text">
-                                    <h3>Dirección para este pedido</h3>
-                                        <p>{{ direccion_existente.calle | title}} {{ direccion_existente.num_direccion }},
-                                        {{ direccion_existente.comuna.name }} - {{ direccion_existente.ciudad }}</p>
+                                    <h3>Dirección para retiro</h3>
+                                        <p>Av. Tecnologia 123, Santiago</p>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +84,7 @@
                             </div>
                         </div>
                         <div class="modify-address">
-                            <a href="{% url 'add_address' %}" class="modify-link">✏️ Agregar dirección a mi perfil</a>
+                            <a href="{% url 'add_address' %}" class="modify-link btn">✏️ Agregar dirección a mi perfil</a>
                         </div>
                     </div>
                         

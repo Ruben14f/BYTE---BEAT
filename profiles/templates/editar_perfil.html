@@ -1,108 +1,30 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<style>
-  body {
-    background-color: #0f1125;
-    color: #00f7e0;
-    font-family: 'Segoe UI', sans-serif;
-  }
-
-  .profile-form-container {
-    max-width: 700px;
-    margin: 50px auto;
-    background-color: #1d213a;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  h1, h2 {
-    text-align: center;
-    color: #00f7e0;
-    margin-bottom: 20px;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .profile-form-container p {
-    margin: 10px 0;
-  }
-
-  label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-    color: #00f7e0;
-  }
-
-  input, select {
-    width: 100%;
-    padding: 10px;
-    background-color: #2b2f50;
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-  }
-
-  input::placeholder {
-    color: #ccc;
-  }
-
-  button {
-    padding: 12px;
-    background-color: #00f7e0;
-    color: #0f1125;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  button:hover {
-    background-color: #00d9c2;
-  }
-
-  a {
-    display: inline-block;
-    margin-top: 20px;
-    text-align: center;
-    color: #00f7e0;
-    text-decoration: none;
-    font-weight: bold;
-  }
-
-  a:hover {
-    text-decoration: underline;
-  }
-</style>
+<link rel="stylesheet" href="{% static 'css/editar_perfil.css' %}">
 
 <div class="profile-form-container">
   <h1>Editar Perfil</h1>
-
+  <hr>
   <form method="POST">
     {% csrf_token %}
 
     <h2>Datos personales</h2>
     {{ user_form.as_p }}
-
+    <hr>
     <h2>Información de contacto</h2>
     {{ profile_form.as_p }}
 
+    <hr>
     <h2>Dirección</h2>
     {{ address_form.as_p }}
-
-    <button type="submit">Actualizar perfil</button>
+    <hr>
+    <button class="btn" type="submit">Actualizar perfil</button>
     {% if next %}
       <input type="hidden" name="next" value="{{next}}">
     {% endif %}
   </form>
 
-  <a href="{% url 'perfil' %}">← Atrás</a>
+  <a class="btn" href="{% url 'perfil' %}">← Atrás</a>
 </div>
 {% endblock %}

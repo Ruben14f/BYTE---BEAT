@@ -1,8 +1,8 @@
 .search-container {
     display: flex;
     flex-direction: column;
-    align-items: center; /* Alinea todo en el centro */
-    justify-content: center; /* Asegura que el contenido esté centrado */
+    align-items: center;
+    justify-content: center; 
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;

@@ -1,5 +1,5 @@
 :root {
-    --primary-color: #0dffd4;
+    --primary-color: #06B6D4 ;
     --background-color: #272840;
     --dark-background: #1e1f36;
     --text-color: #ffffff;
@@ -8,28 +8,7 @@
 }
 
 
-.logo {
-    color: var(--primary-color);
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-decoration: none;
-}
 
-nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-nav li {
-    margin-left: 1.5rem;
-}
-
-nav a {
-    color: var(--text-color);
-    text-decoration: none;
-}
 
 .user-icons {
     display: flex;
@@ -50,15 +29,16 @@ section {
 }
 
 .profile-container {
-    background-color: var(--dark-background);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     padding: 2rem;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4),
         0 0 0 1px rgba(23, 240, 210, 0.1);
+    margin-top: 5%;
 }
 
 h1 {
-    color: var(--primary-color);
+    color: white;
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
     text-align: center;
@@ -80,7 +60,7 @@ h1 {
 
 .field-label {
     font-weight: 600;
-    color: var(--primary-color);
+    color: #06B6D4;
     margin-bottom: 0.3rem;
     font-size: 0.9rem;
     text-transform: uppercase;
@@ -108,7 +88,7 @@ h1 {
 
 .buttons a{
     text-decoration: none;
-    color: black;
+    color: 0f3460 ;
 }
 
 .btn {
@@ -119,27 +99,26 @@ h1 {
     font-weight: 600;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: all 0.3s ease;
 }
 
 .btn:hover {
-    background-color: #0cbda0;
-    color: black;
+    background: #06B6D4 ;
+    transform: scale(1.05);
+    color: #0f3460 ;
 }
 
 .btn:active{
-    background-color: #0cbda0 !important;
-    color: black !important;
+    background: #06B6D4 ;
+    color:#0f3460 ;
 }
 
 .btn:focus{
-    background-color: #0cbda0 !important;
-    border: none !important;
-    color: black !important;
+    background: #06B6D4  !important;
+    color: #0f3460 !important;
 }
 
 .user-info {
-    background-color: var(--card-background);
     border-radius: 8px;
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -161,7 +140,7 @@ h1 {
     justify-content: center;
     font-size: 2rem;
     font-weight: bold;
-    color: var(--dark-background);
+    color: #0f3460 ;
     margin-right: 1.5rem;
 }
 

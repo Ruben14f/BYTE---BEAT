@@ -111,7 +111,7 @@ def add_new_address(request):
 def historial_orden(request):
     user = request.user
     if user.is_authenticated:
-        ordenes = Orden.objects.filter(user=request.user).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
+        ordenes = Orden.objects.exclude(status='CREATED').filter(user=request.user).order_by('-fecha_pagada').prefetch_related('productos_orden__producto')
         paginator = Paginator(ordenes, 10)  
         page_number = request.GET.get('page')
         orden_list = paginator.get_page(page_number)

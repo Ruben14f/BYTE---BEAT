@@ -159,13 +159,13 @@
     }
 
     .main-image img {
-        width: 70%; 
-        height: 70%; 
-        object-fit: contain; /* Ajusta la imagen sin distorsión */
+        width: 100%; 
+        height: 100%; 
+        object-fit: contain; 
     }
     .main-image{
-        width: auto; 
-        height: auto;
+        width:70%; 
+        margin: auto;
     }
 
     .thumbnail-images {
@@ -176,7 +176,7 @@
     .thumbnail img {
         width: 70%; 
         height: 70%; 
-        object-fit: contain; /* Ajusta la imagen sin distorsión */
+        object-fit: contain; 
     }
 
     .product-info {
@@ -184,8 +184,8 @@
     }
 
     .quantity-selector {
-        font-size: 14px; /* Reducir tamaño de botones */
-        padding: 8px 16px; /* Reducir tamaño de botones */
+        font-size: 14px;
+        padding: 8px 16px; 
     }
 }
 
@@ -201,13 +201,13 @@
     }
 
     .main-image img {
-        width: 70%; 
-        height: 70%; 
+        width: 100%; 
+        height: 100%; 
         object-fit: contain;
     }
     .main-image{
-        width: auto; 
-        height: auto;
+        width:70%; 
+        margin: auto;
     }
 
     .thumbnail-images {
@@ -216,8 +216,8 @@
     }
 
     .thumbnail img {
-        width: 70%; 
-        height: 70%; 
+        width: 100%; 
+        height: 100%; 
         object-fit: contain;
     }
 
@@ -250,18 +250,19 @@
 
     .quantity-selector {
         margin-top: 10px;
-        font-size: 14px; /* Reducir tamaño de botones */
-        padding: 10px 20px; /* Reducir tamaño de botones */
+        font-size: 14px; 
+        padding: 10px 20px; 
     }
 
     .main-image img {
-        width: 70%; 
-        height: 70%; 
+        width: 100%; 
+        height: 100%; 
         object-fit: contain;
     }
     .main-image{
-        width: auto; 
-        height: auto;
+        width:65%; 
+        height: 35%;
+        margin: auto;
     }
 }
 
@@ -278,13 +279,13 @@
     }
 
     .main-image img {
-        width: 70%; 
-        height: 70%; 
+        width: 100%; 
+        height: 100%; 
         object-fit: contain;
     }
     .main-image{
-        width: auto; 
-        height: auto;
+        width:70%; 
+        margin: auto;
     }
 
     .thumbnail-images {
@@ -322,13 +323,13 @@
     }
 
     .main-image img {
-        width: 70%; 
-        height: 70%; 
+        width: 100%; 
+        height: 100%; 
         object-fit: contain;
     }
     .main-image{
-        width: auto; 
-        height: auto;
+        width:70%; 
+        margin: auto;
     }
 
     .thumbnail-images {
@@ -394,8 +395,8 @@
         object-fit: contain;
     }
     .main-image{
-        width: auto; 
-        height: auto;
+        width:70%; 
+        margin: auto;
     }
 
     .thumbnail-images {

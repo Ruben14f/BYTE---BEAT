@@ -1,0 +1,57 @@
+.detalle-compra {
+    max-width: 800px;
+    margin: 40px auto;
+    background: rgb(255, 255, 255, 0.1) !important;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+h1 {
+    color: white;
+    margin-bottom: 20px;
+}
+
+h3,
+h4 {
+    color: #06B6D4;
+}
+
+p {
+    color: #e5faff;
+    margin: 8px 0;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 15px;
+}
+
+li {
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(131, 56, 236, 0.1) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #ffffff;
+}
+
+img {
+    border-radius: 5px;
+}
+
+.atras {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #06B6D4;
+    color: #0f3460;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}

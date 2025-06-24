@@ -127,29 +127,27 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                 {% for ordenes in ordens %}
-                    {% if not ordenes.status == 'CREATED' %}
-                        <tbody>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap" >#{{ordenes.num_orden}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    {{ ordenes.user.first_name.split|first | title}}
-                                    {{ ordenes.user.last_name.split|first | title}}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.total | format_price }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.get_status_display}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
-                                <td class="px-6 py-4 whitespace-nowrap flex items-center gap-3">
-                                    {% include 'gestion_pedidos/update_status.html' %}
-                                    <a href="{% url 'detail_orden_admin' ordenes.id %}"
-                                    class="text-blue-600 hover:text-blue-800 transition text-xl ml-2"
-                                    title="Ver detalle">
-                                        <i class="bi bi-eye-fill"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    {% endif %}
-                {% endfor %}
+                    <tbody>
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap" >#{{ordenes.num_orden}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                {{ ordenes.user.first_name.split|first | title}}
+                                {{ ordenes.user.last_name.split|first | title}}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.total | format_price }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.get_status_display}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap" >{{ordenes.fecha_pagada|date:"d/m/Y"}}</td>
+                            <td class="px-6 py-4 whitespace-nowrap flex items-center gap-3">
+                                {% include 'gestion_pedidos/update_status.html' %}
+                                <a href="{% url 'detail_orden_admin' ordenes.id %}"
+                                class="text-blue-600 hover:text-blue-800 transition text-xl ml-2"
+                                title="Ver detalle">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+            {% endfor %}
                 </tbody>
             </table>
         </div>

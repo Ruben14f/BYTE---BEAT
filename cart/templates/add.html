@@ -9,7 +9,7 @@
         <p style="margin-left: 50px; margin-top: 15px;">Stock: {{product.stock}}</p>
     </div>
     <div class="action-buttons">
-        <button class="add-to-cart" type="submit" id="add-to-cart-button" {% if product.stock == 0 %}disabled{% endif %}>Agregar al carrito</button>
+        <button class="add-to-cart btn" type="submit" id="add-to-cart-button" {% if product.stock == 0 %}disabled{% endif %}>Agregar al carrito</button>
     </div>
     {% if product.stock == 0 %}
         <p style="color: red;">No hay stock disponible para este producto.</p>

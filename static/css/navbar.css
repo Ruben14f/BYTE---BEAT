@@ -17,7 +17,7 @@
 
 
 .cart-icon:hover{
-    color: #006377 !important;
+    color: #06B6D4 !important;
 }
 
 .newsletter-form {
@@ -49,6 +49,12 @@
     padding: 0;
 }
 
+
+.formulario-contact-footer{
+    border: none !important;
+    background: none !important;
+}
+
 /* Contenido principal del footer */
 .footer-content {
     display: flex;
@@ -67,7 +73,7 @@
 }
 
 .footer-column h4 {
-    color: #D1A0FF !important;
+    color: #06B6D4 !important;
     font-size: 16px;
     margin-bottom: 20px;
     position: relative;
@@ -91,7 +97,7 @@
 }
 
 .footer-column ul li a:hover {
-    color: #D1A0FF !important; 
+    color: #06B6D4 !important; 
 }
 
 .social-icons {
@@ -112,7 +118,7 @@
 }
 
 .social-icon:hover {
-    background-color: #D1A0FF !important;
+    background-color: #06B6D4 !important;
 }
 
 .social-icon svg {
@@ -161,7 +167,7 @@
 }
 
 .footer-bottom a:hover {
-    color: #00ffd5;
+    color: #06B6D4;
 }
 
 /* Estilos adicionales para el dropdown */
@@ -178,8 +184,8 @@
 
 
 .initial-user:hover {
-  background-color: #006377 !important;
-  color: white;
+  background-color: #06B6D4 !important;
+  color: #0f3460 ;
 }
 
 /* Flecha del dropdown */
@@ -188,7 +194,7 @@
 }
 
 .nav-link:hover{
-    color: #D1A0FF !important;
+    color: #06B6D4 !important;
 }
 
 

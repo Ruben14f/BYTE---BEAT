@@ -217,11 +217,11 @@ def estado_product_search(request):
 
 #GESTION DE PEDIDOS
 def listado_ordenes(request):
-    ordenes = Orden.objects.all().order_by('-fecha_pagada')
+    ordenes = Orden.objects.exclude(status='CREATED').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
 
-    paginator = Paginator(ordenes, 3) 
-    page_number = request.GET.get('page')
+    paginator = Paginator(ordenes, 10) 
+    page_number = request.GET.get('page',1)
     page_obj = paginator.get_page(page_number)
     
     resumen_estados_qs = (

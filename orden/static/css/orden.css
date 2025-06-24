@@ -157,20 +157,20 @@ body {
 }
 
 .modify-link {
-    color: white;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: all 0.2s ease;
-    padding: 8px 16px;
-    border: 1px solid var(--primary);
-    border-radius: 20px;
+    color: white !important;
+    text-decoration: none !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    transition: all 0.2s ease !important;
+    padding: 8px 16px !important;
+    border: 1px solid var(--primary) !important;
+    border-radius: 20px !important;
 }
 
 .modify-link:hover {
-    background-color: rgba(0, 242, 195, 0.1);
-    transform: translateY(-2px);
+    background-color: rgba(0, 242, 195, 0.1) !important;
+    transform: translateY(-2px) !important;
 }
 
 .shipping-cost {
@@ -193,8 +193,8 @@ body {
 }
 
 .modify-link {
-    color: white;
-    text-decoration: none;
+    color: white !important;
+    text-decoration: none !important;
 }
 
 .payment-method {
@@ -279,17 +279,17 @@ body {
 }
 
 .btn {
-    display: block;
-    width: 100%;
-    padding: 1rem;
-    border: none;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    text-align: center;
-    text-transform: uppercase;
-    transition: background-color 0.3s, transform 0.2s;
+    display: block !important;
+    width: 100% !important;
+    padding: 1rem !important;
+    border: none !important;
+    border-radius: 30px !important;
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    cursor: pointer !important;
+    text-align: center !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease !important;
 }
 
 .btn-primary {
@@ -299,7 +299,12 @@ body {
 }
 
 .btn-primary:hover {
-    background-color: var(--primary-hover);
+    background-color: var(--primary-hover) !important;
+    transform: translateY(-2px);
+}
+
+.btn-primary:focus {
+    background-color: var(--primary-hover) !important;
     transform: translateY(-2px);
 }
 

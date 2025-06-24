@@ -150,9 +150,19 @@
     cursor: pointer;
     width: 100%;
     margin-top: 1rem;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
     
 }
+
+.btn-continuar-compra:focus{
+    text-decoration: none !important;
+    border: none !important;
+}
+.btn-continuar-compra:hover{
+    text-decoration: none !important;
+    border: none !important;
+}
+
 .btn-gotopay:hover {
     background: #7c3aed;
     transform: scale(1.05);
@@ -161,13 +171,15 @@
 .continue-shopping {
     text-align: center;
     margin-top: 1rem;
+    border: none;
 }
 .continue-shopping a {
     color: white !important;
     text-decoration: none;
+    border: none;
 }
 .empty-cart {
-    display: none; /* oculto por defecto */
+    display: none; 
     flex-direction: column;
     align-items: center;
     justify-content: center;
@@ -184,8 +196,8 @@
     color: #9f9faf;
 }
 .shop-now-button {
-    background-color: #0bebc8;
-    color: #1e1d2b;
+    background-color: #7c3aed;
+    color: white;
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 2rem;
@@ -195,10 +207,14 @@
     transition: background-color 0.3s;
     text-decoration: none;
     display: inline-block;
+    transition: all 0.3s ease;
 }
 .shop-now-button:hover {
-    background-color: #09c4a6;
+    background-color: #7c3aed;
+    transform: scale(1.05);
 }
+
+
 /* móviles pequeños */
 @media (max-width: 640px) {
     .cart-container {

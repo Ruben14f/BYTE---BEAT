@@ -6,10 +6,21 @@
     border-radius: 10px;
 }
 
+.search-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+}
+
+
+
 .order-history {
     max-width: 900px;
     margin: 40px auto;
-    background-color: #1d213a;
+    background-color: rgba(255, 255, 255, 0.1) !important;
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
@@ -18,7 +29,7 @@
 h1 {
     text-align: center;
     margin-bottom: 30px;
-    color: #00f7e0;
+    color: white;
 }
 
 h3 {
@@ -40,7 +51,8 @@ li {
     display: flex;
     align-items: center;
     gap: 10px;
-    background-color: #2a2f4a;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(131, 56, 236, 0.1) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
     padding: 10px;
     border-radius: 8px;
     color: #ffffff;
@@ -53,7 +65,8 @@ li {
 .order-details {
     margin-top: 10px;
     padding: 10px;
-    background-color: #303558;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.1) 0%, rgba(131, 56, 236, 0.1) 100%);
+    border: 1px solid rgba(0, 212, 255, 0.2);
     border-radius: 8px;
     color: #e5faff;
 }
@@ -73,7 +86,7 @@ a.btn-danger:hover {
 }
 
 a {
-    color: #00f7e0;
+    color: #06B6D4;
     font-weight: bold;
     text-decoration: none;
 }
@@ -83,7 +96,7 @@ a {
 .total-ordenes {
     margin-top: 20px;
     font-weight: bold;
-    color: #00f7e0;
+    color: #06B6D4;
     text-align: center;
 }
 

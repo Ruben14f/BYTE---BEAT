@@ -1,7 +1,7 @@
 <form action="{% url 'remove' %}" onsubmit="eliminarProductoCart(event, this)"  method="POST">
     {% csrf_token %}
     <input type="hidden" name="product_id" value="{{ product.id }}">
-    <button type="submit" class="btn" style="color: white; background-color: #0f3460 ;">Eliminar</button>
+    <button type="submit" class="btn" style="color: #0f3460 ; background-color: #06B6D4 ;">Eliminar</button>
 </form> 
 
 <script>

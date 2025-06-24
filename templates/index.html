@@ -8,7 +8,7 @@
     <div class="hero-content animate-fade-in">
         <h1 class="hero-title">Los mejores productos<br>a un click</h1>
         <p class="hero-subtitle">Descubre lo mejor en tecnología e instrumentos musicales en Byte & Beat</p>
-        <a class="cta-button floating" href="{% url 'view_products' %}">Explorar Productos</a>
+        <a class="cta-button floating btn" href="{% url 'view_products' %}">Explorar Productos</a>
     </div>
 </section>
 {% endblock %}
@@ -25,7 +25,10 @@
     <div class="container-our-categories">
         <div class="col-4-md col-12">
             <div class="row">
+                
+                
                 {% for product_vent in mas_vendido %}
+                {% if product_vent.main_image and product_vent.stock > 0 %}
                 <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
                     <div class="position-relative" style="height: 130px; border-radius: 10px;">
                         <div class="d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px; background: white; margin-bottom: 20px;">
@@ -42,7 +45,8 @@
                         <a href="{% url 'detail_product' product_vent.slug %}" class="btn rounded-pill px-4">Añadir al carrito</a>
                     </div>
                 </div>  
-                {% endfor %}             
+                {% endif %}  
+                {% endfor %}    
             </div>
         </div>
     </div>

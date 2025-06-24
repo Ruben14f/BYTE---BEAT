@@ -1,0 +1,83 @@
+.profile-form-container {
+    max-width: 700px;
+    margin: 50px auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+h1,
+h2 {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.profile-form-container p {
+    margin: 10px 0;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+    color: #06B6D4;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    background-color: #2b2f50;
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+}
+
+input::placeholder {
+    color: #ccc;
+}
+
+.btn {
+    padding: 12px;
+    background-color: #06B6D4 ;
+    color: #0f3460 ;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #06B6D4 ;
+    transform: scale(1.05);
+    color: #0f3460 ;
+}
+
+
+
+a {
+    display: inline-block;
+    margin-top: 20px;
+    text-align: center;
+    color: #06B6D4;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 730px) { 
+   .profile-form-container {
+    margin: 50px 20px;
+}
+}

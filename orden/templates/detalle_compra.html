@@ -1,62 +1,10 @@
 {% extends 'base.html' %}
 {% load precios_tag %}
+{% load static %}
 {% block content %}
 
-<style>
 
-  .detalle-compra {
-    max-width: 800px;
-    margin: 40px auto;
-    background-color: #1d213a;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-
-  h1, h3, h4 {
-    color: #00f7e0;
-    margin-bottom: 20px;
-  }
-
-  p {
-    color: #e5faff;
-    margin: 8px 0;
-  }
-
-  ul {
-    list-style: none;
-    padding-left: 0;
-    margin-top: 15px;
-  }
-
-  li {
-    background-color: #2a2f4a;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    color: #ffffff;
-  }
-
-  img {
-    border-radius: 5px;
-  }
-
-  .atras {
-    display: inline-block;
-    margin-top: 20px;
-    background-color: #00f7e0;
-    color: #0f1125;
-    padding: 10px 18px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-  }
-
-</style>
+<link rel="stylesheet" href="{% static 'css/detalle_compra.css' %}">
 
 <div class="detalle-compra">
   <h1>Detalle de la compra</h1>
