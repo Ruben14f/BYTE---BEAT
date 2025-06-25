@@ -72,7 +72,9 @@
       </ul>
       {% include 'paginacion_products.html' with page_obj=ordenes %}
     {% else %}
-      <p>No tienes compras</p>
+      <div style="display: flex; justify-content: center;">
+        <p>No tienes compras</p>
+      </div>
     {% endif %}
   {% endif %}
 </div>

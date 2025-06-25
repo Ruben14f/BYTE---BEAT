@@ -154,27 +154,31 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    border: 1px solid var(--primary) !important;
+    border-radius: 15px !important;
+    transition: all 0.2s ease !important;
+    padding-top: 5% !important;
 }
 
 .modify-link {
+    
     color: white !important;
     text-decoration: none !important;
     display: inline-flex !important;
+    justify-content: center;
     align-items: center !important;
     gap: 0.5rem !important;
-    transition: all 0.2s ease !important;
     padding: 8px 16px !important;
-    border: 1px solid var(--primary) !important;
-    border-radius: 20px !important;
+    height: 100% !important;
 }
 
-.modify-link:hover {
-    background-color: rgba(0, 242, 195, 0.1) !important;
+.modify-address:hover {
+    background-color: #7c3aed !important;
     transform: translateY(-2px) !important;
 }
 
 .shipping-cost {
-    background-color: rgba(0, 242, 195, 0.1);
+    background-color: #7c3aed;
     padding: 1rem;
     border-radius: 8px;
     text-align: center;
@@ -327,4 +331,16 @@ body {
     .delivery-options {
         flex-direction: column;
     }
+    
+    .delivery-info{
+        display: flex;
+        flex-direction: column;
+    }
+    .modify-address{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
 }
+
+

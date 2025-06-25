@@ -19,8 +19,10 @@ def orden(request):
     orden = funcionOrden(cart, request)
 
     direccion_existente = Address.objects.filter(user=request.user).first()
-    address_form = AddressForm(request.POST or None)
+    direccion_pedido = OrderAddress.objects.filter(order=orden).first()
     
+    address_form = AddressForm(request.POST or None)
+
     if request.method == 'POST':
         if 'delivery_method' in request.POST:
             delivery_method = request.POST.get('delivery_method')
@@ -32,10 +34,15 @@ def orden(request):
                 orden.delivery_method = DeliveryMethod.PICKUP
                 orden.save()  
                 orden.update_total()
-        
+
         if 'pagar' in request.POST:
             return crearTransaccion(request)
 
+        if 'modificar_direccion' in request.POST:  
+            if direccion_pedido:
+                direccion_pedido.delete()
+                return redirect(f'modificar_direccion/{orden.id}') 
+  
         if not direccion_existente and orden.delivery_method == 'SHIPPING':
             address_form = AddressForm(request.POST)  
             if address_form.is_valid():
@@ -45,17 +52,19 @@ def orden(request):
                 request.user.userprofile.address = address 
                 request.user.userprofile.save()
                 messages.success(request, "Dirección agregada al perfil con éxito.")
-                return redirect('orden')
-    
+                return redirect('orden') 
+
     breadcrumb_items = breadcrumb(products=True, confirmation=False)  
 
     return render(request, 'orden.html',{
         'cart': cart,
         'orden': orden,
         'direccion_existente': direccion_existente,
+        'direccion_pedido': direccion_pedido, 
         'address_form': address_form,
         'breadcrumb' : breadcrumb_items,
     })
+
 
 @login_required(login_url='login')
 def modificar_direccion(request, orden_id):
@@ -104,7 +113,6 @@ def add_new_address(request):
             request.user.userprofile.save()
             messages.success(request, "Dirección agregada al perfil con éxito.")
             return redirect('orden') 
-
     return render(request, 'add_newaddress.html', {'address_form': address_form})
 
 @login_required(login_url='login')

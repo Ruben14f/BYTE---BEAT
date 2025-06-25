@@ -1,0 +1,90 @@
+.modificar-direccion {
+    max-width: 500px;
+    margin: 40px auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+h3 {
+    text-align: center;
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+}
+
+.form-group {
+    color: white;
+    padding: 10px;
+    margin-bottom: 1.5rem;
+    border-radius: 8px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    background-color: #1E1F36;
+    border: 2px solid #06B6D4; /* Borde azul solo en los inputs y selects */
+    color: white;
+    font-size: 1rem;
+    border-radius: 5px;
+    appearance: none; /* Elimina los estilos predeterminados del navegador */
+    -webkit-appearance: none; /* Para Safari */
+    -moz-appearance: none; /* Para Firefox */
+}
+
+.form-group select {
+    padding-right: 30px; /* Añadir espacio para el ícono de la flecha */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4z" fill="white"/></svg>'); /* Flecha personalizada */
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+}
+
+.form-group input::placeholder {
+    color: #a1a1a1;
+}
+
+button {
+    width: 100%;
+    background-color: #06B6D4;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    color: #0f3460;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: #06B6D4 ;
+    transform: scale(1.05);
+    color: #0f3460 ;
+}
+
+@media screen and (max-width: 769px) {
+    .modificar-direccion{
+        margin: 5% 5%;
+    }
+
+}
+
+@media (min-width: 569px) and (max-width: 768px) {
+    .modificar-direccion{
+        margin-top: auto;
+    }
+    .breadcrumb{
+        margin-bottom: 50px;
+    }
+
+}

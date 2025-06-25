@@ -1,17 +1,41 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block content %}
-<div style="background-color: aliceblue;">
+
+<link rel="stylesheet" href="{% static 'css/edit_direccion.css' %}">
+<div class="modificar-direccion">
     <h3>Modificar dirección para el pedido {{ orden.ordenID }}</h3>
 
     <form method="POST">
         {% csrf_token %}
-        {{ address_form.as_p }}
+        
+        <div class="form-group">
+            <label for="id_calle">{{ address_form.calle.label }}</label>
+            {{ address_form.calle }}
+            {{ address_form.calle.errors }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_num_direccion">{{ address_form.num_direccion.label }}</label>
+            {{ address_form.num_direccion }}
+            {{ address_form.num_direccion.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_comuna">{{ address_form.comuna.label }}</label>
+            {{ address_form.comuna }}
+            {{ address_form.comuna.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_ciudad">{{ address_form.ciudad.label }}</label>
+            {{ address_form.ciudad }}
+            {{ address_form.ciudad.errors }}
+        </div>
+
+
         <button type="submit">Guardar dirección</button>
     </form>
-
-    {% if direccion_existente %}
-        <p>Dirección actual: {{ direccion_existente.calle }} {{ direccion_existente.num_direccion }} - {{ direccion_existente.comuna.name }}, {{ direccion_existente.ciudad }}</p>
-    {% endif %}
 </div>
+
 {% endblock %}

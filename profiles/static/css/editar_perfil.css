@@ -30,18 +30,33 @@ label {
     color: #06B6D4;
 }
 
-input,
-select {
+input, select{
     width: 100%;
     padding: 10px;
-    background-color: #2b2f50;
-    border: none;
+    background-color: #1E1F36;
+    border: 2px solid #06B6D4;
     border-radius: 8px;
     color: #fff;
+    -webkit-appearance: none; 
+    -moz-appearance: none; 
 }
 
 input::placeholder {
     color: #ccc;
+}
+
+input:focus {
+    border-color: #06B6D4;
+    box-shadow: 0 0 8px rgba(0, 188, 212, 0.5);
+    outline: none; 
+}
+
+select {
+    padding-right: 30px; /* Añadir espacio para el ícono de la flecha */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4z" fill="white"/></svg>'); /* Flecha personalizada */
+    background-position: right 10px center;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
 }
 
 .btn {
@@ -56,9 +71,12 @@ input::placeholder {
 }
 
 .btn:hover {
-    background: #06B6D4 ;
-    transform: scale(1.05);
-    color: #0f3460 ;
+    background: #06B6D4  !important;
+    transform: scale(1.05) !important;
+    color: #0f3460 !important;
+}
+.btn:focus {
+    background: #06B6D4 !important;
 }
 
 

@@ -10,6 +10,7 @@ class OrderAddressForm(forms.ModelForm):
 
     calle = forms.CharField(label='Calle',
         widget=forms.TextInput(attrs={  
+            'class': 'form-group',
             'placeholder': 'Nombre calle'
         }),
         required=True
@@ -17,6 +18,7 @@ class OrderAddressForm(forms.ModelForm):
 
     num_direccion = forms.CharField(label='Numero de calle',
         widget=forms.TextInput(attrs={  
+            'class': 'form-group',
             'placeholder': 'Numero de calle'
         }),
         required=True

@@ -29,7 +29,32 @@
                 
                 {% if orden.delivery_method == 'SHIPPING' %}
                     {% if orden.orderaddress_set.first %}
-    
+                        <div class="delivery-info">
+                            <div class="address-container">
+                                <div class="address-icon">📍</div>
+                                <div class="address-text">
+                                    <h3>Dirección de envío para este pedido</h3>
+                                    <p>{{ orden.orderaddress_set.first.calle | title }} {{ orden.orderaddress_set.first.num_direccion }},
+                                    {{ orden.orderaddress_set.first.comuna.name }} - {{ orden.orderaddress_set.first.ciudad }}</p>
+                                </div>
+                            </div>
+                            <div class="modify-address">
+                                <form method="POST" >
+                                    {% csrf_token %}
+                                    <button type="submit" name="modificar_direccion" class="modify-link btn">✏️ Modificar dirección solo para este pedido</button>
+                                </form>
+                            </div>
+                            <div class="modify-address">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" name="volver_direccion_perfil" class="modify-link btn">Volver a la dirección por defecto</button>
+                                </form>
+                            </div>
+                            <div class="shipping-cost" >
+                                <h3>Valor de envío</h3>
+                                <p>{{ orden.envio_total | format_price}}</p>
+                            </div>
+                        </div>
                     {% else %}
                         {% if direccion_existente %}
                             <div class="delivery-info">
