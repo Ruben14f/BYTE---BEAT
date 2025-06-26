@@ -1,87 +1,4 @@
-<style>
-/* Estilos para el loading moderno */
-.loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(26, 26, 46, 0.95);
-    backdrop-filter: blur(8px);
-    z-index: 100;
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius: 12px;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.3s ease;
-}
 
-.loading-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-/* Spinner moderno con anillos múltiples */
-.modern-spinner {
-    position: relative;
-    width: 50px;
-    height: 50px;
-}
-
-.spinner-ring {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border: 2px solid transparent;
-    border-radius: 50%;
-    animation: spin 2s linear infinite;
-}
-
-.spinner-ring:nth-child(1) {
-    border-top-color: #00d4ff;
-    animation-duration: 1.5s;
-}
-
-.spinner-ring:nth-child(2) {
-    border-right-color: #ff006e;
-    animation-duration: 2s;
-    animation-direction: reverse;
-}
-
-.spinner-ring:nth-child(3) {
-    border-bottom-color: #8338ec;
-    animation-duration: 2.5s;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-/* Texto de loading */
-.loading-text {
-    margin-top: 15px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #ffffff;
-    opacity: 0.9;
-}
-
-.loading-text::after {
-    content: '';
-    animation: dots 1.5s infinite;
-}
-
-@keyframes dots {
-    0%, 20% { content: ''; }
-    40% { content: '.'; }
-    60% { content: '..'; }
-    80%, 100% { content: '...'; }
-}
-</style>
 
 <div style="display: flex; flex-direction: row; align-items: center; color: #FFFFFF; position: relative; min-height: 100px; width: 100%; box-sizing: border-box;">
     <!-- Loading moderno -->
@@ -109,6 +26,8 @@
 </div>
 
 <script>
+    let userInitiatedUpdate = false;
+
     function showLoading(cartProductId) {
         const loadingElement = document.getElementById('loading-spinner-' + cartProductId);
         loadingElement.style.display = 'flex';
@@ -126,6 +45,11 @@
     }
 
     function updateQuantity(cartProductId, change) {
+        userInitiatedUpdate = true;
+        
+        // Marcar que se está realizando una actualización
+        sessionStorage.setItem('updating_cart_' + cartProductId, 'true');
+
         let quantityElement = document.getElementById('quantity-' + cartProductId);
         let currentQuantity = parseInt(quantityElement.innerText);
         let newQuantity = currentQuantity + change;
@@ -134,21 +58,24 @@
         if (newQuantity == stock + 1) {
             console.log("Cantidad solicitada excede el stock disponible");
             hideLoading(cartProductId);
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
             return;
         }
 
- 
         if (newQuantity <= 0) {
             console.log("La cantidad no puede ser menor a 1");
             hideLoading(cartProductId);
+            userInitiatedUpdate = false;
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
             return;
         }
 
         if (newQuantity > stock) {
             newQuantity = stock;
+            userInitiatedUpdate = false;
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
             console.log("La cantidad solicitada excede el stock disponible. Se ajustará a " + stock);
         }
-
 
         if (newQuantity > 0 && newQuantity <= stock) {
             // Mostrar loading
@@ -169,7 +96,13 @@
             form.submit();
         } else {
             hideLoading(cartProductId);
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
         }
+    }
+
+    // Detectar tipo de navegación/recarga
+    function isManualReload() {
+        return performance.navigation.type === performance.navigation.TYPE_RELOAD;
     }
 
     // Ocultar todos los spinners al cargar la página
@@ -185,14 +118,42 @@
     window.addEventListener('load', function() {
         const cartProductId = {{ cart_product.id }};
         
-        // Reactivar botones
-        const removeBtn = document.getElementById('remove-' + cartProductId);
-        const addBtn = document.getElementById('add-' + cartProductId);
+        // Verificar si fue una recarga manual (F5 o botón de recarga)
+        if (isManualReload()) {
+            console.log("Recarga manual detectada - no se ejecutarán actualizaciones automáticas");
+            // Limpiar cualquier estado de actualización pendiente
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
+            userInitiatedUpdate = false;
+        }
         
-        if (removeBtn) removeBtn.disabled = false;
-        if (addBtn) addBtn.disabled = false;
+        // Solo proceder si no fue una recarga manual o si había una actualización en curso
+        const wasUpdating = sessionStorage.getItem('updating_cart_' + cartProductId) === 'true';
         
-        // Ocultar loading
-        hideLoading(cartProductId);
+        if (!isManualReload() || wasUpdating) {
+            // Reactivar botones
+            const removeBtn = document.getElementById('remove-' + cartProductId);
+            const addBtn = document.getElementById('add-' + cartProductId);
+            
+            if (removeBtn) removeBtn.disabled = false;
+            if (addBtn) addBtn.disabled = false;
+            
+            // Ocultar loading
+            hideLoading(cartProductId);
+            
+            // Limpiar el estado de actualización
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
+        }
+        
+        // Resetear la variable
+        userInitiatedUpdate = false;
+    });
+
+    // Detectar cuando el usuario abandona la página (incluyendo recarga manual)
+    window.addEventListener('beforeunload', function() {
+        const cartProductId = {{ cart_product.id }};
+        // Si no hay una actualización en curso, limpiar el estado
+        if (!userInitiatedUpdate) {
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
+        }
     });
 </script>

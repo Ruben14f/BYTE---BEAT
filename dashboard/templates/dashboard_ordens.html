@@ -49,33 +49,43 @@
 
 
   <!-- Filtros Globales -->
-  <div class="mb-6 bg-white rounded-xl p-4 shadow-sm border">
-      <div class="flex flex-wrap items-center gap-4">
-          <div class="flex items-center gap-2">
-              <i class="fas fa-filter text-gray-500"></i>
-              <span class="font-medium text-gray-700">Filtrar todos los graficos por fecha:</span>
-          </div>
-          <select id="filtro" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-              <option value="" selected disabled>Filtrar por:</option>
-              <option value="today">Hoy</option>
-              <option value="week">Esta semana</option>
-              <option value="month">Este mes</option>
-              <option value="year">Este año</option>
-              <option value="7days">Últimos 7 días</option>
-              <option value="30days">Últimos 30 días</option>
-          </select>
-          <div class="flex gap-2 ml-auto">
-              <button id="btn-filtrar" class="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                  <i class="fas fa-download"></i>
-                  Aplicar filtro
-              </button>
-              <button id="btn-borrar-filtro" class="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                  <i class="fas fa-sync-alt"></i>
-                  Borrar filtro
-              </button>
-          </div>
-      </div>
-  </div>
+<div class="mb-6 bg-white rounded-xl p-4 shadow-sm border">
+        <!-- En desktop: todo en una fila -->
+        <!-- En móvil: se divide en filas -->
+        <div class="flex flex-col md:flex-row md:flex-wrap md:items-center gap-4">
+            
+            <!-- Título y select - primera fila en móvil -->
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 w-full md:w-auto">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-filter text-gray-500"></i>
+                    <span class="font-medium text-gray-700">Filtrar todos los gráficos por fecha:</span>
+                </div>
+                <select id="filtro" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <option value="" selected disabled>Filtrar por:</option>
+                    <option value="today">Hoy</option>
+                    <option value="week">Esta semana</option>
+                    <option value="month">Este mes</option>
+                    <option value="year">Este año</option>
+                    <option value="7days">Últimos 7 días</option>
+                    <option value="30days">Últimos 30 días</option>
+                </select>
+            </div>
+            
+            <!-- Botones - segunda fila en móvil, derecha en desktop -->
+            <div class="flex gap-2 w-full sm:w-auto md:ml-auto">
+                <button id="btn-filtrar" class="flex items-center justify-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex-1 sm:flex-none">
+                    <i class="fas fa-download"></i>
+                    <span class="hidden sm:inline">Aplicar filtro</span>
+                    <span class="sm:hidden">Aplicar</span>
+                </button>
+                <button id="btn-borrar-filtro" class="flex items-center justify-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex-1 sm:flex-none">
+                    <i class="fas fa-sync-alt"></i>
+                    <span class="hidden sm:inline">Borrar filtro</span>
+                    <span class="sm:hidden">Borrar</span>
+                </button>
+            </div>
+        </div>
+    </div>
 
 <div class="grid grid-cols-1 gap-6 mb-8">
   <!-- Gráfico de Barras -->

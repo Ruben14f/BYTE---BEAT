@@ -28,10 +28,14 @@ def orden(request):
             delivery_method = request.POST.get('delivery_method')
             if delivery_method == 'SHIPPING':
                 orden.delivery_method = DeliveryMethod.SHIPPING
+                comuna = direccion_pedido.comuna if direccion_pedido else (direccion_existente.comuna if direccion_existente else None)
+                if comuna:
+                    orden.envio_total = comuna.valor_envio
                 orden.save() 
                 orden.update_total()
             elif delivery_method == 'PICKUP':
                 orden.delivery_method = DeliveryMethod.PICKUP
+                orden.envio_total = 0
                 orden.save()  
                 orden.update_total()
 
@@ -42,7 +46,19 @@ def orden(request):
             if direccion_pedido:
                 direccion_pedido.delete()
                 return redirect(f'modificar_direccion/{orden.id}') 
-  
+            
+        if 'volver_direccion_perfil' in request.POST:
+            if direccion_pedido:
+                direccion_pedido.delete()
+            
+            if orden.delivery_method == DeliveryMethod.SHIPPING and direccion_existente:
+                orden.envio_total = direccion_existente.comuna.valor_envio
+                orden.save()
+                orden.update_total()
+            
+            messages.success(request, "Se ha vuelto a la dirección por defecto del perfil.")
+            return redirect('orden')
+        
         if not direccion_existente and orden.delivery_method == 'SHIPPING':
             address_form = AddressForm(request.POST)  
             if address_form.is_valid():
@@ -85,6 +101,14 @@ def modificar_direccion(request, orden_id):
                 address.order = orden  
                 address.user = request.user  
                 address.save()
+                direccion_existente = address
+                
+            if orden.delivery_method == DeliveryMethod.SHIPPING:
+                nueva_comuna = order_address_form.cleaned_data['comuna']
+                if nueva_comuna:
+                    orden.envio_total = nueva_comuna.valor_envio
+                    orden.save()
+                    orden.update_total()
 
             return redirect('orden')  
         else:

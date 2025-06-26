@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 
 class Comuna(models.Model):
     name = models.CharField(max_length=100)
+    valor_envio = models.IntegerField(default=0) 
 
     def __str__(self):
         return self.name
