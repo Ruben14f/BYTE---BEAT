@@ -37,6 +37,7 @@
               <p style="margin: 0; font-weight: 600;">Producto: {{ products.producto.name }}</p>
               <p style="margin: 0;">Cantidad: {{ products.quantity }}</p>
               <p style="margin: 0;">Precio unitario: {{ products.producto.price | format_price }}</p>
+              <p style="margin: 0;">Subtotal: {% widthratio products.quantity 1 products.producto.price as subtotal %} {{ subtotal|format_price }}</p>
             </div>
           </div>
 

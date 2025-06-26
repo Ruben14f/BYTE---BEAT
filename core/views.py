@@ -66,7 +66,8 @@ def index_admin(request):
         'ordenes_recientes': ordenes_recientes
     })
 
-
+def form_contacto(request):
+    return render(request, 'formulario_contacto.html')
 def ventas_mensuales():
     ventas = (
         Orden.objects

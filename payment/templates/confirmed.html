@@ -245,10 +245,10 @@
 
             <!-- Buttons -->
             <div class="button-container">
-                <a href="#" class="btn-custom btn-outline-custom">
+                <a href="{% url 'detalle_compra' orden.id %}" class="btn-custom btn-outline-custom">
                     <i class="fas fa-eye me-2"></i>Ver Detalles de Compra
                 </a>
-                <a href="#" class="btn-custom btn-outline-custom">
+                <a href="{% url 'view_products' %}" class="btn-custom btn-outline-custom">
                     <i class="fas fa-shopping-cart me-2"></i>Continuar Comprando
                 </a>
             </div>

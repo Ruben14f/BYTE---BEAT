@@ -47,14 +47,6 @@ class Orden(models.Model):
         self.total = self.get_total()
         self.save()
 
-    # def save(self, *args, **kwargs):
-    #     if self.delivery_method == DeliveryMethod.SHIPPING:
-    #         self.envio_total = 3990
-    #     elif self.delivery_method == DeliveryMethod.PICKUP:
-    #         self.envio_total = 0
-
-    #     super().save(*args, **kwargs)
-
     @classmethod
     def ordenes_recentes(cls, limite=10):
         hoy = localdate() 

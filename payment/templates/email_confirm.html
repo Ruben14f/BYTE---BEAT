@@ -1,3 +1,4 @@
+{% load precios_tag %}
 <html>
   <body style="font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 20px;">
     <div style="max-width: 600px; margin: auto; background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
@@ -26,10 +27,10 @@
               {% endif %}
             </td>
             <td style="padding: 10px; text-align: center;">{{ products.quantity }}</td>
-            <td style="padding: 10px; text-align: right;">${{ products.producto.price|floatformat:2 }}</td>
+            <td style="padding: 10px; text-align: right;">{{ products.producto.price | format_price }}</td>
             <td style="padding: 10px; text-align: right;">
-              ${{ products.quantity|floatformat:2|floatformat:"0"|add:"0" |floatformat:2|floatformat:"0" }} <!-- Calcula subtotal si lo quieres dinámico en backend -->
-              {% comment %} Mejor calcula subtotal en backend y pásalo al template {% endcomment %}
+              {% widthratio products.quantity 1 products.producto.price as subtotal %}
+              {{ subtotal|format_price }} 
             </td>
           </tr>
           {% endfor %}
@@ -37,8 +38,8 @@
       </table>
 
       <div style="margin-top: 20px; text-align: right; font-size: 16px;">
-        <p>Envío: <strong>${{ orden.envio_total|floatformat:2 }}</strong></p>
-        <p>Total: <strong style="font-size: 18px; color: #0BEAD0;">${{ orden.total|floatformat:2 }}</strong></p>
+        <p>Envío: <strong>${{ orden.envio_total|format_price}}</strong></p>
+        <p>Total: <strong style="font-size: 18px; color: #0BEAD0;">{{ orden.total |format_price }}</strong></p>
       </div>
 
       <p style="margin-top: 30px; color: #777;">Si tienes alguna pregunta, responde este correo o contáctanos en nuestro servicio de atención al cliente.</p>

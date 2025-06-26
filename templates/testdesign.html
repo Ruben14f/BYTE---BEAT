@@ -3,961 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Byte & Beat - Los mejores productos a un click</title>
+    <title>Confirmación de Compra - Byte & Beat</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #111827;
-            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
             line-height: 1.6;
         }
-
-        /* Gradients and Backgrounds */
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e293b 0%, #3730a3 25%, #7c3aed 50%, #ec4899 75%, #06b6d4 100%);
-        }
-
-        .gradient-text {
-            background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-        }
-
-        /* Navbar Styles */
-        .navbar {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            background: rgba(17, 24, 39, 0.95);
-        }
-
-        .nav-container {
-            max-width: 1200px;
+        
+        .email-container {
+            max-width: 600px;
             margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: 64px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .nav-menu {
-            display: flex;
-            list-style: none;
-            gap: 32px;
-            align-items: center;
-        }
-
-        .nav-menu li a {
-            color: #ffffff;
-            text-decoration: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .nav-menu li a:hover {
-            color: #8B5CF6;
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .nav-menu li a.logout {
-            background: #dc2626;
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-        }
-
-        .nav-menu li a.logout:hover {
-            background: #b91c1c;
-        }
-
-        .cart-btn {
-            position: relative;
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        .cart-btn:hover {
-            background: rgba(139, 92, 246, 0.2);
-        }
-
-        .cart-count {
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: #ec4899;
-            color: white;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .mobile-menu-btn {
-            display: none;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
-        }
-
-        .mobile-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            width: 100%;
-            background: rgba(17, 24, 39, 0.95);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 20px;
-        }
-
-        .mobile-menu.active {
-            display: block;
-        }
-
-        .mobile-menu a {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            transition: color 0.3s ease;
-        }
-
-        .mobile-menu a:hover {
-            color: #8B5CF6;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 40px 30px;
+            text-align: center;
             position: relative;
             overflow: hidden;
-            padding-top: 64px;
         }
-
-        .hero-bg-element {
+        
+        .header::before {
+            content: '';
             position: absolute;
-            border-radius: 50%;
-            filter: blur(40px);
-            opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
         }
-
-        .hero-bg-element:nth-child(1) {
-            top: -160px;
-            right: -160px;
-            width: 320px;
-            height: 320px;
-            background: #8B5CF6;
-            animation-delay: 0s;
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
         }
-
-        .hero-bg-element:nth-child(2) {
-            bottom: -160px;
-            left: -160px;
-            width: 320px;
-            height: 320px;
-            background: #06B6D4;
-            animation-delay: 2s;
-        }
-
-        .hero-bg-element:nth-child(3) {
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 320px;
-            height: 320px;
-            background: #EC4899;
-            animation-delay: 4s;
-        }
-
-        .hero-content {
-            text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 10;
-        }
-
-        .hero-title {
-            font-size: 4rem;
+        
+        .logo {
+            font-size: 28px;
             font-weight: bold;
-            margin-bottom: 24px;
-            line-height: 1.2;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
         }
-
-        .hero-subtitle {
-            font-size: 1.5rem;
-            color: #d1d5db;
-            margin-bottom: 32px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        
+        .thank-you {
+            font-size: 24px;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 2;
         }
-
-        .hero-btn {
-            background: linear-gradient(135deg, #8B5CF6, #EC4899, #06B6D4);
-            color: white;
-            border: none;
-            padding: 16px 32px;
+        
+        .confirmation-text {
+            font-size: 16px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .content {
+            padding: 40px 30px;
+        }
+        
+        .order-info {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f1f3ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+        
+        .order-number {
             font-size: 18px;
             font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: #333;
+            margin-bottom: 20px;
         }
-
-        .hero-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        
+        .order-details {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-
-        /* Sections */
-        .section {
-            padding: 80px 0;
-        }
-
-        .section-alt {
-            background-color: #1f2937;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 64px;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            font-weight: bold;
-            margin-bottom: 16px;
-        }
-
-        .section-subtitle {
-            font-size: 1.25rem;
-            color: #9ca3af;
-        }
-
-        /* Product Grid */
-        .product-grid {
+        
+        .product-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 32px;
-            margin-bottom: 48px;
+            grid-template-columns: 60px 2fr 80px 120px 120px;
+            gap: 15px;
+            font-weight: bold;
+            font-size: 14px;
         }
-
-        .product-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 24px;
-            transition: all 0.3s ease;
-            cursor: pointer;
+        
+        .product-item {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 60px 2fr 80px 120px 120px;
+            gap: 15px;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.3s ease;
         }
-
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        
+        .product-item:hover {
+            background: #f8f9ff;
         }
-
+        
         .product-image {
-            height: 192px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 8px;
-            margin-bottom: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 48px;
             color: white;
-        }
-
-        .product-image.tech {
-            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
-        }
-
-        .product-image.audio {
-            background: linear-gradient(135deg, #EC4899, #8B5CF6);
-        }
-
-        .product-image.music {
-            background: linear-gradient(135deg, #06B6D4, #10B981);
-        }
-
-        .product-title {
-            font-size: 1.25rem;
             font-weight: bold;
-            margin-bottom: 8px;
+            font-size: 12px;
         }
-
-        .product-description {
-            color: #9ca3af;
-            margin-bottom: 16px;
+        
+        .product-name {
+            font-weight: 500;
+            color: #333;
         }
-
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .product-price {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .product-btn {
-            background: #8B5CF6;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        
+        .quantity, .unit-price, .subtotal {
+            text-align: center;
             font-weight: 500;
         }
-
-        .product-btn:hover {
-            background: #7c3aed;
-            transform: scale(1.05);
+        
+        .totals {
+            padding: 20px;
+            background: #f8f9ff;
         }
-
-        /* Category Grid */
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-        }
-
-        .category-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .category-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
-        }
-
-        .category-icon {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .category-card:hover .category-icon {
-            transform: scale(1.1);
-        }
-
-        .category-icon.computers {
-            background: linear-gradient(135deg, #8B5CF6, #06B6D4);
-        }
-
-        .category-icon.audio {
-            background: linear-gradient(135deg, #EC4899, #EF4444);
-        }
-
-        .category-icon.instruments {
-            background: linear-gradient(135deg, #10B981, #14B8A6);
-        }
-
-        .category-icon.accessories {
-            background: linear-gradient(135deg, #F59E0B, #F97316);
-        }
-
-        .category-title {
-            font-size: 1.125rem;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
-
-        .category-description {
-            color: #9ca3af;
-            font-size: 0.875rem;
-        }
-
-        /* Footer */
-        .footer {
-            padding: 64px 0;
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 32px;
-            margin-bottom: 48px;
-        }
-
-        .footer-brand {
-            max-width: 400px;
-        }
-
-        .footer-brand h3 {
-            font-size: 1.875rem;
-            font-weight: bold;
-            margin-bottom: 16px;
-        }
-
-        .footer-brand p {
-            color: #d1d5db;
-            margin-bottom: 24px;
-            line-height: 1.6;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 16px;
-        }
-
-        .social-btn {
-            background: #8B5CF6;
-            color: white;
-            border: none;
-            padding: 8px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .social-btn:hover {
-            background: #7c3aed;
-            transform: scale(1.1);
-        }
-
-        .footer-section h4 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-
-        .footer-section ul {
-            list-style: none;
-        }
-
-        .footer-section ul li {
-            margin-bottom: 8px;
-        }
-
-        .footer-section ul li a {
-            color: #d1d5db;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-
-        .footer-section ul li a:hover {
-            color: #8B5CF6;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid #374151;
-            padding-top: 32px;
+        
+        .total-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
+            margin-bottom: 10px;
+            padding: 8px 0;
         }
-
-        .footer-bottom p {
-            color: #9ca3af;
-            font-size: 0.875rem;
+        
+        .total-row.shipping {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 15px;
         }
-
-        .footer-links {
-            display: flex;
-            gap: 24px;
+        
+        .total-row.final {
+            border-top: 2px solid #667eea;
+            font-weight: bold;
+            font-size: 18px;
+            color: #333;
+            padding-top: 15px;
+            margin-top: 10px;
         }
-
-        .footer-links a {
-            color: #9ca3af;
+        
+        .support-section {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f1f3ff 100%);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .support-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .support-text {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .contact-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
             text-decoration: none;
-            font-size: 0.875rem;
-            transition: color 0.3s ease;
+            font-weight: bold;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .footer-links a:hover {
-            color: #8B5CF6;
+        
+        .contact-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
-
-        /* Animations */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        
+        .footer {
+            background: #333;
+            color: white;
+            padding: 30px;
+            text-align: center;
         }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .footer-text {
+            opacity: 0.8;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 10px;
+                border-radius: 15px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            
+            .header, .content, .support-section {
+                padding: 20px;
             }
-        }
-
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease forwards;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .nav-menu {
+            
+            .product-header, .product-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                text-align: center;
+            }
+            
+            .product-header {
                 display: none;
-            }
-
-            .mobile-menu-btn {
-                display: block;
-            }
-
-            .hero-title {
-                font-size: 2.5rem;
-            }
-
-            .hero-subtitle {
-                font-size: 1.125rem;
-            }
-
-            .section-title {
-                font-size: 2rem;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .footer-bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .hero-title {
-                font-size: 2rem;
-            }
-
-            .product-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .category-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar" id="navbar">
-        <div class="nav-container">
-            <a href="#" class="logo gradient-text">Byte & Beat</a>
-            
-            <ul class="nav-menu">
-                <li><a href="#home">Inicio</a></li>
-                <li><a href="#products">Productos</a></li>
-                <li><a href="#purchases">Mis Compras</a></li>
-                <li><a href="#admin">Panel Admin</a></li>
-                <li><a href="#logout" class="logout">Cerrar Sesión</a></li>
-                <li>
-                    <button class="cart-btn" id="cartBtn">
-                        🛒
-                        <span class="cart-count" id="cartCount">3</span>
-                    </button>
-                </li>
-            </ul>
-
-            <button class="mobile-menu-btn" id="mobileMenuBtn">
-                <span id="hamburger">☰</span>
-                <span id="close" style="display: none;">✕</span>
-            </button>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">Byte & Beat</div>
+            <div class="thank-you">¡Gracias por tu compra!</div>
+            <div class="confirmation-text">Tu pedido ha sido confirmado y está siendo procesado</div>
         </div>
-
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="#home">Inicio</a>
-            <a href="#products">Productos</a>
-            <a href="#purchases">Mis Compras</a>
-            <a href="#admin">Panel Admin</a>
-            <a href="#logout" style="color: #dc2626;">Cerrar Sesión</a>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero gradient-bg" id="home">
-        <div class="hero-bg-element"></div>
-        <div class="hero-bg-element"></div>
-        <div class="hero-bg-element"></div>
         
-        <div class="hero-content">
-            <h1 class="hero-title fade-in-up">
-                <span class="gradient-text">Los mejores productos</span>
-                <br>
-                <span>a un click</span>
-            </h1>
-            <p class="hero-subtitle fade-in-up">
-                Descubre lo mejor en tecnología e instrumentos musicales en Byte & Beat
-            </p>
-            <button class="hero-btn fade-in-up" onclick="scrollToSection('products')">
-                Explorar Productos
-            </button>
-        </div>
-    </section>
-
-    <!-- Productos Destacados -->
-    <section class="section" id="products">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="gradient-text">Productos Destacados</span>
-                </h2>
-                <p class="section-subtitle">Lo mejor de nuestra selección</p>
-            </div>
-
-            <div class="product-grid">
-                <div class="product-card ">
-                    <div class="product-image tech">💻</div>
-                    <h3 class="product-title">Laptop Gaming Pro</h3>
-                    <p class="product-description">Potencia extrema para gaming y trabajo profesional</p>
-                    <div class="product-footer">
-                        <span class="product-price gradient-text">$1,299</span>
-                        <button class="product-btn" onclick="addToCart('Laptop Gaming Pro', 1299)">Comprar</button>
-                    </div>
-                </div>
-
-                <div class="product-card ">
-                    <div class="product-image audio">🎧</div>
-                    <h3 class="product-title">Auriculares Premium</h3>
-                    <p class="product-description">Calidad de sonido profesional con cancelación de ruido</p>
-                    <div class="product-footer">
-                        <span class="product-price gradient-text">$249</span>
-                        <button class="product-btn" onclick="addToCart('Auriculares Premium', 249)">Comprar</button>
-                    </div>
-                </div>
-
-                <div class="product-card ">
-                    <div class="product-image music">🎹</div>
-                    <h3 class="product-title">Teclado Musical</h3>
-                    <p class="product-description">88 teclas con sensibilidad táctil profesional</p>
-                    <div class="product-footer">
-                        <span class="product-price gradient-text">$899</span>
-                        <button class="product-btn" onclick="addToCart('Teclado Musical', 899)">Comprar</button>
-                    </div>
-                </div>
-            </div>
-
-            <div style="text-align: center;">
-                <button class="hero-btn" onclick="showAllProducts()">
-                    Ver Todos los Productos
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Categorías -->
-    <section class="section section-alt">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">
-                    <span class="gradient-text">Nuestras Categorías</span>
-                </h2>
-                <p class="section-subtitle">Encuentra exactamente lo que buscas</p>
-            </div>
-
-            <div class="category-grid">
-                <div class="category-card fade-in-up" onclick="filterByCategory('computers')">
-                    <div class="category-icon computers">💻</div>
-                    <h3 class="category-title">Computadoras</h3>
-                    <p class="category-description">Laptops, PCs, tablets y más</p>
-                </div>
-
-                <div class="category-card fade-in-up" onclick="filterByCategory('audio')">
-                    <div class="category-icon audio">🎧</div>
-                    <h3 class="category-title">Audio</h3>
-                    <p class="category-description">Auriculares, altavoces, micrófonos</p>
-                </div>
-
-                <div class="category-card fade-in-up" onclick="filterByCategory('instruments')">
-                    <div class="category-icon instruments">🎹</div>
-                    <h3 class="category-title">Instrumentos</h3>
-                    <p class="category-description">Teclados, guitarras, baterías</p>
-                </div>
-
-                <div class="category-card fade-in-up" onclick="filterByCategory('accessories')">
-                    <div class="category-icon accessories">🔌</div>
-                    <h3 class="category-title">Accesorios</h3>
-                    <p class="category-description">Cables, soportes, fundas</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer gradient-bg">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <h3 class="gradient-text">Byte & Beat</h3>
-                    <p>
-                        Tu destino principal para tecnología de vanguardia e instrumentos musicales de calidad profesional. 
-                        Conectamos la pasión por la tecnología con el amor por la música.
-                    </p>
-                    <div class="social-links">
-                        <button class="social-btn" onclick="openSocial('twitter')">🐦</button>
-                        <button class="social-btn" onclick="openSocial('facebook')">📘</button>
-                        <button class="social-btn" onclick="openSocial('instagram')">📷</button>
-                        <button class="social-btn" onclick="openSocial('youtube')">📺</button>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Enlaces Rápidos</h4>
-                    <ul>
-                        <li><a href="#home">Inicio</a></li>
-                        <li><a href="#products">Productos</a></li>
-                        <li><a href="#offers">Ofertas</a></li>
-                        <li><a href="#contact">Contacto</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Contacto</h4>
-                    <ul>
-                        <li><a href="mailto:info@bytebeat.com">📧 info@bytebeat.com</a></li>
-                        <li><a href="tel:+56912345678">📞 +56 9 1234 5678</a></li>
-                        <li><a href="#">📍 Santiago, Chile</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>© 2025 Byte & Beat. Todos los derechos reservados.</p>
-                <div class="footer-links">
-                    <a href="#privacy">Política de Privacidad</a>
-                    <a href="#terms">Términos de Servicio</a>
-                    <a href="#faq">FAQ</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        // Variables globales
-        let cartItems = [];
-        let cartCount = 3;
-
-        // Navbar scroll effect
-        window.addEventListener('scroll', function() {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const hamburger = document.getElementById('hamburger');
-        const closeIcon = document.getElementById('close');
-
-        mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('active');
-            
-            if (mobileMenu.classList.contains('active')) {
-                hamburger.style.display = 'none';
-                closeIcon.style.display = 'block';
-            } else {
-                hamburger.style.display = 'block';
-                closeIcon.style.display = 'none';
-            }
-        });
-
-        // Smooth scrolling
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                const offsetTop = element.offsetTop - 64; // Account for fixed navbar
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        // Add smooth scrolling to all nav links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href').substring(1);
-                scrollToSection(targetId);
+        <!-- Content -->
+        <div class="content">
+            <div class="order-info">
+                <div class="order-number">Número de Orden: #BB-2024-001234</div>
                 
-                // Close mobile menu if open
-                mobileMenu.classList.remove('active');
-                hamburger.style.display = 'block';
-                closeIcon.style.display = 'none';
-            });
-        });
-
-        // Cart functionality
-        function addToCart(productName, price) {
-            cartItems.push({
-                name: productName,
-                price: price,
-                quantity: 1
-            });
+                <div class="order-details">
+                    <div class="product-header">
+                        <div>Imagen</div>
+                        <div>Producto</div>
+                        <div>Cantidad</div>
+                        <div>Precio Unit.</div>
+                        <div>Subtotal</div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">🎧</div>
+                        <div class="product-name">Auriculares Bluetooth Pro</div>
+                        <div class="quantity">2</div>
+                        <div class="unit-price">$89.99</div>
+                        <div class="subtotal">$179.98</div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">🎵</div>
+                        <div class="product-name">Micrófono USB Studio</div>
+                        <div class="quantity">1</div>
+                        <div class="unit-price">$149.99</div>
+                        <div class="subtotal">$149.99</div>
+                    </div>
+                    
+                    <div class="product-item">
+                        <div class="product-image">🔊</div>
+                        <div class="product-name">Altavoz Portátil Beat</div>
+                        <div class="quantity">1</div>
+                        <div class="unit-price">$79.99</div>
+                        <div class="subtotal">$79.99</div>
+                    </div>
+                    
+                    <div class="totals">
+                        <div class="total-row">
+                            <span>Subtotal:</span>
+                            <span>$409.96</span>
+                        </div>
+                        <div class="total-row shipping">
+                            <span>Envío:</span>
+                            <span>$15.00</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Total:</span>
+                            <span>$424.96</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            cartCount++;
-            updateCartCount();
-            
-            // Show success message
-            showNotification(`${productName} agregado al carrito`, 'success');
-            
-            // Animate cart button
-            const cartBtn = document.getElementById('cartBtn');
-            cartBtn.style.transform = 'scale(1.2)';
-            setTimeout(() => {
-                cartBtn.style.transform = 'scale(1)';
-            }, 200);
-        }
-
-        function updateCartCount() {
-            document.getElementById('cartCount').textContent = cartCount;
-        }
-
-        // Cart button click
-        document.getElementById('cartBtn').addEventListener('click', function() {
-            showCart();
-        });
-
-        function showCart() {
-            if (cartItems.length === 0) {
-                showNotification('Tu carrito está vacío', 'info');
-                return;
-            }
-            
-            let cartContent = 'Productos en tu carrito:\n\n';
-            let total = 0;
-            
-            cartItems.forEach(item => {
-                cartContent += `${item.name} - $${item.price}\n`;
-                total += item.price;
-            });
-            
-            cartContent += `\nTotal: $${total}`;
-            
-            if (confirm(cartContent + '\n\n¿Proceder al checkout?')) {
-                showNotification('Redirigiendo al checkout...', 'success');
-            }
-        }
-
-        // Category filtering
-        function filterByCategory(category) {
-            showNotification(`Mostrando productos de ${category}`, 'info');
-            // Here you would implement actual filtering logic
-        }
-
-        // Show all products
-        function showAllProducts() {
-            showNotification('Cargando todos los productos...', 'info');
-            // Here you would implement navigation to products page
-        }
-
-        // Social media links
-        function openSocial(platform) {
-            const urls = {
-                twitter: 'https://twitter.com/bytebeat',
-                facebook: 'https://facebook.com/bytebeat',
-                instagram: 'https://instagram.com/bytebeat',
-                youtube: 'https://youtube.com/bytebeat'
-            };
-            
-            if (urls[platform]) {
-                window.open(urls[platform], '_blank');
-            }
-        }
-
-        // Notification system
-        function showNotification(message, type = 'info') {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: ${type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#3B82F6'};
-                color: white;
+            <div class="support-section">
+                <div class="support-title">¿Necesitas ayuda?</div>
+                <div class="support-text">
+                    Si tienes alguna pregunta sobre tu pedido, no dudes en contactarnos. 
+                    Nuestro equipo de atención al cliente está aquí para ayudarte.
+                </div>
+                <a href="mailto:soporte@byteandbeat.com" class="contact-button">
+                    Contactar Soporte
+                </a>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="footer">
+            <div class="footer-logo">Byte & Beat</div>
+            <div class="footer-text">
+                Descubre lo mejor en tecnología e instrumentos musicales<br>
+                © 2024 Byte & Beat. Todos los derechos reservados.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

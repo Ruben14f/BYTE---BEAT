@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Agregar un if que indique si esta con sesion iniciada no deba agregar datos personales y de contacto -->
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/form_contacto.css'%}">
+    <!-- Contenido principal -->
+    <div class="container">
+        <div class="title">
+            <h1>Contáctanos</h1>
+            <p>¿Necesitas ayuda? Estamos aquí para ti. Completa el formulario y te responderemos pronto.</p>
+        </div>
+
+        <div class="form-container">
+            <div id="successMessage" class="success-message">
+                ¡Gracias por contactarnos! Tu mensaje ha sido enviado exitosamente. Te responderemos pronto.
+            </div>
+            
+            <div id="errorMessage" class="error-message">
+                Hubo un error al enviar tu mensaje. Por favor, inténtalo de nuevo.
+            </div>
+
+            <form id="contactForm">
+                <!-- Datos Personales -->
+                <div class="form-section">
+                    <h3>Datos Personales</h3>
+                    <div class="form-group">
+                        <label for="nombres">Nombres: *</label>
+                        <input type="text" id="nombres" name="nombres" required placeholder="Ingresa tus nombres">
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidos">Apellidos: *</label>
+                        <input type="text" id="apellidos" name="apellidos" required placeholder="Ingresa tus apellidos">
+                    </div>
+                </div>
+
+                <!-- Información de Contacto -->
+                <div class="form-section">
+                    <h3>Información de Contacto</h3>
+                    <div class="form-group">
+                        <label for="email">Email: *</label>
+                        <input type="email" id="email" name="email" required placeholder="tu-email@ejemplo.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono:</label>
+                        <input type="tel" id="telefono" name="telefono" placeholder="Ej: 946385072">
+                    </div>
+                </div>
+
+                <!-- Tipo de Consulta -->
+                <div class="form-section">
+                    <h3>Tipo de Consulta</h3>
+                    <div class="form-group">
+                        <label for="tipoConsulta">Selecciona el tipo de consulta: *</label>
+                        <select id="tipoConsulta" name="tipoConsulta" required>
+                            <option value="">Selecciona una opción</option>
+                            <option value="consulta-productos">Consulta de Productos</option>
+                            <option value="estado-pedido">Estado de Pedido</option>
+                            <option value="informacion-general">Información General</option>
+                            <option value="soporte-tecnico">Soporte Técnico</option>
+                            <option value="devoluciones">Devoluciones y Cambios</option>
+                            <option value="otros">Otros</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Mensaje -->
+                <div class="form-section">
+                    <h3>Tu Mensaje</h3>
+                    <div class="form-group">
+                        <label for="asunto">Asunto: *</label>
+                        <input type="text" id="asunto" name="asunto" required placeholder="Resumen de tu consulta">
+                    </div>
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje: *</label>
+                        <textarea id="mensaje" name="mensaje" required placeholder="Describe detalladamente tu consulta o problema..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Botones -->
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        Enviar Mensaje
+                        <span class="loader" id="loader"></span>
+                    </button>
+                    <button type="reset" class="btn btn-secondary">Limpiar Formulario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Elementos del DOM
+        const form = document.getElementById('contactForm');
+        const successMessage = document.getElementById('successMessage');
+        const errorMessage = document.getElementById('errorMessage');
+        const loader = document.getElementById('loader');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        // Función para mostrar mensajes
+        function showMessage(type, message = '') {
+            hideMessages();
+            if (type === 'success') {
+                successMessage.style.display = 'block';
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            } else if (type === 'error') {
+                errorMessage.style.display = 'block';
+                if (message) {
+                    errorMessage.textContent = message;
+                }
+                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function hideMessages() {
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+        }
+
+        // Validación de email
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        // Validación de teléfono (opcional pero si se ingresa debe ser válido)
+        function isValidPhone(phone) {
+            if (!phone.trim()) return true; // Es opcional
+            const phoneRegex = /^[0-9+\-\s()]{7,15}$/;
+            return phoneRegex.test(phone);
+        }
+
+        // Función para limpiar y validar texto
+        function sanitizeText(text) {
+            return text.trim().replace(/[<>]/g, '');
+        }
+
+        // Validación del formulario
+        function validateForm() {
+            const nombres = document.getElementById('nombres').value.trim();
+            const apellidos = document.getElementById('apellidos').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const tipoConsulta = document.getElementById('tipoConsulta').value;
+            const asunto = document.getElementById('asunto').value.trim();
+            const mensaje = document.getElementById('mensaje').value.trim();
+
+            // Validaciones
+            if (!nombres || nombres.length < 2) {
+                showMessage('error', 'El nombre debe tener al menos 2 caracteres.');
+                return false;
+            }
+
+            if (!apellidos || apellidos.length < 2) {
+                showMessage('error', 'Los apellidos deben tener al menos 2 caracteres.');
+                return false;
+            }
+
+            if (!email || !isValidEmail(email)) {
+                showMessage('error', 'Por favor, ingresa un email válido.');
+                return false;
+            }
+
+            if (!isValidPhone(telefono)) {
+                showMessage('error', 'El teléfono ingresado no es válido.');
+                return false;
+            }
+
+            if (!tipoConsulta) {
+                showMessage('error', 'Por favor, selecciona el tipo de consulta.');
+                return false;
+            }
+
+            if (!asunto || asunto.length < 5) {
+                showMessage('error', 'El asunto debe tener al menos 5 caracteres.');
+                return false;
+            }
+
+            if (!mensaje || mensaje.length < 10) {
+                showMessage('error', 'El mensaje debe tener al menos 10 caracteres.');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Simulación de envío de formulario
+        async function submitForm(formData) {
+            // Simular delay de red
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // Simular éxito la mayoría de las veces
+                    if (Math.random() > 0.1) {
+                        resolve({
+                            success: true,
+                            orderId: '#' + Math.floor(Math.random() * 9000 + 1000),
+                            message: 'Mensaje enviado exitosamente'
+                        });
+                    } else {
+                        reject(new Error('Error de conexión'));
+                    }
+                }, 2000);
+            });
+        }
+
+        // Manejo del envío del formulario
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            hideMessages();
+
+            // Validar formulario
+            if (!validateForm()) {
+                return;
+            }
+
+            // Mostrar loader
+            loader.style.display = 'inline-block';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Enviando...';
+
+            try {
+                // Recopilar datos del formulario
+                const formData = {
+                    nombres: sanitizeText(document.getElementById('nombres').value),
+                    apellidos: sanitizeText(document.getElementById('apellidos').value),
+                    email: document.getElementById('email').value.trim().toLowerCase(),
+                    telefono: document.getElementById('telefono').value.trim(),
+                    tipoConsulta: document.getElementById('tipoConsulta').value,
+                    asunto: sanitizeText(document.getElementById('asunto').value),
+                    mensaje: sanitizeText(document.getElementById('mensaje').value),
+                    fechaEnvio: new Date().toLocaleString('es-ES'),
+                    origen: 'Footer - Sección Ayuda'
+                };
+
+                // Enviar formulario
+                const response = await submitForm(formData);
+
+                // Mostrar mensaje de éxito
+                showMessage('success');
+                
+                // Limpiar formulario
+                form.reset();
+
+                // Log para desarrollo (en producción esto iría a tu backend)
+                console.log('Formulario enviado:', formData);
+                console.log('Respuesta del servidor:', response);
+
+            } catch (error) {
+                console.error('Error al enviar formulario:', error);
+                showMessage('error', 'Hubo un problema al enviar tu mensaje. Por favor, inténtalo de nuevo.');
+            } finally {
+                // Ocultar loader
+                loader.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Enviar Mensaje';
+            }
+        });
+
+        // Limpiar mensajes cuando el usuario empiece a escribir de nuevo
+        const inputs = form.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('input', hideMessages);
+        });
+
+        // Efecto visual en los campos de entrada
+        inputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+
+        // Manejo del botón reset
+        form.addEventListener('reset', function() {
+            hideMessages();
+            setTimeout(() => {
+                form.querySelector('input').focus();
+            }, 100);
+        });
+    </script>
+{% endblock %}
