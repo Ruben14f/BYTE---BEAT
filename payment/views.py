@@ -17,7 +17,6 @@ from django.db import transaction
 from datetime import datetime
 from django.utils import timezone
 from dateutil.parser import parse
-import pytz
 
 
 
@@ -141,11 +140,12 @@ def webpay_respuesta(request):
                 if user_profile:
                     # Aquí puedes acceder a los datos de UserProfile
                     print("Datos del perfil:", user_profile)
+
                 orden = Orden.objects.filter(token_ws=token_ws).first()
 
                 if orden:
                     if orden.status == OrdenStatus.PAYED:
-                        return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden ,'perfiluser' : user_profile})
+                        return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden, 'perfiluser': user_profile})
 
                     orden.status = OrdenStatus.PAYED
                     orden.save(update_fields=['status'])
@@ -170,8 +170,8 @@ def webpay_respuesta(request):
                                     else:
                                         messages.error(request, f"Stock insuficiente para el producto {product.name}.")
                                         return redirect('orden')    
-                                cart.productos.clear()
-                                cart.update_totals()
+                                cart.cartproduct_set.all().delete()  # Eliminar todos los productos del carrito
+                                cart.update_totals()  # Actualizar totales del carrito
                         except Exception as e:
                             messages.error(request, f"Error al procesar la transacción: {e}")
                             return redirect('orden')
@@ -181,11 +181,12 @@ def webpay_respuesta(request):
                     orden.total = original_total
                     orden.save(update_fields=['total', 'fecha_pagada'])
 
-                confirmacion_pedido_email(request, token_ws)
-                
-                print('ORDEN:',orden)
-                # Make sure to return a valid response here
-                return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden, 'perfiluser' : user_profile})
+                    confirmacion_pedido_email(request, token_ws)
+
+                    print('ORDEN:', orden)
+
+                    # Make sure to return a valid response here
+                    return render(request, 'confirmed.html', {'resultado': resultado, 'orden': orden, 'perfiluser': user_profile})
 
         elif estado == 'INITIALIZED':
             return render(request, 'peding.html', {'resultado': resultado, 'token_ws': token_ws})

@@ -3,337 +3,396 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmación de Compra - Byte & Beat</title>
+    <title>Actualizador de Cantidad</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            line-height: 1.6;
-        }
-        
-        .email-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
             color: white;
-            padding: 40px 30px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+            padding: 20px;
         }
-        
-        .header::before {
-            content: '';
+
+        .loading-overlay {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-            animation: pulse 4s ease-in-out infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.1); opacity: 0.8; }
-        }
-        
-        .logo {
-            font-size: 28px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .thank-you {
-            font-size: 24px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .confirmation-text {
-            font-size: 16px;
-            opacity: 0.9;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .content {
-            padding: 40px 30px;
-        }
-        
-        .order-info {
-            background: linear-gradient(135deg, #f8f9ff 0%, #f1f3ff 100%);
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-            border-left: 5px solid #667eea;
-        }
-        
-        .order-number {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 20px;
-        }
-        
-        .order-details {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-        
-        .product-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 15px 20px;
-            display: grid;
-            grid-template-columns: 60px 2fr 80px 120px 120px;
-            gap: 15px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        
-        .product-item {
-            padding: 20px;
-            display: grid;
-            grid-template-columns: 60px 2fr 80px 120px 120px;
-            gap: 15px;
-            align-items: center;
-            border-bottom: 1px solid #f0f0f0;
-            transition: background 0.3s ease;
-        }
-        
-        .product-item:hover {
-            background: #f8f9ff;
-        }
-        
-        .product-image {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 12px;
+            align-items: center;
+            flex-direction: column;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        
-        .product-name {
-            font-weight: 500;
-            color: #333;
+
+        .loading-overlay.active {
+            opacity: 1;
         }
-        
-        .quantity, .unit-price, .subtotal {
-            text-align: center;
-            font-weight: 500;
+
+        .modern-spinner {
+            position: relative;
+            width: 60px;
+            height: 60px;
         }
-        
-        .totals {
-            padding: 20px;
-            background: #f8f9ff;
+
+        .spinner-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid transparent;
+            border-top: 3px solid #dc3545;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
-        
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            padding: 8px 0;
+
+        .spinner-ring:nth-child(2) {
+            animation-delay: 0.1s;
+            border-top-color: #ff6b6b;
         }
-        
-        .total-row.shipping {
-            border-top: 1px solid #e0e0e0;
-            padding-top: 15px;
+
+        .spinner-ring:nth-child(3) {
+            animation-delay: 0.2s;
+            border-top-color: #ff9999;
         }
-        
-        .total-row.final {
-            border-top: 2px solid #667eea;
-            font-weight: bold;
-            font-size: 18px;
-            color: #333;
-            padding-top: 15px;
-            margin-top: 10px;
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-        
-        .support-section {
-            background: linear-gradient(135deg, #f8f9ff 0%, #f1f3ff 100%);
-            border-radius: 15px;
-            padding: 25px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        
-        .support-title {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        
-        .support-text {
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .contact-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .contact-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        .footer {
-            background: #333;
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
-        .footer-logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        
-        .footer-text {
-            opacity: 0.8;
+
+        .loading-text {
+            margin-top: 15px;
             font-size: 14px;
+            color: #ccc;
         }
-        
-        @media (max-width: 600px) {
-            .email-container {
-                margin: 10px;
-                border-radius: 15px;
-            }
-            
-            .header, .content, .support-section {
-                padding: 20px;
-            }
-            
-            .product-header, .product-item {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                text-align: center;
-            }
-            
-            .product-header {
-                display: none;
-            }
+
+        .btn {
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background-color: #c82333;
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .quantity-form {
+            position: relative;
+        }
+
+        .demo-info {
+            background-color: #2a2a2a;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #dc3545;
         }
     </style>
 </head>
 <body>
-    <div class="email-container">
-        <!-- Header -->
-        <div class="header">
-            <div class="logo">Byte & Beat</div>
-            <div class="thank-you">¡Gracias por tu compra!</div>
-            <div class="confirmation-text">Tu pedido ha sido confirmado y está siendo procesado</div>
-        </div>
-        
-        <!-- Content -->
-        <div class="content">
-            <div class="order-info">
-                <div class="order-number">Número de Orden: #BB-2024-001234</div>
-                
-                <div class="order-details">
-                    <div class="product-header">
-                        <div>Imagen</div>
-                        <div>Producto</div>
-                        <div>Cantidad</div>
-                        <div>Precio Unit.</div>
-                        <div>Subtotal</div>
-                    </div>
-                    
-                    <div class="product-item">
-                        <div class="product-image">🎧</div>
-                        <div class="product-name">Auriculares Bluetooth Pro</div>
-                        <div class="quantity">2</div>
-                        <div class="unit-price">$89.99</div>
-                        <div class="subtotal">$179.98</div>
-                    </div>
-                    
-                    <div class="product-item">
-                        <div class="product-image">🎵</div>
-                        <div class="product-name">Micrófono USB Studio</div>
-                        <div class="quantity">1</div>
-                        <div class="unit-price">$149.99</div>
-                        <div class="subtotal">$149.99</div>
-                    </div>
-                    
-                    <div class="product-item">
-                        <div class="product-image">🔊</div>
-                        <div class="product-name">Altavoz Portátil Beat</div>
-                        <div class="quantity">1</div>
-                        <div class="unit-price">$79.99</div>
-                        <div class="subtotal">$79.99</div>
-                    </div>
-                    
-                    <div class="totals">
-                        <div class="total-row">
-                            <span>Subtotal:</span>
-                            <span>$409.96</span>
-                        </div>
-                        <div class="total-row shipping">
-                            <span>Envío:</span>
-                            <span>$15.00</span>
-                        </div>
-                        <div class="total-row final">
-                            <span>Total:</span>
-                            <span>$424.96</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="support-section">
-                <div class="support-title">¿Necesitas ayuda?</div>
-                <div class="support-text">
-                    Si tienes alguna pregunta sobre tu pedido, no dudes en contactarnos. 
-                    Nuestro equipo de atención al cliente está aquí para ayudarte.
-                </div>
-                <a href="mailto:soporte@byteandbeat.com" class="contact-button">
-                    Contactar Soporte
-                </a>
-            </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="footer">
-            <div class="footer-logo">Byte & Beat</div>
-            <div class="footer-text">
-                Descubre lo mejor en tecnología e instrumentos musicales<br>
-                © 2024 Byte & Beat. Todos los derechos reservados.
-            </div>
-        </div>
+    <div class="demo-info">
+        <h3>Demo: Actualizador de Cantidad de Carrito</h3>
+        <p>Este es un ejemplo de cómo prevenir el reenvío de formularios al recargar la página (F5).</p>
+        <p><strong>Stock disponible:</strong> 10 unidades</p>
     </div>
+
+    <div style="display: flex; flex-direction: row; align-items: center; color: #FFFFFF; position: relative; min-height: 100px; width: 100%; box-sizing: border-box;">
+        <!-- Loading moderno -->
+        <div id="loading-spinner-123" class="loading-overlay">
+            <div class="modern-spinner">
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+                <div class="spinner-ring"></div>
+            </div>
+            <div class="loading-text">Actualizando cantidad</div>
+        </div>
+
+        <p style="margin-right: 10px;">Cantidad:</p>
+        <form id="quantity-form-123" class="quantity-form" method="post" style="display: flex; align-items: center;">
+            <input type="hidden" name="cart_product_id" value="123">
+            <input type="hidden" name="new_quantity" id="new_quantity-123" value="1">
+            
+            <button type="button" class="btn btn-danger" id="remove-123" onclick="updateQuantity(123, -1)" style="width: 40px; height: 40px; font-size: 24px;">-</button>
+            <span id="quantity-123" style="font-size: 18px; margin: 0 10px;">1</span>
+            <button type="button" class="btn btn-danger" id="add-123" onclick="updateQuantity(123, 1)" style="width: 40px; height: 40px; font-size: 24px;">+</button>
+
+            <button type="submit" style="display: none;" id="submit-123">Actualizar</button>
+        </form>
+    </div>
+
+    <div style="margin-top: 20px; font-size: 14px; color: #ccc;">
+        <p><strong>Instrucciones de prueba:</strong></p>
+        <ul>
+            <li>Cambia la cantidad usando los botones + y -</li>
+            <li>Presiona F5 para recargar la página</li>
+            <li>Observa que NO se reenvía el formulario automáticamente</li>
+        </ul>
+    </div>
+
+    <script>
+        // Variables de control
+        let userInitiatedUpdate = false;
+        let formSubmissionId = null;
+        const STOCK = 10; // Simular stock para el demo
+
+        // Generar ID único para cada envío de formulario
+        function generateSubmissionId() {
+            return 'submission_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function showLoading(cartProductId) {
+            const loadingElement = document.getElementById('loading-spinner-' + cartProductId);
+            if (loadingElement) {
+                loadingElement.style.display = 'flex';
+                setTimeout(() => {
+                    loadingElement.classList.add('active');
+                }, 10);
+            }
+        }
+
+        function hideLoading(cartProductId) {
+            const loadingElement = document.getElementById('loading-spinner-' + cartProductId);
+            if (loadingElement) {
+                loadingElement.classList.remove('active');
+                setTimeout(() => {
+                    loadingElement.style.display = 'none';
+                }, 300);
+            }
+        }
+
+        function updateQuantity(cartProductId, change) {
+            // Marcar que es una actualización iniciada por el usuario
+            userInitiatedUpdate = true;
+            
+            // Generar ID único para este envío
+            formSubmissionId = generateSubmissionId();
+            
+            // Guardar el ID de envío y timestamp
+            sessionStorage.setItem('last_submission_id', formSubmissionId);
+            sessionStorage.setItem('last_submission_time', Date.now().toString());
+            sessionStorage.setItem('updating_cart_' + cartProductId, 'true');
+
+            let quantityElement = document.getElementById('quantity-' + cartProductId);
+            let currentQuantity = parseInt(quantityElement.innerText);
+            let newQuantity = currentQuantity + change;
+
+            // Validaciones
+            if (newQuantity == STOCK + 1) {
+                console.log("Cantidad solicitada excede el stock disponible");
+                hideLoading(cartProductId);
+                sessionStorage.removeItem('updating_cart_' + cartProductId);
+                userInitiatedUpdate = false;
+                return;
+            }
+
+            if (newQuantity <= 0) {
+                console.log("La cantidad no puede ser menor a 1");
+                hideLoading(cartProductId);
+                userInitiatedUpdate = false;
+                sessionStorage.removeItem('updating_cart_' + cartProductId);
+                return;
+            }
+
+            if (newQuantity > STOCK) {
+                newQuantity = STOCK;
+                console.log("La cantidad solicitada excede el stock disponible. Se ajustará a " + STOCK);
+            }
+
+            if (newQuantity > 0 && newQuantity <= STOCK) {
+                // Mostrar loading
+                showLoading(cartProductId);
+                
+                // Deshabilitar botones
+                document.getElementById('remove-' + cartProductId).disabled = true;
+                document.getElementById('add-' + cartProductId).disabled = true;
+                
+                // Actualizar cantidad en pantalla
+                quantityElement.innerText = newQuantity;
+                document.getElementById('new_quantity-' + cartProductId).value = newQuantity;
+                
+                console.log("Nueva cantidad: " + newQuantity + " (ID: " + formSubmissionId + ")");
+                
+                // Simular envío de formulario (en la versión real, descomenta la línea siguiente)
+                // let form = document.getElementById('quantity-form-' + cartProductId);
+                // form.submit();
+                
+                // Para el demo, simular la respuesta del servidor
+                setTimeout(() => {
+                    simulateServerResponse(cartProductId);
+                }, 1500);
+            } else {
+                hideLoading(cartProductId);
+                sessionStorage.removeItem('updating_cart_' + cartProductId);
+                userInitiatedUpdate = false;
+            }
+        }
+
+        // Función para simular respuesta del servidor (solo para demo)
+        function simulateServerResponse(cartProductId) {
+            // Reactivar botones
+            const removeBtn = document.getElementById('remove-' + cartProductId);
+            const addBtn = document.getElementById('add-' + cartProductId);
+            
+            if (removeBtn) removeBtn.disabled = false;
+            if (addBtn) addBtn.disabled = false;
+            
+            // Ocultar loading
+            hideLoading(cartProductId);
+            
+            // Limpiar estado
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
+            userInitiatedUpdate = false;
+            
+            console.log("Simulación: Respuesta del servidor recibida");
+        }
+
+        // Detectar tipo de navegación
+        function getNavigationType() {
+            if (performance.navigation) {
+                return performance.navigation.type;
+            } else if (performance.getEntriesByType) {
+                const navEntry = performance.getEntriesByType('navigation')[0];
+                return navEntry ? navEntry.type : 'unknown';
+            }
+            return 'unknown';
+        }
+
+        function isPageReload() {
+            const navType = getNavigationType();
+            return navType === 1 || navType === 'reload'; // 1 = TYPE_RELOAD
+        }
+
+        function wasRecentFormSubmission() {
+            const lastSubmissionTime = sessionStorage.getItem('last_submission_time');
+            if (!lastSubmissionTime) return false;
+            
+            const timeDiff = Date.now() - parseInt(lastSubmissionTime);
+            return timeDiff < 5000; // Considerar "reciente" si fue hace menos de 5 segundos
+        }
+
+        // Ocultar todos los spinners al cargar la página
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("DOM cargado");
+            let allSpinners = document.querySelectorAll('.loading-overlay');
+            allSpinners.forEach(function(spinner) {
+                spinner.style.display = 'none';
+                spinner.classList.remove('active');
+            });
+        });
+
+        // Manejar carga de página
+        window.addEventListener('load', function() {
+            const cartProductId = 123; // En tu código real, usa {{ cart_product.id }}
+            
+            const isReload = isPageReload();
+            const wasUpdating = sessionStorage.getItem('updating_cart_' + cartProductId) === 'true';
+            const recentSubmission = wasRecentFormSubmission();
+            
+            console.log("Página cargada - Tipo:", getNavigationType(), "Es recarga:", isReload, "Estaba actualizando:", wasUpdating, "Envío reciente:", recentSubmission);
+            
+            // Si es una recarga manual Y no hay una actualización pendiente, no hacer nada
+            if (isReload && !wasUpdating && !recentSubmission) {
+                console.log("Recarga manual detectada sin actualización pendiente - no se procesará");
+                sessionStorage.removeItem('updating_cart_' + cartProductId);
+                userInitiatedUpdate = false;
+                return;
+            }
+            
+            // Solo proceder si había una actualización en curso o fue un envío reciente
+            if (wasUpdating || recentSubmission) {
+                console.log("Procesando respuesta de actualización");
+                
+                // Reactivar botones
+                const removeBtn = document.getElementById('remove-' + cartProductId);
+                const addBtn = document.getElementById('add-' + cartProductId);
+                
+                if (removeBtn) removeBtn.disabled = false;
+                if (addBtn) addBtn.disabled = false;
+                
+                // Ocultar loading
+                hideLoading(cartProductId);
+                
+                // Limpiar estados
+                sessionStorage.removeItem('updating_cart_' + cartProductId);
+                
+                // Si no fue una actualización iniciada por el usuario, limpiar también el ID de envío
+                if (!userInitiatedUpdate) {
+                    sessionStorage.removeItem('last_submission_id');
+                    sessionStorage.removeItem('last_submission_time');
+                }
+            }
+            
+            // Resetear la variable
+            userInitiatedUpdate = false;
+        });
+
+        // Detectar cuando el usuario abandona la página
+        window.addEventListener('beforeunload', function(event) {
+            const cartProductId = 123; // En tu código real, usa {{ cart_product.id }}
+            
+            // Si hay una actualización en curso iniciada por el usuario, mantener el estado
+            if (userInitiatedUpdate) {
+                console.log("Manteniendo estado de actualización al abandonar la página");
+                return;
+            }
+            
+            // Si no hay actualización en curso, limpiar estados
+            sessionStorage.removeItem('updating_cart_' + cartProductId);
+            
+            // Limpiar estados antiguos (más de 10 segundos)
+            const lastSubmissionTime = sessionStorage.getItem('last_submission_time');
+            if (lastSubmissionTime) {
+                const timeDiff = Date.now() - parseInt(lastSubmissionTime);
+                if (timeDiff > 10000) {
+                    sessionStorage.removeItem('last_submission_id');
+                    sessionStorage.removeItem('last_submission_time');
+                }
+            }
+        });
+
+        // Prevenir envío duplicado del formulario
+        document.getElementById('quantity-form-123').addEventListener('submit', function(event) {
+            if (!userInitiatedUpdate) {
+                console.log("Envío de formulario bloqueado - no iniciado por el usuario");
+                event.preventDefault();
+                return false;
+            }
+        });
+
+        // Función para limpiar estados antiguos (llamar periódicamente)
+        function cleanupOldStates() {
+            const keys = Object.keys(sessionStorage);
+            const now = Date.now();
+            
+            keys.forEach(key => {
+                if (key.startsWith('updating_cart_') || key === 'last_submission_time') {
+                    const time = sessionStorage.getItem('last_submission_time');
+                    if (time && (now - parseInt(time)) > 30000) { // 30 segundos
+                        sessionStorage.removeItem(key);
+                        if (key === 'last_submission_time') {
+                            sessionStorage.removeItem('last_submission_id');
+                        }
+                    }
+                }
+            });
+        }
+
+        // Limpiar estados antiguos cada 30 segundos
+        setInterval(cleanupOldStates, 30000);
+    </script>
 </body>
 </html>

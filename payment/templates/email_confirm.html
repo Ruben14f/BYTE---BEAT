@@ -1,52 +1,80 @@
 {% load precios_tag %}
-<html>
-  <body style="font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 20px;">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Compra - Byte & Beat</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 20px; line-height: 1.6;">
     <div style="max-width: 600px; margin: auto; background-color: white; padding: 20px; border-radius: 8px; border: 1px solid #ddd;">
-      <h2 style="color: #333;">Gracias por tu compra!</h2>
-      <p>Orden número: <strong>{{ orden.num_orden }}</strong></p>
-
-      <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-        <thead>
-          <tr style="background-color: #0BEAD0; color: white;">
-            <th style="padding: 10px; text-align: left;">Producto</th>
-            <th style="padding: 10px; text-align: center;">Imagen</th>
-            <th style="padding: 10px; text-align: center;">Cantidad</th>
-            <th style="padding: 10px; text-align: right;">Precio Unitario</th>
-            <th style="padding: 10px; text-align: right;">Subtotal</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for products in orden.productos_orden.all %}
-          <tr style="border-bottom: 1px solid #ddd;">
-            <td style="padding: 10px; color: #555;">{{ products.producto.name }}</td>
-            <td style="padding: 10px; text-align: center;">
-              {% if products.producto.main_image %}
-                <img src="{{ products.producto.main_image.url }}" alt="{{ products.producto.name }}" width="50" height="50" style="border-radius: 4px;">
-              {% else %}
-                N/A
-              {% endif %}
-            </td>
-            <td style="padding: 10px; text-align: center;">{{ products.quantity }}</td>
-            <td style="padding: 10px; text-align: right;">{{ products.producto.price | format_price }}</td>
-            <td style="padding: 10px; text-align: right;">
-              {% widthratio products.quantity 1 products.producto.price as subtotal %}
-              {{ subtotal|format_price }} 
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <div style="margin-top: 20px; text-align: right; font-size: 16px;">
-        <p>Envío: <strong>${{ orden.envio_total|format_price}}</strong></p>
-        <p>Total: <strong style="font-size: 18px; color: #0BEAD0;">{{ orden.total |format_price }}</strong></p>
-      </div>
-
-      <p style="margin-top: 30px; color: #777;">Si tienes alguna pregunta, responde este correo o contáctanos en nuestro servicio de atención al cliente.</p>
-
-      <p style="color: #999; font-size: 12px; text-align: center; margin-top: 40px;">
-        © {{ now.year }} Tu Empresa. Todos los derechos reservados.
-      </p>
+        
+        <!-- Header -->
+        <div style="background-color: #667eea; color: white; padding: 30px 20px; text-align: center; border-radius: 6px; margin-bottom: 20px;">
+            <h1 style="font-size: 28px; font-weight: bold; margin: 0 0 10px 0;">Byte & Beat</h1>
+            <h2 style="font-size: 24px; margin: 0 0 10px 0;">¡Gracias por tu compra!</h2>
+            <p style="font-size: 16px; margin: 0; opacity: 0.9;">Tu pedido ha sido confirmado y está siendo procesado</p>
+        </div>
+        
+        <!-- Order Info -->
+        <div style="background-color: #f8f9ff; border-radius: 6px; padding: 20px; margin-bottom: 20px; border-left: 4px solid #667eea;">
+            <h3 style="font-size: 18px; font-weight: bold; color: #333; margin: 0 0 20px 0;">Número de Orden: <strong>#{{ orden.num_orden }}</strong></h3>
+            
+            <!-- Products Table -->
+            <div style="background-color: white; border-radius: 6px; overflow: hidden; border: 1px solid #e0e0e0;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background-color: #667eea; color: white;">
+                            <th style="padding: 15px 10px; text-align: left; font-weight: bold; font-size: 14px;">Producto</th>
+                            <th style="padding: 15px 10px; text-align: center; font-weight: bold; font-size: 14px;">Imagen</th>
+                            <th style="padding: 15px 10px; text-align: center; font-weight: bold; font-size: 14px;">Cantidad</th>
+                            <th style="padding: 15px 10px; text-align: right; font-weight: bold; font-size: 14px;">Precio Unitario</th>
+                            <th style="padding: 15px 10px; text-align: right; font-weight: bold; font-size: 14px;">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for products in orden.productos_orden.all %}
+                        <tr style="border-bottom: 1px solid #f0f0f0;">
+                            <td style="padding: 15px 10px; color: #333; font-weight: 500;">{{ products.producto.name | title }}</td>
+                            <td style="padding: 15px 10px; text-align: center;">
+                                {% if products.producto.main_image %}
+                                    <img src="{{ products.producto.main_image.url }}" alt="{{ products.producto.name }}" style="width: 50px; height: 50px; border-radius: 8px; object-fit: cover; border: 1px solid #ddd;">
+                                {% else %}
+                                    <div style="width: 50px; height: 50px; background-color: #667eea; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">N/A</div>
+                                {% endif %}
+                            </td>
+                            <td style="padding: 15px 10px; text-align: center; font-weight: 500;">{{ products.quantity }}</td>
+                            <td style="padding: 15px 10px; text-align: right; font-weight: 500;">{{ products.producto.price | format_price }}</td>
+                            <td style="padding: 15px 10px; text-align: right; font-weight: 500;">
+                                {% widthratio products.quantity 1 products.producto.price as subtotal %}
+                                {{ subtotal|format_price }}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <!-- Totals -->
+                <div style="padding: 20px; background-color: #f8f9ff; text-align: right;">
+                    <div style="margin-bottom: 10px; padding: 8px 0; font-size: 16px; border-top: 1px solid #e0e0e0; padding-top: 15px;">
+                        <span>Envío: <strong>{{ orden.envio_total|format_price }}</strong></span>
+                    </div>
+                    <div style="border-top: 2px solid #667eea; font-weight: bold; font-size: 18px; color: #667eea; padding-top: 15px; margin-top: 10px;">
+                        <span>Total: <strong>{{ orden.total |format_price }}</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div style="background-color: #333; color: white; padding: 20px; text-align: center; border-radius: 6px; margin-top: 20px;">
+            <h4 style="font-size: 24px; font-weight: bold; margin: 0 0 10px 0;">Byte & Beat</h4>
+            <p style="opacity: 0.8; font-size: 14px; margin: 0;">
+                Descubre lo mejor en tecnología e instrumentos musicales<br>
+                © {{ now.year }} Byte & Beat. Todos los derechos reservados.
+            </p>
+        </div>
+        
     </div>
-  </body>
+</body>
 </html>

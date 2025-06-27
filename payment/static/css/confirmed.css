@@ -1,0 +1,186 @@
+
+.success-icon {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00bcd4, #e91e63);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    position: relative;
+    animation: circleAppear 0.8s ease-out;
+}
+
+.success-icon i {
+    font-size: 3rem; /* Aumenta el tamaño del ícono */
+    color: white;
+}
+
+/* Títulos */
+.success-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 1rem;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.success-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+/* Card */
+.order-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 600px;
+    animation: slideInUp 0.8s ease-out 0.4s both;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+    margin: 0 -1rem;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.order-label {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
+}
+
+.order-value {
+    color: white;
+    font-weight: 600;
+}
+
+/* Botones */
+.btn-custom {
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    margin: 0.5rem;
+    text-decoration: none;
+    display: inline-block;
+    z-index: 10; /* Asegura que los botones estén por encima */
+}
+
+.btn-primary-custom {
+    background: rgba(233, 30, 99, 0.1);
+    color: #e91e63;
+    border: 1px solid rgba(233, 30, 99, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.btn-primary-custom:hover {
+    background: rgba(233, 30, 99, 0.2);
+    color: #e91e63;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.3);
+    border: 1px solid rgba(233, 30, 99, 0.5);
+}
+
+.btn-outline-custom {
+    background: rgba(0, 188, 212, 0.1);
+    color: #00bcd4;
+    border: 1px solid rgba(0, 188, 212, 0.3);
+    backdrop-filter: blur(10px);
+}
+
+.btn-outline-custom:hover {
+    background: rgba(0, 188, 212, 0.2);
+    color: #00bcd4;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 188, 212, 0.3);
+    border: 1px solid rgba(0, 188, 212, 0.5);
+}
+
+/* Contenedor de botones */
+.button-container {
+    margin-top: 3rem;
+    animation: slideInUp 0.8s ease-out 0.6s both;
+    text-align: center;
+}
+
+/* Animaciones */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+    .order-card {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    /* Cambiar el layout de los items a columna */
+    .order-item {
+        display: block; /* Cambiar a bloque para apilar */
+        width: 100%; /* Hacer que los items ocupen todo el ancho */
+        padding: 1rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+    .order-label {
+        font-weight: bold; /* Aseguramos que las etiquetas sean más destacadas */
+        display: block; /* Para que estén en una nueva línea */
+        margin-bottom: 0.5rem;
+    }
+
+    .order-value {
+        font-weight: 600;
+        display: block; /* Se separa de la etiqueta */
+        margin-bottom: 1rem;
+    }
+
+    .btn-custom {
+        width: 80%; /* Cambié a 80% para evitar que se estire demasiado */
+        margin: 1rem 0;
+    }
+
+    .success-icon {
+        width: 100px;
+        height: 100px;
+    }
+
+    .success-icon i {
+        font-size: 2.5rem;
+    }
+}
+

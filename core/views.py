@@ -11,7 +11,10 @@ from products.models import Product
 from django.db.models.functions import TruncMonth
 from adminPanel.utils import ingresos_totales
 from adminPanel.utils import *
-import pytz
+import os
+from django.core.mail import send_mail
+from django.contrib import messages
+from django.template.loader import render_to_string
 
 
 
@@ -67,7 +70,58 @@ def index_admin(request):
     })
 
 def form_contacto(request):
+    if request.method == 'POST':
+        # Extrae los datos del formulario
+        nombres = request.POST.get('nombres')
+        apellidos = request.POST.get('apellidos')
+        email = request.POST.get('email')
+        telefono = request.POST.get('telefono')
+        tipoConsulta = request.POST.get('tipoConsulta')
+        asunto = request.POST.get('asunto')
+        mensaje = request.POST.get('mensaje')
+
+        # Verifica si el usuario está autenticado
+        if request.user.is_authenticated:
+            email = request.user.email
+
+        # Llamar a la función correo_de_contacto para enviar el correo
+        correo_de_contacto(nombres, apellidos, email, telefono, tipoConsulta, asunto, mensaje)
+
+        # Mostrar mensaje de éxito
+        messages.success(request, 'Mensaje enviado. Te responderemos pronto.')
+        return render(request, 'formulario_contacto.html')
+
     return render(request, 'formulario_contacto.html')
+
+# Función para enviar el correo
+
+def correo_de_contacto(nombres, apellidos, email, telefono, tipoConsulta, asunto, mensaje):
+    email_host = os.environ.get('EMAIL_HOST_USER')  # Usando variable de entorno para obtener el correo del servidor
+
+    # Construir el mensaje HTML
+    html_message = f"""
+    <h3>Detalles del mensaje:</h3>
+    <p><strong>Nombre:</strong> {nombres} {apellidos}</p>
+    <p><strong>Email:</strong> {email}</p>
+    <p><strong>Teléfono:</strong> {telefono}</p>
+    <p><strong>Tipo de consulta:</strong> {tipoConsulta}</p>
+    <p><strong>Asunto:</strong> {asunto}</p>
+    <p><strong>Mensaje:</strong> {mensaje}</p>
+    """
+
+    try:
+        send_mail(
+            'Consulta de Contacto',
+            'Detalles de la consulta recibida.',
+            from_email=email_host, 
+            recipient_list=[email_host],  # Dirección a la que deseas enviar el correo
+            fail_silently=False,
+            html_message=html_message
+        )
+        print('Correo enviado con éxito')
+    except Exception as e:
+        print('Error al enviar correo:', e)
+
 def ventas_mensuales():
     ventas = (
         Orden.objects

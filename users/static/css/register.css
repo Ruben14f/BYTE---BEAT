@@ -21,7 +21,7 @@
 }
 
 .card h3 {
-    color: #17F0D2;
+    color: #00d4ff;
     margin-top: 10%;
     text-align: center;
 }
@@ -44,14 +44,27 @@
 }
 .form-group label {
     margin-bottom: 3%;
-    color: #17F0D2;
+    color: #00d4ff;
 }
 
 .form-group .register-input {
-    background-color: #1E1F36;
-    border: 2px solid #17F0D2;
-    color: white;
+    width: 100%;
     padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    transition: all 0.3s ease !important;
+}
+
+
+.form-group .register-input:focus{
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
 }
 
 .form-group .register-input::placeholder {
@@ -59,7 +72,23 @@
 }
 
 .btn {
-    --background: #17F0D2 !important;
+    padding: 12px;
+    background-color: #06B6D4 ;
+    color: #0f3460 ;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background: #06B6D4  !important;
+    transform: scale(1.05) !important;
+    color: #0f3460 !important;
+}
+.btn:focus {
+    background: #06B6D4 !important;
 }
 
 /* Ajustes para dispositivos pequeños */

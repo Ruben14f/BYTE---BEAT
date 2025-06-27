@@ -30,7 +30,7 @@ class Orden(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
     status = models.CharField(max_length=40, choices=OrdenStatus.choices, default=OrdenStatus.CREATED)
-    delivery_method = models.CharField(max_length=40, choices=DeliveryMethod.choices, default=DeliveryMethod.SHIPPING)
+    delivery_method = models.CharField(max_length=40, choices=DeliveryMethod.choices, default=DeliveryMethod.PICKUP)
     envio_total = models.DecimalField(default=0, max_digits=9, decimal_places=2)
     total = models.DecimalField(default=0, max_digits=9, decimal_places=2)
     create_at = models.DateField(auto_now_add=True)

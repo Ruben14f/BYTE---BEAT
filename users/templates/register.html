@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/register.css' %}">
 
 <div style="display: flex; justify-content: center; align-items: center; margin-top: -1%;">
-    <a style="text-decoration: none;" href="{% url 'index' %}"><h2 style="color: #17F0D2; font-size: 40px;">Byte & Beat</h2></a>
+    <a style="text-decoration: none;" href="{% url 'index' %}"><h2 style="color: #00d4ff; font-size: 40px;">Byte & Beat</h2></a>
 </div>
 
 <section class="register-wrapper" style="margin-bottom: 100px;">
@@ -31,12 +31,11 @@
                     {% endfor %}
 
                     <div class="mt-4 mb-4" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-                        <a style="color: #17F0D2; text-decoration: none;" href="{% url 'login' %}">¿Ya tienes cuenta? Iniciar sesión</a>
+                        <a style="color: #00d4ff; text-decoration: none;" href="{% url 'login' %}">¿Ya tienes cuenta? Iniciar sesión</a>
                     </div>
                     
-                    <hr style="color: #17F0D2;">
-                    <button type="submit" class="btn w-100 py-2"
-                        style="margin-bottom: 20px; background-color: #17F0D2; color: #1E1F36; font-weight: bold;">
+                    <hr style="color: #00d4ff;">
+                    <button type="submit" class="btn w-100 py-2">
                         Registrarse
                     </button>
                 </form>

@@ -20,7 +20,7 @@
 }
 
 .card h3 {
-    color: #17F0D2;
+    color: #00d4ff;
     margin-top: 10%;
     text-align: center;
 }
@@ -40,45 +40,47 @@
     align-items: center;
     width: 100%;
     margin-top: 10%;
+    
 }
 
 .form-group label {
     margin-bottom: 3%;
-    color: #17F0D2;
+    color: #00d4ff;
 }
 
 
-.form-group .login-input {
-    background-color: #1E1F36;
-    border: 2px solid #17F0D2;
-    color: white;
+.login-input {
+    width: 100%;
     padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #fff !important;
+    transition: all 0.3s ease !important;
 }
 
-.form-group .login-input::placeholder {
+.login-input:focus {
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
+}
+
+.login-input::placeholder {
     color: #aaaaaa;
 }
 
-.btn {
-    --background: #17F0D2 !important;
-}
-
 
 .input-reset {
-    background-color: #1E1F36;
-    border: 2px solid #17F0D2;
-    color: white;
-    padding: 10px;
-}
-
-.input-reset {
-    background-color: #1E1F36;
-    border: 2px solid #17F0D2;
-    color: white;
-    padding: 10px;
     width: 100%;
-    margin-bottom: 10px;
-    border-radius: 5px;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    color: #fff;
+    transition: all 0.3s ease !important;
 }
 
 .input-reset::placeholder {
@@ -86,9 +88,12 @@
 }
 
 .input-reset:focus  {
-    background: white;
-    color: black;
-    border: 2px solid #17F0D2;
+    outline: none;
+    border-color: #00d4ff;
+    box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+    transition: transform 0.2s ease;
 }
 
 .form-container {
@@ -125,7 +130,7 @@
 }
 
 .form-card h3 {
-    color: #17F0D2;
+    color: #00d4ff;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -133,7 +138,7 @@
 
 .input-group label {
     margin-bottom: 3%;
-    color: #17F0D2;
+    color: #00d4ff;
     font-size: 16px;
 }
 
@@ -142,7 +147,7 @@
     width: 100%;
     padding: 12px;
     background-color: #1E1F36;
-    border: 2px solid #17F0D2;
+    border: 2px solid #00d4ff;
     color: white;
     margin-bottom: 15px;
     border-radius: 5px;
@@ -156,25 +161,43 @@
 .reset-input:focus {
     background: white;
     color: black;
-    border: 2px solid #17F0D2;
+    border: 2px solid #00d4ff;
     outline: none;
 }
 
+.btn,
+.btn-cambiar-passwo,
+.submit-btn  {
+    padding: 12px;
+    background-color: #06B6D4 ;
+    color: #0f3460 ;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
 
-.submit-btn {
+.btn:focus,
+.submit-btn:focus,
+.btn-cambiar-passwo:focus {
     width: 100%;
     padding: 14px;
-    background-color: #17F0D2;
-    color: #1E1F36;
+    background-color: #06B6D4;
+    color: #0f3460;
     font-weight: bold;
     border-radius: 5px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: transform 0.2s ease;
 }
 
-.submit-btn:hover {
-    background-color: #15d1b6;
+.btn:hover,
+.submit-btn:hover,
+.btn-cambiar-passwo:hover {
+    background: #06B6D4  !important;
+    transform: scale(1.05) !important;
+    color: #0f3460 !important;
 }
 
 

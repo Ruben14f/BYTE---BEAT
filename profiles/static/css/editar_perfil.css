@@ -60,7 +60,6 @@ select option {
 
 select {
     padding-right: 30px; /* Añadir espacio para el ícono de la flecha */
-    background: #2a3c72;
     background-position: right 10px center;
     background-repeat: no-repeat;
     background-size: 12px 12px;
