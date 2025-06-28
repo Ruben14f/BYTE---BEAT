@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from .utils_bot import consulta_stock, consultar_estado_pedido
+from django.urls import reverse
+
 
 MAIN_MENU_OPTIONS = [
     "1- Consulta de Productos",
@@ -16,9 +18,8 @@ OPCION_PRODUCTOS_MENU = [
 ]
 
 OPCION_INFOGENERAL_MENU = [
-    "1- Guia de compra",
-    "2- Contacto y ubicacion",
-    "3- Volver al menú principal"
+    "1- Contacto y ubicacion",
+    "2- Volver al menú principal"
 ]
 
 # Funcion para devolver menu principal apenas inicia el chat
@@ -138,18 +139,11 @@ def menu_bot_view(request):
     # Estado: Información General
     elif estado == 'info_general':
         if user_input == '1':
-            return JsonResponse({
-                'mensaje': "Has seleccionado: Guia de compra",
-                'opciones': [ "Instrucciones de cómo comprar con link de página <br>",
-                    "1- Volver a información general",
-                    "2- Volver al menú principal"
-                ],
-                'estado': 'guia_compra'
-            })
-        elif user_input == '2':
+            contacto_url = reverse('formulario_contacto') 
             return JsonResponse({
                 'mensaje': "Has seleccionado: Contacto y ubicación",
-                'opciones': [ "Información con link de contacto y ubicación <br>",
+                'opciones': ["Av. Tecnología 123, Santiago <br> contacto@bytebeat.cl",
+                            f"También puedes ponerte en contacto con nosotros a través de nuestro <a href='{contacto_url}'>Formulario de contacto</a>.",
                     "1- Volver a información general",
                     "2- Volver al menú principal"
                 ],
@@ -164,21 +158,6 @@ def menu_bot_view(request):
                 'estado': 'info_general'
             })
         
-    elif estado == 'guia_compra':
-        if user_input == '1':
-            return menu_informacion_general()
-        elif user_input == '2':
-            return menu_principal_response()
-        else:
-            return JsonResponse({
-                'mensaje': "Opción no válida. Por favor elige una opción válida.",
-                'opciones': [
-                    "1- Volver a información general",
-                    "2- Volver al menú principal"
-                ],
-                'estado': 'guia_compra'
-            })
-
     elif estado == 'contacto_ubicacion':
         if user_input == '1':
             return menu_informacion_general()
@@ -226,7 +205,7 @@ def menu_bot_view(request):
             return JsonResponse({
                 'mensaje': "Opción no válida. Por favor elige una opción válida.",
                 'opciones': [ 
-                    "Si desea comunicarse con personal ir via WhatsApp +569 12341234 <br>",
+                    "Si desea comunicarse con personal ir via WhatsApp +56 2 2345 6789 <br>",
                     "1- Volver al menú principal"
                 ],
                 'estado': 'contactar_personal'
