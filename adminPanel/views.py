@@ -317,7 +317,7 @@ def send_email(request, nuevo_estado, usermail, orden, user):
     print('email user change status',usermail)
     email_host = os.environ.get('EMAIL_HOST_USER')
     
-    html_message = render_to_string('gestion_productos/email_update_status.html', {
+    html_message = render_to_string('gestion_pedidos/email_update_status.html', {
         'orden' : orden,
         'user' : user
     })
