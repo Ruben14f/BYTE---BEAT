@@ -46,9 +46,9 @@
 }
 
 .product-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas en grandes pantallas */
+    gap: 20px; /* Espacio entre productos */
     padding: 0 1rem;
 }
 
