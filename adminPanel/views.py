@@ -13,8 +13,11 @@ from django.template.loader import render_to_string
 from django.utils.timezone import now, localtime
 from django.utils import formats
 from django.core.paginator import Paginator
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 #GESTION DE PRODUCTOS
+@staff_member_required(login_url='/')
 def listado_productos(request):
     productos = Product.objects.all()
     marca = Brand.objects.all()
@@ -65,7 +68,8 @@ def listado_productos(request):
         'fecha_formateada': hora_actual,
         'dia_de_la_semana': dia_de_la_semana,
     })
-    
+
+@staff_member_required(login_url='/')  
 def agregar_producto(request):
     form = ProductForm()
 
@@ -83,6 +87,7 @@ def agregar_producto(request):
         'productform' : form
     })
 
+@staff_member_required(login_url='/')
 def modificar_producto(request, id):
     producto = get_object_or_404(Product, id=id)
     form = ProductForm(instance=producto)
@@ -104,11 +109,13 @@ def modificar_producto(request, id):
         'producto': producto
     })
 
+@staff_member_required(login_url='/')
 def eliminar_producto(request, id):
     producto = get_object_or_404(Product, id=id)
     producto.delete()
     return redirect('list_product_admin')
 
+@staff_member_required(login_url='/')
 def detail_product(request, id):
     product = get_object_or_404(Product, id=id)
     
@@ -117,6 +124,7 @@ def detail_product(request, id):
     })
 
 #Filtros productos
+@staff_member_required(login_url='/')
 def sku_search(request):
     query = request.GET.get('searchSku')
     if query:
@@ -137,6 +145,7 @@ def sku_search(request):
     }
     return render(request, 'gestion_productos/list_product.html', context)
 
+@staff_member_required(login_url='/')
 def marca_search(request):
     query = request.GET.get('searchMarca')
     marca = Brand.objects.all()
@@ -159,6 +168,7 @@ def marca_search(request):
     }
     return render(request, 'gestion_productos/list_product.html', context)
 
+@staff_member_required(login_url='/')
 def categoria_search(request):
     query =request.GET.get('searchCategoria')
     categoria = Category.objects.all()
@@ -180,6 +190,7 @@ def categoria_search(request):
     }
     return render(request, 'gestion_productos/list_product.html', context)
 
+@staff_member_required(login_url='/')
 def estado_product_search(request):
     query = request.GET.get('searchEstadoProducto')
     product_status = ProductStatus.choices
@@ -216,6 +227,7 @@ def estado_product_search(request):
     
 
 #GESTION DE PEDIDOS
+@staff_member_required(login_url='/')
 def listado_ordenes(request):
     ordenes = Orden.objects.exclude(status='CREATED').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
@@ -260,6 +272,7 @@ def listado_ordenes(request):
         'dia_de_la_semana': dia_de_la_semana,
     })
 
+@staff_member_required(login_url='/')
 def detail_orden(request, id):
     orden = get_object_or_404(Orden, id=id)
     user = orden.user
@@ -281,6 +294,7 @@ def detail_orden(request, id):
     }
     return render(request, 'gestion_pedidos/detail_orden.html', context)
 
+@staff_member_required(login_url='/')
 def update_status_orden(request, id):
     orden = get_object_or_404(Orden, id=id)
     orden_status = OrdenStatus.choices
@@ -312,6 +326,7 @@ def update_status_orden(request, id):
             print('testmail',send_mail)
     return redirect('list_ordenes_admin')
 
+@staff_member_required(login_url='/')
 def send_email(request, nuevo_estado, usermail, orden, user):
     print('nuevo estado email', nuevo_estado)
     print('email user change status',usermail)
@@ -334,6 +349,7 @@ def send_email(request, nuevo_estado, usermail, orden, user):
     print('correo enviado desde', email_host ,'hacia' , usermail, orden.id)
 
 #Filtros ordenes
+@staff_member_required(login_url='/')
 def orden_search(request):
     query = request.GET.get('searchNumOrden')
     orden_status = OrdenStatus.choices
@@ -354,6 +370,7 @@ def orden_search(request):
 
     return render(request, 'gestion_pedidos/list_ordenes.html', context)
 
+@staff_member_required(login_url='/')
 def estado_search(request):
     query = request.GET.get('searchEstado')
     orden_status = OrdenStatus.choices

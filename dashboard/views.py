@@ -8,9 +8,11 @@ from datetime import datetime, timedelta, time,timezone, date
 from django.utils.timezone import now, make_aware,localtime
 from babel.dates import format_date
 from django.utils import formats
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 
+@staff_member_required(login_url='/')
 def dashboard_view(request):
     mayor_vendido = OrdenProducto.total_productos_mas_vendido()
     categorias = Category.ventas_por_categoria()

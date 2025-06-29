@@ -14,7 +14,8 @@ from adminPanel.utils import *
 import os
 from django.core.mail import send_mail
 from django.contrib import messages
-from django.template.loader import render_to_string
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 
 
@@ -31,6 +32,7 @@ def index(request):
         'mas_vendido' : mayor_vendido
     })
 
+@staff_member_required(login_url='/')
 def index_admin(request):
     profile = UserProfile.objects.get(user=request.user)
     

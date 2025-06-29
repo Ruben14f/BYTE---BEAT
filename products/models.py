@@ -4,7 +4,6 @@ from django.db.models.signals import pre_save
 import uuid
 from cloudinary.models import CloudinaryField
 from cloudinary.uploader import upload
-
 from django.db.models import Sum, F
 
 

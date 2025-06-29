@@ -1,15 +1,41 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
-<div style="background: white; margin: auto; color: black; display: flex; flex-direction: column; justify-content: center; align-items: center;">
-    <h1>Agregar direccion</h1>
+<link rel="stylesheet" href="{% static 'css/edit_direccion.css' %}">
+
+<div class="modificar-direccion">
+    <h3>Agregar direccion al perfil</h3>
+
     <form method="POST">
         {% csrf_token %}
-    
-        <h2>Dirección</h2>
-        {{ address_form.as_p }}
-    
-        <button type="submit">Guardar</button>
+        
+        <div class="form-group">
+            <label for="id_calle">{{ address_form.calle.label }}</label>
+            {{ address_form.calle }}
+            {{ address_form.calle.errors }}
+        </div>
+        
+        <div class="form-group">
+            <label for="id_num_direccion">{{ address_form.num_direccion.label }}</label>
+            {{ address_form.num_direccion }}
+            {{ address_form.num_direccion.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_comuna">{{ address_form.comuna.label }}</label>
+            {{ address_form.comuna }}
+            {{ address_form.comuna.errors }}
+        </div>
+
+        <div class="form-group">
+            <label for="id_ciudad">{{ address_form.ciudad.label }}</label>
+            {{ address_form.ciudad }}
+            {{ address_form.ciudad.errors }}
+        </div>
+
+
+        <button type="submit">Guardar dirección</button>
     </form>
 </div>
 {% endblock %}

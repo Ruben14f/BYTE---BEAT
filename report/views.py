@@ -10,9 +10,11 @@ from adminPanel.utils import *
 from django.utils.timezone import now, localtime
 from django.utils import formats
 from django.core.paginator import Paginator
+from django.contrib.admin.views.decorators import staff_member_required
+
 
 # Create your views here.
-
+@staff_member_required(login_url='/')
 def orden_list_report(request):
     ordenes = Orden.objects.select_related('user').prefetch_related('productos_orden__producto').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
@@ -47,6 +49,7 @@ def orden_list_report(request):
         'dia_de_la_semana': dia_de_la_semana,
     })
 
+@staff_member_required(login_url='/')
 def orden_list_filter(request):
     ordenes = Orden.objects.select_related('user').prefetch_related('productos_orden__producto').order_by('-fecha_pagada')
     orden_status = OrdenStatus.choices
@@ -121,7 +124,7 @@ def orden_list_filter(request):
         'dia_de_la_semana': dia_de_la_semana,
     })
 
-    
+@staff_member_required(login_url='/')
 def estado_report_filter(request, ordenes, query_estado):
     orden_status = OrdenStatus.choices
 
@@ -140,6 +143,7 @@ def estado_report_filter(request, ordenes, query_estado):
     return ordenes
 
 # Filtro por fecha
+@staff_member_required(login_url='/')
 def fecha_filter_report(request, ordenes, fecha_inicio, fecha_fin):
     q = Q()
 
@@ -155,6 +159,7 @@ def fecha_filter_report(request, ordenes, fecha_inicio, fecha_fin):
         return None
     return ordenes
 
+@staff_member_required(login_url='/')
 def generar_reporte_excel(ordenes):
     data = []
 

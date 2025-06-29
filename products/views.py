@@ -1,10 +1,11 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from .models import Product,Category,Brand
-from django.db.models import Q,Count, Max, Min
+from django.db.models import Count, Max, Min
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from orden.models import OrdenProducto
+
 
 # Create your views here.
 class ProductListView(ListView):
