@@ -10,7 +10,7 @@ from orden.models import OrdenProducto
 # Create your views here.
 class ProductListView(ListView):
     template_name = 'list_products.html'
-    queryset = Product.objects.all()
+    queryset = Product.objects.select_related('category', 'brand').all() 
     paginate_by = 15
 
     def get_queryset(self):
@@ -41,9 +41,15 @@ class ProductListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        min_price_all = Product.objects.aggregate(min_price=Min('price'))['min_price'] or 0
-        max_price_all = Product.objects.aggregate(max_price=Max('price'))['max_price'] or 0
+        # Obtener los valores mínimos y máximos de los precios en una sola consulta
+        price_range = Product.objects.aggregate(
+            min_price=Min('price'),
+            max_price=Max('price')
+        )
+        min_price_all = price_range['min_price'] or 0
+        max_price_all = price_range['max_price'] or 0
 
+        # Verificar valores de precios actuales
         try:
             current_min_price = int(float(self.request.GET.get('min_price', min_price_all)))
         except (ValueError, TypeError):
@@ -57,25 +63,31 @@ class ProductListView(ListView):
         context['min_price_all'] = int(min_price_all)
         context['current_min_price'] = current_min_price
         context['current_max_price'] = current_max_price
-        
-        context['products'] = self.queryset
-        context['categorias'] = Category.objects.annotate(productos_count=Count('product', distinct=True)).filter(product__isnull=False)
-        context['marcas'] = Brand.objects.annotate(productos_count=Count('product', distinct=True)).filter(product__isnull=False)
 
-        #Codificacion del id
+        # Consultas optimizadas para categorías y marcas
+        context['categorias'] = Category.objects.prefetch_related('product_set').annotate(
+            productos_count=Count('product', distinct=True)
+        ).filter(product__isnull=False)
+
+        context['marcas'] = Brand.objects.prefetch_related('product_set').annotate(
+            productos_count=Count('product', distinct=True)
+        ).filter(product__isnull=False)
+
+        # Codificación del id
         context['categorias'] = [{
             'name': c.name,
-            'id' : urlsafe_base64_encode(force_bytes(c.id)),
-            'count' : c.productos_count
-        }for c in context['categorias']]
-        
+            'id': urlsafe_base64_encode(force_bytes(c.id)),
+            'count': c.productos_count
+        } for c in context['categorias']]
+
         context['marcas'] = [{
-            'name' : m.name,
-            'id' : urlsafe_base64_encode(force_bytes(m.id)),
-            'count' : m.productos_count
-        }for m in context['marcas']]
-        
+            'name': m.name,
+            'id': urlsafe_base64_encode(force_bytes(m.id)),
+            'count': m.productos_count
+        } for m in context['marcas']]
+
         return context
+
 
 class ProductDateilView(DetailView):
     model = Product
