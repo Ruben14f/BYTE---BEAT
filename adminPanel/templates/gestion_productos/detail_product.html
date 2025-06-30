@@ -24,7 +24,7 @@
           <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;">
             <div style="width: 100%; height: auto; border-radius: 8px; border: 1px solid #ddd; overflow: hidden;">
               {% if product.secondary_image.url %}  
-              <img id="main-image" src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto; object-fit: cover; border-radius: 8px; cursor: pointer; transition: opacity 0.5s ease;">
+              <img id="main-image" src="{{ product.main_image.url}}" alt="{{ product.name }}" style="width: 100%; height: auto; object-fit: cover; border-radius: 8px; cursor: pointer; transition: opacity 0.5s ease;">
               {% else %}
                 <p>Sin imagen</p>
               {% endif %}

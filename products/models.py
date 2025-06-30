@@ -1,10 +1,11 @@
 from django.db import models
 from django.utils.text import slugify
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 import uuid
 from cloudinary.models import CloudinaryField
 from cloudinary.uploader import upload
 from django.db.models import Sum, F
+import cloudinary
 
 
 class ProductStatus(models.TextChoices):
@@ -73,21 +74,12 @@ class Product(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
-        if self.pk:
-            original = Product.objects.get(pk=self.pk)
-            self.__original_main_image = original.main_image
-            self.__original_secondary_image = original.secondary_image
-        else:
-            self.__original_main_image = self.main_image
-            self.__original_secondary_image = self.secondary_image
-
-        super(Product, self).save(*args, **kwargs)
-
-    def save(self, *args, **kwargs):
+        # Actualizar status basado en stock
         if self.stock == 0:
             self.status = ProductStatus.INACTIVE 
         else:
             self.status = ProductStatus.ACTIVE  
+
         super().save(*args, **kwargs)
 
 def new_slug(sender, instance, *args, **kwargs):
@@ -98,22 +90,53 @@ def new_slug(sender, instance, *args, **kwargs):
             slug = slugify('{}-{}'.format(instance.name, str(uuid.uuid4())[:8:]))
         instance.slug = slug
 
-def optimize_image(sender, instance, **kwargs):
-    if hasattr(instance, '__original_main_image') and instance.main_image and (instance.main_image != instance.__original_main_image):
-        uploaded_image = upload(instance.main_image, transformation=[{
-            'quality': '70', 'fetch_format': 'auto'
-        }], folder='products')
-        
+def optimize_images(sender, instance, created, **kwargs):
+    """
+    Optimiza las imágenes después de que el producto se haya guardado
+    """
+    if created or instance.main_image or instance.secondary_image:
+        # Optimizar imagen principal
+        if instance.main_image:
+            try:
+                # Obtener el public_id de la imagen
+                if hasattr(instance.main_image, 'public_id'):
+                    public_id = instance.main_image.public_id
+                    
+                    # Aplicar transformaciones a la imagen existente
+                    optimized_url = cloudinary.utils.cloudinary_url(
+                        public_id,
+                        quality="70",
+                        format="webp",
+                        fetch_format="auto",
+                        secure=True
+                    )[0]
+                    
+                    # Actualizar el campo con la URL optimizada
+                    Product.objects.filter(pk=instance.pk).update(main_image=optimized_url)
+            except Exception as e:
+                print(f"Error optimizando imagen principal: {e}")
 
-        instance.main_image = uploaded_image['secure_url']  
+        # Optimizar imagen secundaria
+        if instance.secondary_image:
+            try:
+                # Obtener el public_id de la imagen
+                if hasattr(instance.secondary_image, 'public_id'):
+                    public_id = instance.secondary_image.public_id
+                    
+                    # Aplicar transformaciones a la imagen existente
+                    optimized_url = cloudinary.utils.cloudinary_url(
+                        public_id,
+                        quality="70",
+                        format="webp",
+                        fetch_format="auto",
+                        secure=True
+                    )[0]
+                    
+                    # Actualizar el campo con la URL optimizada
+                    Product.objects.filter(pk=instance.pk).update(secondary_image=optimized_url)
+            except Exception as e:
+                print(f"Error optimizando imagen secundaria: {e}")
 
-
-    if hasattr(instance, '__original_secondary_image') and instance.secondary_image and (instance.secondary_image != instance.__original_secondary_image):
-        uploaded_image = upload(instance.secondary_image, transformation=[{
-            'quality': '70', 'fetch_format': 'auto'
-        }], folder='products')
-
-        instance.secondary_image = uploaded_image['secure_url']
-
+# Conectar los signals
 pre_save.connect(new_slug, sender=Product)
-pre_save.connect(optimize_image, sender=Product)
+post_save.connect(optimize_images, sender=Product)
