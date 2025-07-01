@@ -265,6 +265,15 @@
     toastList.forEach(toastEl => {
       new bootstrap.Toast(toastEl).show();
     });
+    const timeoutId = setTimeout(() => {
+      toast.classList.add('opacity-0');
+      setTimeout(() => toast.remove(), 500);
+    }, 7000);
+    toast.querySelector('button').addEventListener('click', () => {
+      clearTimeout(timeoutId);
+      toast.classList.add('opacity-0');
+      setTimeout(() => toast.remove(), 500);
+    });
   });
 </script>
 </body>
