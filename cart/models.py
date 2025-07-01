@@ -46,8 +46,7 @@ class CartProductManager(models.Manager):
         object, created = self.get_or_create(cart=cart, productos=productos)
 
         if not created:
-            quantity = object.quantity + quantity
-            object.save()
+            quantity += object.quantity
 
         object.update_quantity(quantity)
         return object

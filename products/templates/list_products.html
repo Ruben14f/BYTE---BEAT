@@ -107,7 +107,7 @@
                         <div class="product-card">
                             <div class="product-image">
                                 {% if product.main_image %}
-                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;" loading="lazy">
                                 {% else %}
                                 <p>No image available</p>
                                 {% endif %}
@@ -117,7 +117,12 @@
                                 <div class="product-brand">{{ product.brand | title }}</div>
                                 <div class="product-name">{{ product.name | title }}</div>
                                 <div class="product-price">{{ product.price | format_price }}</div>
-                                <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                                <form action="{% url 'add' %}" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product_vent.id }}">
+                                    <input type="hidden" name="quantity" value="1">
+                                    <button type="submit" class="btn rounded-pill px-4 add-to-cart-a">Añadir al carrito</button>
+                                </form>
                                 <a class="btn add-to-cart-a" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
                             </div>
                         </div>
@@ -250,10 +255,10 @@
         <div class="product-container">
             {% for product in product_list %}
                 {% if product.main_image and product.stock > 0 %}
-                <div class="product-card">
+                <div class="product-card" data-href="{% url 'detail_product' product.slug %}">
                     <div class="product-image">
                         {% if product.main_image %}
-                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                        <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;" loading="lazy">
                         {% else %}
                         <p>No image available</p>
                         {% endif %}
@@ -263,7 +268,12 @@
                         <div class="product-brand">{{ product.brand | title }}</div>
                         <div class="product-name">{{ product.name | title }}</div>
                         <div class="product-price">{{ product.price | format_price }}</div>
-                        <!-- <button class="add-to-cart">Agregar al carrito</button> -->
+                        <form action="{% url 'add' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ product.id }}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn rounded-pill px-4 add-to-cart-a">Añadir al carrito</button>
+                        </form>
                         <a class="btn add-to-cart-a" href="{% url 'detail_product' product.slug %}">Ir al producto</a>
                     </div>
                 </div>
@@ -283,6 +293,21 @@
 <script>
 // JavaScript para manejar los filtros móviles
 document.addEventListener('DOMContentLoaded', function() {
+
+
+    const cards = document.querySelectorAll('.product-card');
+    cards.forEach(function(card) {
+        card.addEventListener('click', function (e) {
+            // Evita el redireccionamiento si se hizo clic en el botón o dentro del formulario
+            if (e.target.closest('form')) return;
+
+            const href = card.getAttribute('data-href');
+            if (href) {
+                window.location.href = href;
+            }
+        });
+    });
+    
     const mobileFilterToggle = document.getElementById('mobileFilterToggle');
     const filtersPanel = document.getElementById('filtersPanel');
     const closeFilters = document.getElementById('closeFilters');

@@ -126,7 +126,7 @@
             <div class="product-item">
                 <div class="product-image">
                     {% if cart_product.productos.main_image %}
-                        <img src="{{cart_product.productos.main_image.url}}" alt="" width="70px" height="70px">
+                        <img src="{{cart_product.productos.main_image.url}}" alt="" width="70px" height="70px" loading="lazy"> 
                     {% endif %}
                 </div>
                 <div class="product-details">

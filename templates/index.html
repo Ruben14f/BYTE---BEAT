@@ -30,26 +30,30 @@
         <div class="col-4-md col-12">
             <div class="row">
                 
-                
                 {% for product_vent in mas_vendido %}
-                {% if product_vent.main_image and product_vent.stock > 0 %}
-                <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
-                    <div class="position-relative" style="height: 130px; border-radius: 10px;">
-                        <div class="d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px; background: white; margin-bottom: 20px;">
-                            <span class="text-muted fs-4"><img src="{{product_vent.main_image.url}}" alt="" width="90%" height="90%"></span>
+                    {% if product_vent.main_image and product_vent.stock > 0 %}
+                    <div class="card product-card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; cursor: pointer;" data-href="{% url 'detail_product' product_vent.slug %}">
+                        <div class="position-relative" style="height: 130px; border-radius: 10px;">
+                            <div class="d-flex align-items-center justify-content-center" style="height: 130px; border-radius: 10px; background: white; margin-bottom: 20px;">
+                                <span class="text-muted fs-4"><img src="{{product_vent.main_image.url}}" alt="" width="90%" height="90%" loading="lazy" ></span>
+                            </div>
+                            <div class="overlay">
+                                <h6 class="fw-bold m-0" style="color: #2C2F47;">{{product_vent.category}}</h6>
+                            </div>
                         </div>
-                        <div class="overlay">
-                            <h6 class="fw-bold m-0" style="color: #2C2F47;">{{product_vent.category}}</h6>
+                        
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">{{product_vent.name}}</h5>
+                            <p class="card-text mb-2" style="color: white;">{{product_vent.price | format_price }}</p>
+                            <form action="{% url 'add' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="product_id" value="{{ product_vent.id }}">
+                                <input type="hidden" name="quantity" value="1">
+                                <button type="submit" class="btn rounded-pill px-4">Añadir al carrito</button>
+                            </form>
                         </div>
-                    </div>
-                    
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">{{product_vent.name}}</h5>
-                        <p class="card-text mb-2" style="color: white;">{{product_vent.price | format_price }}</p>
-                        <a href="{% url 'detail_product' product_vent.slug %}" class="btn rounded-pill px-4">Añadir al carrito</a>
-                    </div>
-                </div>  
-                {% endif %}  
+                    </div>  
+                    {% endif %}  
                 {% endfor %}    
             </div>
         </div>
@@ -71,9 +75,6 @@
                     <div class="card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px;">
                         <div class="card-body">
                             <h5 class="card-title fw-bold">{{categorys.name}}</h5>
-                            <p class="card-text">
-                                Descripcion de los productos en esta categoria
-                            </p>
                             <a href="{% url 'categorias_marcas_filtro' 'categoria' categorys.id|urlsafe_base64_encode_filter %}" class="btn rounded-pill px-4">Ver</a>
                         </div>
                     </div>
@@ -84,6 +85,22 @@
 </section>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cards = document.querySelectorAll('.product-card');
+
+        cards.forEach(function(card) {
+            card.addEventListener('click', function (e) {
+                // Evita el redireccionamiento si se hizo clic en el botón o dentro del formulario
+                if (e.target.closest('form')) return;
+
+                const href = card.getAttribute('data-href');
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        });
+    });
+    
     // Tu lógica existente del IntersectionObserver
     const observerOptions = {
         threshold: 0.1,

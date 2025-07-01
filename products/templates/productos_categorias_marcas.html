@@ -100,7 +100,7 @@
             <div class="product-card">
                 <div class="product-image">
                     {% if product.main_image %}
-                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px;">
+                    <img src="{{ product.main_image.url }}" alt="{{ product.name }}" style="width: 100px; height: 100px; " loading="lazy">
                     {% else %}
                     <p>No image available</p>
                     {% endif %}

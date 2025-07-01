@@ -10,13 +10,14 @@
                 <img id="main-image" src="{{ product.main_image.url }}" alt="{{ product.name }}" loading="lazy">
             {% endif %}
         </div>
+        {% if not product.secondary_image %}
+        {% else %}
         <div class="thumbnail-images mt-3">
             <div class="thumbnail active" onclick="switchImages()">
-                {% if product.secondary_image %}
                 <img id="secondary-image" class="secondary_img" src="{{ product.secondary_image.url }}" alt="{{ product.name }}" loading="lazy" onmouseover="highlightImage(this)" onmouseout="removeHighlight(this)">
-                {% endif %}
             </div>
         </div>
+        {% endif %}
     </div>
     
     <div class="product-info">

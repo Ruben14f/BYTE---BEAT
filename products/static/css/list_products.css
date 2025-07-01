@@ -124,14 +124,15 @@
     cursor: pointer;
     margin: auto;
     width: 50%;
-    transition: background-color 0.3s;
     margin-bottom: 5px;
+    color: white;
+    transition: all 0.2s ease !important;
 }
 
 .btn:hover {
-    background: #7c3aed;
-    transform: scale(1.05);
-    color: #fff;
+    background: #7c3aed !important;
+    transform: scale(1.05) !important;
+    color: #fff !important;
 }
 
 .container-main {

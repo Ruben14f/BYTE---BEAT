@@ -13,7 +13,7 @@ from django.db import connection
 class ProductListView(ListView):
     template_name = 'list_products.html'
     queryset = Product.objects.select_related('category', 'brand').prefetch_related('category', 'brand').all()
-    paginate_by = 15
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -122,7 +122,7 @@ class ProductDateilView(DetailView):
 class ProductSearchListView(ListView):
     template_name = 'list_products.html'
     context_object_name = 'product_list'
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         query = self.query()
@@ -228,7 +228,7 @@ class CyMListView(ListView):
     model = Product
     template_name = 'productos_categorias_marcas.html'
     context_object_name = 'productos'
-    paginate_by = 20
+    paginate_by = 10
 
     def get_queryset(self):
         uidb64 = self.kwargs['uidb64']

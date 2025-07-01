@@ -188,7 +188,7 @@
                                 {% if producto.main_image %}
                                     <div class="mt-3 flex justify-center">
 
-                                        <img src="{{ producto.main_image.url }}" alt="Imagen principal actual" class="max-w-full max-h-32 object-contain rounded-lg border-2 border-gray-200">
+                                        <img src="{{ producto.main_image.url }}" alt="Imagen principal actual" class="max-w-full max-h-32 object-contain rounded-lg border-2 border-gray-200" loading="lazy">
                                     </div>
                                 {% else %}
                                     <p class="text-sm text-gray-500 mt-2">No hay imagen cargada</p>
@@ -224,7 +224,7 @@
                                 {% if producto.secondary_image %}
                                     <div class="mt-3 flex justify-center">
         
-                                        <img src="{{ producto.secondary_image.url }}" alt="Imagen secundaria actual" class="max-w-full max-h-32 object-contain rounded-lg border-2 border-gray-200">
+                                        <img src="{{ producto.secondary_image.url }}" alt="Imagen secundaria actual" class="max-w-full max-h-32 object-contain rounded-lg border-2 border-gray-200" loading="lazy">
                                     </div>
                                 {% else %}
                                     <p class="text-sm text-gray-500 mt-2">No hay imagen secundaria cargada</p>

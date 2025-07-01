@@ -14,7 +14,7 @@
                     <div class="imange-detalle-products">
                         <div class="item-image">
                             {% if product.main_image %}
-                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" width="100px">
+                                <img src="{{ product.main_image.url }}" alt="{{ product.name }}" width="100px" loading="lazy">
                             {% else %}
                                 <div style="width:120px; height:120px; background:#fff; border-radius:0.5rem;"></div>
                             {% endif %}

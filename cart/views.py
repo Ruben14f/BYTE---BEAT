@@ -40,10 +40,7 @@ def addCart(request):
         error_trace = traceback.format_exc()
         return HttpResponse(f"<pre>{error_trace}</pre>")
 
-    return render(request, 'cart_detail.html', {
-        'product': product,
-        'cart': cart
-    })
+    return redirect(request.META.get('HTTP_REFERER', 'index'))
 
 def remove(request):
     cart = funcionCarrito(request)

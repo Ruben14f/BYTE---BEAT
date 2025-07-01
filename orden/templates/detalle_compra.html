@@ -17,7 +17,7 @@
   <ul class="lista-productos">
     {% for item in orden.productos_orden.all %}
       <li class="li-lista-productos">
-        <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px">
+        <img src="{{ item.producto.main_image.url }}" alt="{{ item.producto.name }}" width="50px" height="50px" loading="lazy">
         {{ item.producto.name }} x{{ item.quantity }} - {{ item.producto.price | format_price }}
         {% widthratio item.quantity 1 item.producto.price as subtotal %}
         {{ subtotal|format_price }}

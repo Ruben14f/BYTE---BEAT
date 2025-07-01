@@ -249,7 +249,7 @@
                         <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
                             {% if product.main_image.url %}
-                                <img class="product-image mr-3" src="{{product.main_image.url}}" alt="{{product.nombre}}">
+                                <img class="product-image mr-3" src="{{product.main_image.url}}" alt="{{product.nombre}}" loading="lazy">
                             {% else %}
                                 <p>sin imagen</p>
                             {% endif %}
