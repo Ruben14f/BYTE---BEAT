@@ -142,41 +142,40 @@
 
 <!-- Gráfico de torta -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8"> 
-<div class="bg-white rounded-xl p-6 shadow-sm border">
-    <div class="flex flex-col items-start mb-6">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Ventas por productos</h3>
-        
-        <!-- Filtros -->
-        <div class="filtro-chart4 flex flex-col items-start gap-4 w-full">
-            <label for="filtro-chart4" class="text-sm text-gray-600">Filtrar gráfico:</label>
-            <select id="filtro-chart4" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full">
-                <option value="" selected>Todos</option>
-                <option value="7days">Últimos 7 días</option>
-                <option value="30days">Últimos 30 días</option>
-                <option value="year">Este año</option>
-            </select>
+    <div class="bg-white rounded-xl p-6 shadow-sm border">
+        <div class="flex flex-col items-start mb-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Ventas por productos</h3>
+            
+            <!-- Filtros -->
+            <div class="filtro-chart4 flex flex-col items-start gap-4 w-full">
+                <label for="filtro-chart4" class="text-sm text-gray-600">Filtrar gráfico:</label>
+                <select id="filtro-chart4" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full">
+                    <option value="" selected>Todos</option>
+                    <option value="7days">Últimos 7 días</option>
+                    <option value="30days">Últimos 30 días</option>
+                    <option value="year">Este año</option>
+                </select>
 
-            <label for="top_filter_chart4" class="text-sm text-gray-600">Filtro Top:</label>
-            <select id="top_filter_chart4" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full">
-                <option value="all" selected>Todos los productos</option>
-                <option value="top5">Top 5 más vendidos</option>
-                <option value="top10">Top 10 más vendidos</option>
-                <option value="less5">Menos 5 vendidos</option>
-            </select>
+                <label for="top_filter_chart4" class="text-sm text-gray-600">Filtro Top:</label>
+                <select id="top_filter_chart4" class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent w-full">
+                    <option value="all" selected>Todos los productos</option>
+                    <option value="top5">Top 5 más vendidos</option>
+                    <option value="top10">Top 10 más vendidos</option>
+                    <option value="less5">Menos 5 vendidos</option>
+                </select>
 
-            <div class="flex gap-2 w-full">
-                <button id="btn-filtrar-chart4" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors w-full">
-                    Aplicar filtro
-                </button>
-                <button id="btn-borrar-filtro-chart4" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors w-full">
-                    Borrar filtro
-                </button>
+                <div class="flex gap-2 w-full">
+                    <button id="btn-filtrar-chart4" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors w-full">
+                        Aplicar filtro
+                    </button>
+                    <button id="btn-borrar-filtro-chart4" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors w-full">
+                        Borrar filtro
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Contenedor del gráfico -->
-    <div id="chart4" class="w-[100%] h-[430px] flex-shrink-0"></div>
+        <!-- Contenedor del gráfico -->
+        <div id="chart4" class="w-[100%] h-[430px] flex-shrink-0"></div>
     </div>
 
 

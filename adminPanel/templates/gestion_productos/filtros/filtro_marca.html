@@ -1,31 +1,36 @@
-<form action="{% url 'buscar_marca' %}" method="GET" class="w-full">
-    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200/50 shadow-sm">
-        <!-- Título del filtro -->
+<form action="{% url 'buscar_marca' %}" method="GET" class="w-full max-w-4xl mx-auto px-4">
+    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200/50 shadow-sm overflow-hidden">
+        <!-- Título -->
         <div class="flex items-center gap-3 mb-4">
             <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
                 <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
                 </svg>
             </div>
-            <h3 class="text-lg font-semibold text-gray-800">Filtrar por Marca</h3>
+            <h3 class="text-lg font-semibold text-gray-800 truncate">Filtrar por Marca</h3>
         </div>
 
-        <!-- Campo de selección -->
+        <!-- Selector de Marca -->
         <div class="mb-6">
             <select name="searchMarca" class="w-full px-4 py-3 bg-white border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">
                 <option disabled {% if not queryMarca %}selected{% endif %}>Buscar por marca</option>
                 {% for brand in brands %}
                     <option value="{{ brand.name }}" {% if brand.name == queryMarca %}selected{% endif %}>{{ brand.name }}</option>
                 {% endfor %}
-                {% if queryMarca %}
-                    <option value="borrarFiltro" class="text-red-600 font-medium py-2 px-4 bg-red-50">Borrar filtro</option>
-                {% endif %}
             </select>
         </div>
 
-        <!-- Botones de acción -->
-        <div class="flex justify-end">
-            <button type="submit" class="group relative px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 active:scale-95 min-w-[160px]">
+        <!-- Botones -->
+        <div class="flex flex-wrap justify-end gap-4">
+            {% if queryMarca %}
+                <a href="{% url 'buscar_marca' %}?searchMarca=borrarFiltro"
+                   class="group relative px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-lg shadow hover:from-red-600 hover:to-red-700  text-center whitespace-nowrap transform hover:scale-105 transition-all duration-200 active:scale-95">
+                    Borrar filtro
+                </a>
+            {% endif %}
+            <button type="submit"
+                    class="group relative px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow hover:from-blue-600 hover:to-blue-700 whitespace-nowrap transform hover:scale-105 transition-all duration-200 active:scale-95">
                 Buscar Marca
             </button>
         </div>

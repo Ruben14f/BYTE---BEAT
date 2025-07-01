@@ -16,7 +16,6 @@ from django.contrib.admin.views.decorators import staff_member_required
 def dashboard_view(request):
     mayor_vendido = OrdenProducto.total_productos_mas_vendido()
     categorias = Category.ventas_por_categoria()
-
     hora_actual = localtime(now()).date() 
     dia_de_la_semana = formats.date_format(hora_actual, "l")
 
@@ -540,13 +539,29 @@ def get_chart4(request):
             })
     
     df = pd.DataFrame(data)
-    
+    def split_label_3lines(name, max_length=20):
+        parts = []
+        rest = name.strip()
+        for _ in range(2): 
+            if len(rest) <= max_length:
+                parts.append(rest)
+                rest = ""
+                break
+            idx = rest.rfind(' ', 0, max_length)
+            if idx == -1:
+                idx = max_length
+            parts.append(rest[:idx].strip())
+            rest = rest[idx:].strip()
+        if rest:
+            parts.append(rest)
+        return '\n'.join(parts)
+
     if df.empty:
         chart_data = [{
             'value': 0,
             'name': 'Sin datos'
         }]
-    else:
+    else:                                 
         df_agrupado = df.groupby('producto')['cantidad'].sum().reset_index()
 
         # Aplicar filtro top según selección
@@ -556,10 +571,14 @@ def get_chart4(request):
             df_agrupado = df_agrupado.nlargest(10, 'cantidad')
         elif top_filter == 'less5':
             df_agrupado = df_agrupado.nsmallest(5, 'cantidad')
-        # else 'all' deja todo sin filtrar
-    
-        chart_data = [{'value': row['cantidad'], 'name': row['producto']} for _, row in df_agrupado.iterrows()]
-    
+
+        chart_data = []
+        for _, row in df_agrupado.iterrows():
+            nombre_formateado = split_label_3lines(row['producto']).lower().capitalize()
+            chart_data.append({
+                'value': row['cantidad'],
+                'name': nombre_formateado
+            })
     chart = {
         'tooltip': {'trigger': 'item'},
         'toolbox': {
@@ -574,17 +593,19 @@ def get_chart4(request):
         'series': [{
             'name': 'Cantidad de productos vendidos',
             'type': 'pie',
-            'radius': ['40%', '70%'],
+            'radius': ['40%', '65%'],
             'avoidLabelOverlap': False,
             'label': {
                 'show': True,
+                "fontSize": 10, 
+                "overflow" : 'break',
                 'position': 'outside',
                 'formatter': '{b}: {d}%',
                 'fontWeight': 'bold',
             },
             'labelLine': {
                 'show': True,
-                'length': 15,
+                'length': 10,
                 'length2': 10
             },
             'itemStyle': {

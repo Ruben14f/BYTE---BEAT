@@ -1,4 +1,4 @@
-<form action="{% url 'buscar_categoria' %}" method="GET" class="w-full">
+<form action="{% url 'buscar_categoria' %}" method="GET" class="w-full max-w-4xl mx-auto px-4">
     <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200/50 shadow-sm">
         <!-- Título del filtro -->
         <div class="flex items-center gap-3 mb-4">
@@ -24,10 +24,17 @@
         </div>
 
         <!-- Botones de acción -->
-        <div class="flex justify-end">
-            <button type="submit" class="group relative px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow-lg hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform hover:scale-105 transition-all duration-200 active:scale-95 min-w-[160px]">
+        <div class="flex flex-wrap justify-end gap-4">
+            {% if queryCategory %}
+                <a href="{% url 'buscar_categoria' %}?searchCategoria=borrarFiltro"
+                class="group relative px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-lg shadow hover:from-red-600 hover:to-red-700 transition-all duration-200 text-center whitespace-nowrapgroup relative px-6 py-2 bg-gradient-to-r from-red-500 to-red-600 text-white font-medium rounded-lg shadow hover:from-red-600 hover:to-red-700 transition-all duration-200 text-center whitespace-nowrap transform hover:scale-105 transition-all duration-200 active:scale-95">
+                    Borrar filtro
+                </a>
+            {% endif %}
+            <button type="submit" class="group relative px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition-all duration-200 text-center whitespace-nowrapgroup relative px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-medium rounded-lg shadow hover:from-blue-600 hover:to-blue-700 transition-all duration-200 text-center whitespace-nowrap transform hover:scale-105 transition-all duration-200 active:scale-95">
                 Buscar Categoría
             </button>
         </div>
+
     </div>
 </form>

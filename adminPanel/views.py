@@ -128,6 +128,10 @@ def detail_product(request, id):
 def sku_search(request):
     query = request.GET.get('searchSku')
     if query:
+        if query.lower() == 'borrarfiltro':
+            messages.success(request, 'Filtro por SKU eliminado')
+            return redirect('list_product_admin')
+        
         filter = Q(sku__startswith=query)
         product_list = Product.objects.filter(filter)
         if not product_list:

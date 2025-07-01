@@ -15,6 +15,7 @@ import os
 from django.core.mail import send_mail
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
+from datetime import datetime
 
 
 
@@ -125,12 +126,14 @@ def correo_de_contacto(nombres, apellidos, email, telefono, tipoConsulta, asunto
         print('Error al enviar correo:', e)
 
 def ventas_mensuales():
+    año_actual = datetime.now().year  
+    
     ventas = (
         Orden.objects
-        .annotate(mes=TruncMonth('fecha_pagada'))  
+        .filter(fecha_pagada__year=año_actual, status='DELIVERED') 
+        .annotate(mes=TruncMonth('fecha_pagada'))
         .values('mes')
-        .annotate(total_ventas=Sum('total'))  
-        .filter(status='DELIVERED')
-        .order_by('mes') 
+        .annotate(total_ventas=Sum('total'))
+        .order_by('mes')
     )
     return ventas

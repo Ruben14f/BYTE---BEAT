@@ -29,7 +29,6 @@
     <div class="container-our-categories">
         <div class="col-4-md col-12">
             <div class="row">
-                
                 {% for product_vent in mas_vendido %}
                     {% if product_vent.main_image and product_vent.stock > 0 %}
                     <div class="card product-card card-hover shadow-sm border-0 rounded-4 mx-auto" style="max-width: 300px; cursor: pointer;" data-href="{% url 'detail_product' product_vent.slug %}">
@@ -90,7 +89,6 @@
 
         cards.forEach(function(card) {
             card.addEventListener('click', function (e) {
-                // Evita el redireccionamiento si se hizo clic en el botón o dentro del formulario
                 if (e.target.closest('form')) return;
 
                 const href = card.getAttribute('data-href');
@@ -101,7 +99,6 @@
         });
     });
     
-    // Tu lógica existente del IntersectionObserver
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -50px 0px'
@@ -116,7 +113,6 @@
         });
     }, observerOptions);
 
-    // Observe all animated elements (tu código existente)
     document.querySelectorAll('.animate-fade-in').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
@@ -124,7 +120,6 @@
         observer.observe(el);
     });
 
-    // Nuevo código para las animaciones de fade-in de secciones
     const sectionObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -136,7 +131,6 @@
         rootMargin: '0px 0px -50px 0px'
     });
 
-    // Observar secciones con fade-in
     document.querySelectorAll('.section-fade-in').forEach(section => {
         sectionObserver.observe(section);
     });

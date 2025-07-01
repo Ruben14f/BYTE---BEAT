@@ -1,4 +1,4 @@
-{% include 'modals/alert_modal_admin.html'%}
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -192,5 +192,79 @@
             });
         });
     </script>
+<!-- Contenedor toast -->
+<div id="toast-container" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 space-y-6"></div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    {% if messages %}
+      {% for message in messages %}
+        showToast("{{ message|escapejs }}", "{{ message.tags }}");
+      {% endfor %}
+    {% endif %}
+  });
+
+  function showToast(message, type) {
+    const container = document.getElementById("toast-container");
+
+    const colorMap = {
+      success: 'bg-[#198754]',   
+      error: 'bg-[#dc3545]',     
+      info: 'bg-[#17a2b8]',       
+      warning: 'bg-yellow-500'   
+    };
+
+    const bgDark = 'bg-[#1e1f36]';  
+
+    const icons = {
+    success: `<svg class="w-6 h-6 text-white mr-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 13l4 4L19 7"/>
+                </svg>`,
+    error: `<svg class="w-6 h-6 text-white mr-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 18L18 6M6 6l12 12"/>
+            </svg>`,
+    info: `<svg class="w-6 h-6 text-white mr-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 16h-1v-4h-1m1-4h.01"/>
+            </svg>`,
+    warning: `<svg class="w-6 h-6 text-white mr-3 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 9v2m0 4h.01M12 3a9 9 0 100 18 9 9 0 000-18z"/>
+                </svg>`
+    };
+
+
+    const toast = document.createElement("div");
+    toast.className = `${bgDark} flex items-center text-white px-6 py-4 rounded shadow-lg transition-opacity duration-300 max-w-md w-full`;
+
+    toast.innerHTML = `
+      ${icons[type] || ''}
+      <span class="flex-grow">${message}</span>
+      <button class="ml-4 bg-white bg-opacity-20 hover:bg-opacity-40 text-white px-3 py-1 rounded text-sm font-semibold transition"
+        aria-label="Cerrar notificación" onclick="this.parentElement.remove()">
+        Ok
+      </button>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto cierre con animación
+    const timeoutId = setTimeout(() => {
+      toast.classList.add('opacity-0');
+      setTimeout(() => toast.remove(), 500);
+    }, 7000);
+
+    toast.querySelector('button').addEventListener('click', () => {
+      clearTimeout(timeoutId);
+      toast.classList.add('opacity-0');
+      setTimeout(() => toast.remove(), 500);
+    });
+  }
+</script>
+
+
+
 </body>
 </html>
