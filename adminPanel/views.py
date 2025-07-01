@@ -351,6 +351,9 @@ def send_email(request, nuevo_estado, usermail, orden, user):
 #Filtros ordenes
 @staff_member_required(login_url='/')
 def orden_search(request):
+    if request.GET.get('borrarFiltro') == 'true':
+        return redirect('list_ordenes_admin') 
+    
     query = request.GET.get('searchNumOrden')
     orden_status = OrdenStatus.choices
     if query:
