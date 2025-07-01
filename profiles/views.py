@@ -1,4 +1,3 @@
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from .models import UserProfile, Address
 from django.contrib.auth.decorators import login_required
@@ -8,52 +7,49 @@ from django.contrib import messages
 # Create your views here.
 @login_required(login_url='login')
 def Profile(request):
-    profile = UserProfile.objects.get(user=request.user)
-    addresses = Address.objects.filter(user=request.user)
+    profile = UserProfile.objects.select_related('user', 'address__comuna', 'address__ciudad').get(user=request.user)
+
 
     return render(request, 'perfil.html' ,{
         'profile' : profile,
-        'addresses' :addresses,
+        'addresses' :profile.address,
     })
 
 @login_required(login_url='login')
 def edit_profile(request):
-    user_form = UserForm(instance=request.user)
-    profile_form = UserProfileForm(instance=request.user.userprofile)
-    
-    if request.user.userprofile.address:
-        address_form = AddressForm(instance=request.user.userprofile.address)
-    else:
-        address_form = AddressForm()
+    user = request.user
+    user_profile = user.userprofile
+    address_instance = user_profile.address  # Puede ser None
 
     next_url = request.GET.get('next') or request.POST.get('next')
 
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
-        profile_form = UserProfileForm(request.POST, instance=request.user.userprofile)
+        user_form = UserForm(request.POST, instance=user)
+        profile_form = UserProfileForm(request.POST, instance=user_profile)
         address_form = AddressForm(request.POST)
 
         if user_form.is_valid() and profile_form.is_valid() and address_form.is_valid():
             user_form.save()
             profile_form.save()
 
-            if request.user.userprofile.address:
-                request.user.userprofile.address.delete()
+            # Reemplazar dirección anterior si existe
+            if address_instance:
+                address_instance.delete()
 
-            address = address_form.save(commit=False)
-            address.user = request.user 
-            address.save() 
+            new_address = address_form.save(commit=False)
+            new_address.user = user
+            new_address.save()
 
-            request.user.userprofile.address = address
-            request.user.userprofile.save()
+            user_profile.address = new_address
+            user_profile.save()
 
-            
             messages.success(request, "Perfil actualizado correctamente")
+            return redirect(next_url or 'perfil')
 
-            if next_url:
-                return redirect(next_url)
-            return redirect('perfil')  
-        
+    else:
+        user_form = UserForm(instance=user)
+        profile_form = UserProfileForm(instance=user_profile)
+        address_form = AddressForm(instance=address_instance)
 
     return render(request, 'editar_perfil.html', {
         'user_form': user_form,

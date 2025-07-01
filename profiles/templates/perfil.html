@@ -31,18 +31,17 @@
           <div class="field-value">{{profile.user.email}}</div>
         </div>
         
-        <div class="profile-field">
-          <div class="field-label">Dirección</div>
-            <div class="field-value">
-                {% if addresses %}
-                    {% for address in addresses %}
-                        {{ address.calle }} {{ address.num_direccion }}, {{ address.comuna.name | title }}, {{ address.ciudad }}
-                    {% endfor %}
-                    {% else %}
-                        <p>Sin direcciones</p>
-                {% endif %}
-            </div>
+      <div class="profile-field">
+        <div class="field-label">Dirección</div>
+        <div class="field-value">
+          {% if profile.address %}
+            {{ profile.address.calle }} {{ profile.address.num_direccion }}, 
+            {{ profile.address.comuna.name }}, {{ profile.address.ciudad.name }}
+          {% else %}
+            <p>Sin direcciones</p>
+          {% endif %}
         </div>
+      </div>
         
         <div class="profile-field">
           <div class="field-label">Teléfono</div>
@@ -63,25 +62,4 @@
     </div>
     
 </section>
-<script>
-    
-  let ClickedA = false;
-  let ClickedB = false;
-
-  document.getElementById('btn')?.addEventListener('click', function (e) {
-      if (ClickedA) {
-          e.preventDefault();
-          return false;
-      }
-      ClickedA = true;
-  });
-
-  document.getElementById('btn1')?.addEventListener('click', function (e) {
-      if (ClickedB) {
-          e.preventDefault();
-          return false;
-      }
-      ClickedB = true;
-  });
-</script>
 {% endblock %}
