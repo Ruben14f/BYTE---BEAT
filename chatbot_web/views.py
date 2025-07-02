@@ -143,7 +143,7 @@ def menu_bot_view(request):
             return JsonResponse({
                 'mensaje': "Has seleccionado: Contacto y ubicación",
                 'opciones': ["Av. Tecnología 123, Santiago <br> contacto@bytebeat.cl",
-                            f"También puedes ponerte en contacto con nosotros a través de nuestro <a href='{contacto_url}'>Formulario de contacto</a>.",
+                            f"También puedes ponerte en contacto con nosotros a través de nuestro <a href='{contacto_url}'>Formulario de contacto</a>. <br>",
                     "1- Volver a información general",
                     "2- Volver al menú principal"
                 ],
