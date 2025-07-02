@@ -197,5 +197,5 @@ WEBPAY_API_KEY = os.environ.get('WEBPAY_API_KEY')
 WEBPAY_ENVIRONMENT = 'integration' 
 WEBPAY_BASE_URL = 'https://webpay3gint.transbank.cl' 
 
-LOGIN_URL = '/'  # o la URL de tu página de login personalizada
+LOGIN_URL = '/' 
 LOGIN_REDIRECT_URL = '/'

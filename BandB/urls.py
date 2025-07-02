@@ -21,7 +21,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
+from core.views import error_404_view 
+from django.conf.urls import handler404
+
+handler404 = error_404_view 
 
 # Vista personalizada para redirigir a /admin solo si es admin
 @login_required

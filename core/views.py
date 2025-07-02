@@ -19,9 +19,9 @@ from datetime import datetime
 
 
 
+def error_404_view(request, exception=None):
+    return render(request, 'errors/404.html', status=404)
 
-def tests(request):
-    return render(request, 'testdesign.html')
     
 # Create your views here.
 def index(request):
